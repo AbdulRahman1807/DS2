@@ -129,6 +129,8 @@ def compile_indian_ports_benchmarks(output_dir: str = "data/reference") -> Path:
     ]
 
     df = pd.DataFrame(ports_data)
+    df["source_agency"] = "Ministry of Ports, Shipping and Waterways (TRW)"
+    df["reporting_period"] = "FY 2022-23 (Maritime India Baseline)"
     out_parquet = out_path / "indian_ports_benchmarks.parquet"
     out_csv = out_path / "indian_ports_benchmarks.csv"
 

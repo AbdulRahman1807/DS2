@@ -68,54 +68,56 @@ class TimeAndGroupSplitter:
         val_candidates = dense_df[val_mask].copy()
         test_candidates = dense_df[test_mask].copy()
 
-        # 3. Prevent Container Leakage:
-        # If any container in val or test appeared in train, keep all its history in train.
+        # 3. Prevent Container Leakage without Temporal Inversion:
+        # Containers in Val or Test that already appeared in Train must NOT be moved into Train
+        # (which would introduce future dates into Train). Instead, their subsequent repeated
+        # visits in Val/Test are quarantined into repeated_stays so that:
+        # 1) Train date range strictly precedes Val date range (temporal causality).
+        # 2) Container IDs across Train, Val, and Test remain 100% mutually disjoint.
         train_containers = set(train_candidates["container_id"].unique())
         val_leak = val_candidates["container_id"].isin(train_containers)
-        test_leak = test_candidates["container_id"].isin(train_containers)
+        val_clean = val_candidates[~val_leak].copy()
+        val_repeated = val_candidates[val_leak].copy()
 
-        if val_leak.sum() > 0:
-            print(f"Reassigning {val_leak.sum()} container stays from Val to Train to prevent container leakage.")
-            train_candidates = pd.concat([train_candidates, val_candidates[val_leak]], ignore_index=True)
-            val_candidates = val_candidates[~val_leak].copy()
+        combined_train_val = train_containers | set(val_clean["container_id"].unique())
+        test_leak = test_candidates["container_id"].isin(combined_train_val)
+        test_clean = test_candidates[~test_leak].copy()
+        test_repeated = test_candidates[test_leak].copy()
 
-        if test_leak.sum() > 0:
-            print(f"Reassigning {test_leak.sum()} container stays from Test to Train to prevent container leakage.")
-            train_candidates = pd.concat([train_candidates, test_candidates[test_leak]], ignore_index=True)
-            test_candidates = test_candidates[~test_leak].copy()
-
-        # Check overlap between val and test containers
-        val_containers = set(val_candidates["container_id"].unique())
-        test_val_leak = test_candidates["container_id"].isin(val_containers)
-        if test_val_leak.sum() > 0:
-            print(f"Reassigning {test_val_leak.sum()} stays from Test to Val to prevent cross-validation leakage.")
-            val_candidates = pd.concat([val_candidates, test_candidates[test_val_leak]], ignore_index=True)
-            test_candidates = test_candidates[~test_val_leak].copy()
+        repeated_stays_df = pd.concat([val_repeated, test_repeated], ignore_index=True)
+        if len(repeated_stays_df) > 0:
+            print(f"Quarantined {len(repeated_stays_df)} repeated container stays to preserve both strict chronology and entity disjointness.")
 
         # Add split_tag
         burn_in_df["split_tag"] = "burn_in"
         train_candidates["split_tag"] = "train"
-        val_candidates["split_tag"] = "val"
-        test_candidates["split_tag"] = "test"
+        val_clean["split_tag"] = "val"
+        test_clean["split_tag"] = "test"
+        repeated_stays_df["split_tag"] = "repeated_eval"
 
         # Final audit
         c_train = set(train_candidates["container_id"].unique())
-        c_val = set(val_candidates["container_id"].unique())
-        c_test = set(test_candidates["container_id"].unique())
+        c_val = set(val_clean["container_id"].unique())
+        c_test = set(test_clean["container_id"].unique())
+        assert len(c_train & c_val) == 0, "Train and Val containers must be strictly disjoint!"
         assert len(c_train & c_test) == 0, "Train and Test containers must be strictly disjoint!"
         assert len(c_val & c_test) == 0, "Val and Test containers must be strictly disjoint!"
+        assert train_candidates["call_date"].max() < val_clean["call_date"].min(), "Train must strictly precede Val temporally!"
+        assert val_clean["call_date"].max() < test_clean["call_date"].min(), "Val must strictly precede Test temporally!"
 
         print(f"Split completed successfully:")
-        print(f"  - Burn-in: {len(burn_in_df):,} stays")
-        print(f"  - Train:   {len(train_candidates):,} stays ({len(c_train):,} containers)")
-        print(f"  - Val:     {len(val_candidates):,} stays ({len(c_val):,} containers)")
-        print(f"  - Test:    {len(test_candidates):,} stays ({len(c_test):,} containers)")
+        print(f"  - Burn-in:        {len(burn_in_df):,} stays")
+        print(f"  - Train:          {len(train_candidates):,} stays ({len(c_train):,} containers, dates {train_candidates['call_date'].min()} to {train_candidates['call_date'].max()})")
+        print(f"  - Val:            {len(val_clean):,} stays ({len(c_val):,} containers, dates {val_clean['call_date'].min()} to {val_clean['call_date'].max()})")
+        print(f"  - Test:           {len(test_clean):,} stays ({len(c_test):,} containers, dates {test_clean['call_date'].min()} to {test_clean['call_date'].max()})")
+        print(f"  - Repeated Stays: {len(repeated_stays_df):,} stays (quarantined longitudinal visits)")
 
         return {
             "burn_in": burn_in_df,
             "train": train_candidates,
-            "val": val_candidates,
-            "test": test_candidates,
+            "val": val_clean,
+            "test": test_clean,
+            "repeated_stays": repeated_stays_df,
         }
 
 

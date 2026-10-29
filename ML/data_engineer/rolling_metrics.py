@@ -38,9 +38,18 @@ class RollingMetricsEngine:
         if "call_date" not in df.columns or "target_class" not in df.columns:
             raise KeyError("DataFrame must contain 'call_date' and 'target_class' columns.")
 
-        # Aggregate daily statistics
+        # Determine observation date:
+        # To avoid future outcome leakage, trailing delay rates MUST be computed on
+        # completed stays (using departure/truck_out date), because at arrival day t,
+        # only containers that have already departed are observable.
+        if "truck_out_end_ts" in df.columns:
+            df["_obs_date"] = pd.to_datetime(df["truck_out_end_ts"]).dt.date
+        else:
+            df["_obs_date"] = pd.to_datetime(df["call_date"]).dt.date
+
+        # Aggregate daily statistics by observation date
         daily = (
-            df.groupby("call_date")
+            df.groupby("_obs_date")
             .agg(
                 daily_volume=("case_id", "count"),
                 daily_critical=("target_class", lambda s: (s == 2).sum()),
@@ -50,14 +59,20 @@ class RollingMetricsEngine:
             .reset_index()
         )
 
-        daily["call_date"] = pd.to_datetime(daily["call_date"])
-        daily = daily.sort_values("call_date").set_index("call_date")
+        daily["_obs_date"] = pd.to_datetime(daily["_obs_date"])
+        daily = daily.sort_values("_obs_date").set_index("_obs_date")
 
-        # Reindex across complete daily calendar range to handle missing call dates properly
+        # Reindex across complete daily calendar range to handle missing observation dates properly
         min_date = daily.index.min()
         max_date = daily.index.max()
         full_range = pd.date_range(min_date, max_date, freq="D")
-        daily_full = daily.reindex(full_range, fill_value=0)
+        
+        # Count columns filled with 0; mean dwell preserves NaN so 0-volume days do not distort averages
+        daily_full = daily.reindex(full_range)
+        daily_full["daily_volume"] = daily_full["daily_volume"].fillna(0)
+        daily_full["daily_critical"] = daily_full["daily_critical"].fillna(0)
+        daily_full["daily_at_risk"] = daily_full["daily_at_risk"].fillna(0)
+        # daily_mean_dwell remains NaN on zero-call days
 
         # 7-day rolling window lagged by 1 day (closed='left' excludes day t itself)
         rolling_7d = daily_full.rolling(f"{self.window_days}D", closed="left")

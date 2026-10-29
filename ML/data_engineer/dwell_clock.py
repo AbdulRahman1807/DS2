@@ -37,9 +37,9 @@ class DwellClockEngine:
         self.truck_out_act = truck_out_act
         self.on_time_pct = on_time_pct
         self.critical_pct = critical_pct
-
         self.p_on_time: Optional[float] = None
         self.p_critical: Optional[float] = None
+        self.threshold_provenance: Optional[str] = None
 
     def calculate_dwell_durations(self, events_df: pd.DataFrame) -> pd.DataFrame:
         """Extracts DISCHARGE start and TRUCK_OUT end per case_id and calculates dwell in hours.
@@ -87,7 +87,16 @@ class DwellClockEngine:
 
         return valid_df
 
-    def fit_thresholds(self, train_dwell_df: pd.DataFrame) -> Tuple[float, float]:
+    def set_thresholds(self, p_on_time: float, p_critical: float, provenance: str = "operational_benchmark"):
+        """Explicitly sets operational thresholds with documented provenance."""
+        if p_on_time <= 0 or p_critical <= p_on_time:
+            raise ValueError(f"Invalid thresholds: p_on_time={p_on_time}, p_critical={p_critical}")
+        self.p_on_time = float(p_on_time)
+        self.p_critical = float(p_critical)
+        self.threshold_provenance = provenance
+        print(f"Set Dwell Cutoffs ({provenance}): p_on_time={self.p_on_time:.2f}h, p_critical={self.p_critical:.2f}h")
+
+    def fit_thresholds(self, train_dwell_df: pd.DataFrame, provenance: str = "fitted_on_training_split") -> Tuple[float, float]:
         """Fits percentile cutoffs strictly on training stays to prevent lookahead bias."""
         dwells = train_dwell_df["dwell_hours"].dropna().values
         if len(dwells) == 0:
@@ -95,9 +104,10 @@ class DwellClockEngine:
 
         self.p_on_time = float(np.percentile(dwells, self.on_time_pct))
         self.p_critical = float(np.percentile(dwells, self.critical_pct))
+        self.threshold_provenance = provenance
 
         print(
-            f"Fitted Training Dwell Cutoffs: "
+            f"Fitted Training Dwell Cutoffs ({provenance}): "
             f"p{self.on_time_pct:.0f}={self.p_on_time:.2f}h ({self.p_on_time/24:.2f}d), "
             f"p{self.critical_pct:.0f}={self.p_critical:.2f}h ({self.p_critical/24:.2f}d)"
         )

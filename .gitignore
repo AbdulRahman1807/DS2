@@ -1,3 +1,6 @@
+# Context & temporary docs
+context.txt
+
 # Python
 *.xlsx
 __pycache__/

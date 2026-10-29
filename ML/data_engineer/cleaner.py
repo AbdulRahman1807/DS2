@@ -70,12 +70,20 @@ class DataCleaner:
         quarantined_df = df[quarantine_mask].copy()
         cleaned_df = df[~quarantine_mask].copy()
 
+        if len(quarantined_df) > 0:
+            quarantined_df["quarantine_reason"] = "MISSING_TERMINAL_EVENT: TRUCK_OUT"
+            quarantined_df["quarantined_at"] = pd.Timestamp.now(tz="UTC").isoformat()
+        else:
+            quarantined_df["quarantine_reason"] = pd.Series(dtype=str)
+            quarantined_df["quarantined_at"] = pd.Series(dtype=str)
+
         if incomplete_cases:
             print(f"Quarantined {len(incomplete_cases)} incomplete case(s) ({len(quarantined_df)} events): {list(incomplete_cases)}")
 
-        # 5. Sort chronologically by case and event start time
+        # 5. Sort chronologically by case, start time, end time, and activity for deterministic order
         cleaned_df = cleaned_df.sort_values(
-            by=[self.case_col, self.start_ts_col], na_position="last"
+            by=[self.case_col, self.start_ts_col, self.end_ts_col, self.activity_col],
+            na_position="last"
         ).reset_index(drop=True)
 
         print(f"Clean event log ready: {len(cleaned_df):,} rows across {cleaned_df[self.case_col].nunique():,} cases.")
