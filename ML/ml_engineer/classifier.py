@@ -1,16 +1,22 @@
 """Supervised Bottleneck Scoring Engine.
 
 Assigned Role: Senior ML Engineer
-Stage: Stage 01 - Supervised Baseline Triage & Prediction Service Interface
+Stage: Stage 01 - Supervised Baseline Triage & Prediction Service Interface (Audited Pass)
 
-Responsibilities:
-- Wrap trained multi-class gradient boosting model (XGBoost / LightGBM) for real-time inference.
-- Enforce strict arrival-time feature contracts (15 approved predictors).
-- Provide low-latency scoring suitable for API integration.
-- Output calibrated multi-class probabilities across:
-  * ON_TIME (0)
-  * AT_RISK (1)
-  * CRITICAL_DELAY (2)
+Responsibilities & Methodological Status:
+- Exploratory baseline wrapper around multi-class gradient boosting models (XGBoost / LightGBM).
+- Enforces strict arrival-time feature contracts (15 approved predictors).
+- Provides low-latency single-case scoring interface for evaluation and downstream prototyping.
+- Outputs multi-class model scores across [ON_TIME (0), AT_RISK (1), CRITICAL_DELAY (2)].
+
+IMPORTANT METHODOLOGICAL CAVEATS:
+1. Uncalibrated Scores by Default: Raw outputs from predict_proba are tree partition scores,
+   NOT calibrated probabilities, unless calibrate=True is explicitly invoked.
+2. Missed Delay Rate at Default Rule: At the default argmax decision rule, the model misses
+   approximately 88.8% of critical delays (Recall = 11.2%). An operational alert threshold
+   must be agreed with operations rather than relying on argmax classification.
+3. Provisional Feature Status: YARD_BLOCK and YARD_SLOT remain provisional until initial
+   versus final reshuffle timing is authoritatively verified.
 """
 
 from __future__ import annotations
@@ -51,14 +57,14 @@ logger = logging.getLogger(__name__)
 
 
 class BottleneckClassifier(BaseEstimator, ClassifierMixin):
-    """Production-ready bottleneck triage classifier wrapper.
+    """Exploratory baseline bottleneck triage classifier wrapper.
 
     Provides:
     - Contract validation on raw arrival inputs.
     - Leakage-safe preprocessing (TargetEncoder + StandardScaler).
     - Multi-class gradient boosted triage.
-    - Class probability estimation.
-    - Optional out-of-fold probability calibration.
+    - Uncalibrated class probability estimation (or out-of-fold calibrated probabilities if calibrate=True).
+    - Configurable operational alert threshold scoring.
     """
 
     def __init__(
@@ -66,11 +72,13 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
         model_type: str = "xgboost",
         weighted: bool = True,
         calibrate: bool = False,
+        critical_alert_threshold: float = 0.25,
         random_state: int = 42,
     ) -> None:
         self.model_type = model_type.lower()
         self.weighted = weighted
         self.calibrate = calibrate
+        self.critical_alert_threshold = critical_alert_threshold
         self.random_state = random_state
 
         self.active_features = get_active_arrival_predictors(exclude_zero_variance=True)
@@ -108,7 +116,6 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, X: pd.DataFrame, y: np.ndarray) -> "BottleneckClassifier":
         """Fits preprocessing and classifier strictly on training data."""
-        # Validate input features
         X_active = X[self.active_features].copy()
         validate_feature_matrix(X_active, scenario=PredictionScenario.ARRIVAL_TIME, strict_allowlist=True)
 
@@ -131,7 +138,7 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:
-        """Predicts bottleneck triage class (0: ON_TIME, 1: AT_RISK, 2: CRITICAL_DELAY)."""
+        """Predicts bottleneck triage class via default argmax (0: ON_TIME, 1: AT_RISK, 2: CRITICAL_DELAY)."""
         if self.pipeline_ is None:
             raise RuntimeError("Model is not fitted. Call fit() before predict().")
         X_active = X[self.active_features].copy()
@@ -139,14 +146,18 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
         return self.pipeline_.predict(X_active)
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
-        """Predicts continuous probability distribution across [P(ON_TIME), P(AT_RISK), P(CRITICAL_DELAY)]."""
+        """Predicts model scores across [P(ON_TIME), P(AT_RISK), P(CRITICAL_DELAY)]."""
         if self.pipeline_ is None:
             raise RuntimeError("Model is not fitted. Call fit() before predict_proba().")
         X_active = X[self.active_features].copy()
         validate_feature_matrix(X_active, scenario=PredictionScenario.ARRIVAL_TIME, strict_allowlist=True)
         return self.pipeline_.predict_proba(X_active)
 
-    def score_case(self, case_dict: Dict[str, Any]) -> Dict[str, Any]:
+    def score_case(
+        self,
+        case_dict: Dict[str, Any],
+        alert_threshold: Optional[float] = None,
+    ) -> Dict[str, Any]:
         """Low-latency inference method scoring a single container arrival record."""
         df_single = pd.DataFrame([case_dict])
         preds = self.predict(df_single)
@@ -155,14 +166,25 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
         pred_class_id = int(preds[0])
         pred_class_name = CLASS_NAMES[pred_class_id]
 
+        threshold_used = alert_threshold if alert_threshold is not None else self.critical_alert_threshold
+        # Alert is triggered if predicted probability of critical delay exceeds threshold tau
+        critical_prob = float(probs[2])
+        alert_triggered = bool(critical_prob >= threshold_used)
+
         return {
             "predicted_class_id": pred_class_id,
             "predicted_class_name": pred_class_name,
             "probabilities": {
                 "P_ON_TIME": round(float(probs[0]), 4),
                 "P_AT_RISK": round(float(probs[1]), 4),
-                "P_CRITICAL_DELAY": round(float(probs[2]), 4),
+                "P_CRITICAL_DELAY": round(critical_prob, 4),
             },
+            "is_calibrated": bool(self.calibrate),
+            "alert_threshold_tau": threshold_used,
+            "alert_triggered": alert_triggered,
             "frozen_thresholds": CLASS_THRESHOLDS,
-            "alert_triggered": bool(pred_class_id in [1, 2]),
+            "operational_note": (
+                "Scores represent model decision-rule probabilities. At default argmax, ~88.8% of "
+                "critical delays are missed. Use alert_triggered with threshold_tau to adjust sensitivity."
+            ),
         }

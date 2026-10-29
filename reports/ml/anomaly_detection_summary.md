@@ -1,30 +1,42 @@
-# Stage 01 Statistical Anomaly Detection Benchmark Summary
+# Stage 01 Statistical Anomaly Detection Benchmark Summary (Audited Pass)
 
 **Project:** AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks
 **Repository:** `AbdulRahman1807/DS2`
 **Author:** Senior Machine Learning Engineer
-**Stage:** Stage 01 Baseline Benchmark
-**Evaluation Scope:** Unsupervised statistical outlier detection on 15 approved arrival features
+**Stage:** Stage 01 Baseline Benchmark (Corrective Audit Pass)
+**Methodology Note:** All anomaly preprocessing is strictly unsupervised (`OneHotEncoder` + `StandardScaler`), fitted on $X_{\text{train}}$ without exposure to target labels $y$.
 
 ---
 
 ## 1. Executive Summary & Core Principle
 
-The Stage 01 specification explicitly requires baseline unsupervised anomaly detectors (**Isolation Forest** and **One-Class SVM**) to identify anomalous logistics behavior across dwell-time, throughput, and capacity dimensions.
+The Stage 01 specification requires baseline unsupervised anomaly detectors (**Isolation Forest** and **One-Class SVM**) to evaluate anomalous logistics behavior across dwell-time, throughput, and capacity dimensions.
 
 ### Governing Principle: Statistical Outlier $\neq$ Operational Bottleneck
 An unsupervised anomaly detector isolates containers with **rare multivariate attribute combinations** (e.g., highly unusual gross weights, rare refrigerated/tank cargo, or uncommon yard slotting coordinates). **A statistical feature outlier is NOT automatically a critical bottleneck.**
 
 In empirical testing on held-out out-of-time validation data (`val.parquet`, $N=20,879$):
-- **Isolation Forest (5% contamination)** flagged **940 containers (4.50%)** as anomalous.
-- Among these flagged anomalies, the retrospective `CRITICAL_DELAY` rate was **0.96%** — substantially **LOWER** than the general validation critical-delay prevalence of **7.37%**.
+- **Isolation Forest (5% contamination)** flagged **822 containers (3.94%)** as anomalous.
+- Among these flagged anomalies, the retrospective `CRITICAL_DELAY` rate was **3.65%** — substantially **LOWER** than the general validation critical-delay prevalence of **7.37%**.
+- Over **80%** of containers flagged as feature outliers were actually **`ON_TIME`** (80.29%).
 - This occurs because containers with unusual physical characteristics (e.g., lightweight empty dry containers or non-standard carriers) frequently clear customs rapidly, whereas true systemic bottlenecks result from broad yard saturation affecting ordinary standard containers.
 
-Therefore, **unsupervised anomaly detection must be treated as an auxiliary diagnostic for operational surveillance, NOT as a primary substitute for the 3-class supervised triage classifier.**
+Therefore, **unsupervised anomaly detection must be treated as an auxiliary diagnostic for operational surveillance, NOT as a substitute for the 3-class supervised triage classifier.**
 
 ---
 
-## 2. Supported vs. Unsupported Signal Analysis
+## 2. Preprocessing Architecture: Strictly Unsupervised
+
+In response to the methodology audit, the anomaly preprocessing pipeline was completely decoupled from supervised target encoding:
+
+1. **Numeric Features (11 columns):** Imputed with training medians; standardized using `StandardScaler`.
+2. **Categorical Features (4 columns):** Missing values imputed with `'UNKNOWN'`; encoded using `OneHotEncoder(handle_unknown='ignore', sparse_output=False, min_frequency=20)`.
+3. **No Target Exposure:** Preprocessor `fit()` takes only feature matrix $X_{\text{train}}$. Target vector $y_{\text{train}}$ is neither accepted nor required.
+4. **Dimension:** Expands active arrival features into a 340-dimensional sparse feature representation suitable for random tree partition scoring.
+
+---
+
+## 3. Supported vs. Unsupported Signal Analysis
 
 In strict accordance with repo safety and empirical integrity gates, we explicitly distinguish which signals are supported by current dataset artifacts:
 
@@ -39,43 +51,44 @@ In strict accordance with repo safety and empirical integrity gates, we explicit
 
 ---
 
-## 3. Model Benchmark Results
+## 4. Model Benchmark Results
 
-### 3.1 Primary Candidate: Isolation Forest
+### 4.1 Primary Candidate: Isolation Forest (Purely Unsupervised)
 
-- **Algorithm:** Isolation Forest (`n_estimators=100`, out-of-fold `TargetEncoder` + `StandardScaler`).
+- **Algorithm:** Isolation Forest (`n_estimators=100`, purely unsupervised `OneHotEncoder` + `StandardScaler`).
 - **Feature Matrix:** 15 active arrival predictors (all post-arrival inspections and target columns strictly excluded).
 - **Contamination Sensitivity Analysis:**
 
 | Contamination Setting | Train Flagged ($N=60,698$) | Val Flagged ($N=20,879$) | Val Critical Delay Overlap | Val AT_RISK Overlap | Val ON_TIME Overlap | Val Baseline Crit Prev |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **1% Contamination** | 607 (1.00%) | 185 (0.89%) | **0.54%** (1 stay) | 18.92% (35 stays) | 80.54% (149 stays) | 7.37% |
-| **5% Contamination (Baseline)** | 3,035 (5.00%) | 940 (4.50%) | **0.96%** (9 stays) | 19.36% (182 stays) | 79.68% (749 stays) | 7.37% |
-| **10% Contamination** | 6,070 (10.00%) | 1,883 (9.02%) | **1.70%** (32 stays) | 21.08% (397 stays) | 77.22% (1,454 stays) | 7.37% |
+| **1% Contamination** | 606 (1.0%) | 117 (0.56%) | **2.56%** | 7.69% | 89.74% | 7.37% |
+| **5% Contamination (Baseline)** | 3034 (5.0%) | 822 (3.94%) | **3.65%** | 16.06% | 80.29% | 7.37% |
+| **10% Contamination** | 6070 (10.0%) | 1769 (8.47%) | **4.97%** | 17.86% | 77.16% | 7.37% |
 
 #### Score Distribution (Decision Function on Validation)
 The continuous anomaly score represents the average path length in isolation trees (offset-adjusted; negative scores indicate anomalies):
-- **Minimum Score:** `-0.0735` (most extreme outlier)
-- **25th Percentile:** `0.1146`
-- **Median (50th):** `0.141`
-- **75th Percentile:** `0.1563`
-- **Maximum Score:** `0.1844` (most normal container)
+- **Minimum Score:** `-0.022` (most extreme outlier)
+- **25th Percentile:** `0.0114`
+- **Median (50th):** `0.0175`
+- **75th Percentile:** `0.0229`
+- **Maximum Score:** `0.037` (most normal container)
 
 ---
 
-### 3.2 Comparative Reference: One-Class SVM
+### 4.2 Comparative Reference: One-Class SVM (Label-Selected Normal-Reference Experiment)
 
+- **Methodological Design:** Label-selected normal-reference experiment (semi-supervised, NOT pure unsupervised).
 - **Cohort:** Clean `ON_TIME` training cases ($N=5,000$ sample to avoid cubic computational complexity).
 - **Hyperparameters:** RBF kernel, `gamma='scale'`, `nu=0.05`.
-- **Validation Flagged Count:** **15,068 out of 20,879 stays (72.17%)**.
-- **Critical Delay Overlap:** 7.13% (essentially identical to general population prevalence of 7.37%).
+- **Validation Flagged Count:** **15110 out of 20,879 stays (72.37%)**.
+- **Critical Delay Overlap:** 7.09% (comparable to general population prevalence of 7.37%).
 
 > [!CAUTION]
-> **One-Class SVM Finding:** One-Class SVM with an RBF kernel completely breaks down under out-of-time temporal drift. Because the training period (June/July) exhibited severe COVID congestion while validation (late August/September) reflects a clearance regime with shifting carrier mixes, One-Class SVM classifies nearly three-quarters of normal incoming containers as anomalous. **One-Class SVM is ruled out for production serving.** Isolation Forest remains the only defensible statistical anomaly baseline.
+> **One-Class SVM Finding:** One-Class SVM with an RBF kernel completely breaks down under out-of-time temporal drift. Because the training period (June/July) exhibited severe COVID congestion while validation (late August/September) reflects a clearance regime with shifting carrier mixes, One-Class SVM classifies over 70% of normal incoming containers as anomalous. **One-Class SVM is ruled out for production serving.** Isolation Forest remains the only defensible statistical anomaly baseline.
 
 ---
 
-## 4. Temporal Congestion Regimes (Surge Detection)
+## 5. Temporal Congestion Regimes (Surge Detection)
 
 Aggregating the historical 7-day rolling operational features reveals a marked temporal concentration of systemic congestion:
 
@@ -99,11 +112,11 @@ Aggregating the historical 7-day rolling operational features reveals a marked t
 
 ---
 
-## 5. False-Alarm Limitations & Operational Warnings
+## 6. False-Alarm Limitations & Operational Warnings
 
 1. **No Established Operational Cost Matrix:**
    - In commercial logistics, raising an anomaly alert triggers physical yard inspections, customs re-checks, or off-dock drayage rerouting.
-   - Without an agreed corporate cost ratio ($C_{\text{False Alarm}} / C_{\text{Missed Delay}}$), setting an arbitrary anomaly alert threshold will flood yard dispatchers with false alarms (80% of Isolation Forest flagged cases were actually on-time).
+   - Without an agreed corporate cost ratio ($C_{\text{False Alarm}} / C_{\text{Missed Delay}}$), setting an arbitrary anomaly alert threshold will flood yard dispatchers with false alarms (over 80% of Isolation Forest flagged cases were actually on-time).
 2. **Lack of Verified Disruption Diversity:**
    - The PortWatch external disaster feed is constant 0 throughout mid-2021 (no typhoons or recorded tsunamis).
    - The single July congestion spike reflects local Indonesian pandemic disruptions.
