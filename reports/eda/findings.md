@@ -229,7 +229,37 @@ Container attributes missing, as percent of stays:
 
 ## 9. Guidance for the ML Engineer
 
-Signal is Spearman rho against dwell for numeric features and Kruskal epsilon-squared for categoricals, on clean-band train stays. PSI above 0.25 is a major shift between train and the other split.
+**CRITICAL ANTI-LEAKAGE SEPARATION:** Feature signals are strictly segregated by prediction-time eligibility. Univariate correlation rankings must NOT be interpreted as a validated feature-selection list for arrival-time models. Features such as `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` occur in the yard after container discharge and represent target leakage if included in arrival-time triage models.
+
+### 9A. Eligible Arrival-Time Predictors (Scenario: ARRIVAL_TIME at t_discharge)
+
+| feature | kind | association | n | note | eligibility_tier | arrival_eligible |
+|---|---|---|---|---|---|---|
+| CTR_SIZE | numeric | -0.1639 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| trailing_7d_volume | numeric | -0.1567 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| trailing_7d_critical | numeric | -0.1543 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| is_weekend | numeric | 0.1533 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| historical_delay_rate_7d | numeric | 0.0823 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| CTR_TYPE | categorical | 0.0499 | 56,269 | Kruskal epsilon^2 vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| YARD_BLOCK | categorical | 0.0491 | 56,198 | Kruskal epsilon^2 vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| trailing_7d_mean_dwell | numeric | 0.0445 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| carrier_prefix | categorical | 0.0419 | 54,938 | Kruskal epsilon^2 vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| discharge_day_of_week | categorical | 0.0351 | 56,276 | Kruskal epsilon^2 vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| GROSS | numeric | -0.0276 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| trailing_7d_at_risk | numeric | 0.0075 | 56,276 | Spearman rho vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| discharge_hour | categorical | 0.0032 | 56,276 | Kruskal epsilon^2 vs dwell | ARRIVAL_TIME_ELIGIBLE | yes |
+| weather_severity_index | numeric | – | 56,276 | constant in train | ARRIVAL_TIME_ELIGIBLE | yes |
+| has_active_disruption | numeric | – | 56,276 | constant in train | ARRIVAL_TIME_ELIGIBLE | yes |
+
+### 9B. Retrospective In-Yard / Post-Discharge Diagnostics (FORBIDDEN at Arrival)
+
+| feature | kind | association | n | note | eligibility_tier | arrival_eligible |
+|---|---|---|---|---|---|---|
+| has_behandle_inspection | numeric | 0.1527 | 56,276 | Spearman rho vs dwell | POST_DISCHARGE_DIAGNOSTIC | no |
+| total_events_in_stay | numeric | 0.1378 | 56,276 | Spearman rho vs dwell | POST_DISCHARGE_DIAGNOSTIC | no |
+| JOB_DEL_DOCTYPE | categorical | 0.008 | 55,894 | Kruskal epsilon^2 vs dwell | POST_DISCHARGE_DIAGNOSTIC | no |
+
+### 9C. Feature Stability and Modeling Recommendation Overview
 
 | feature | availability | signal | signal_type | psi_val | psi_test | recommendation |
 |---|---|---|---|---|---|---|
@@ -254,17 +284,19 @@ Signal is Spearman rho against dwell for numeric features and Kruskal epsilon-sq
 | weather_severity_index | at arrival | – | constant in train | 0.0 | 0.0 | DROP: constant in train |
 | has_active_disruption | at arrival | – | constant in train | 0.0 | 0.0 | DROP: constant in train |
 
-- Single features explain little of dwell (largest |association| is 0.16); expect modest classifier skill and report it against a prevalence baseline.
-- Trailing 7-day features have PSI above 3 between train and val/test because the congestion level changed; they also start at zero for the first 4,422 train rows (call dates 2021-06-10 to 2021-06-30), where `trailing_7d_critical` and `trailing_7d_at_risk` are null.
-- Mask `JOB_DEL_DOCTYPE`, `total_events_in_stay` and `has_behandle_inspection` for an arrival-time model.
-- The anomaly baselines (Isolation Forest, One-Class SVM) have few genuine anomalies to find outside July.
+- Single features explain modest variance in dwell; report classification skill against prevalence baselines.
+- Trailing 7-day features have PSI above 3 between train and val/test because the congestion level changed; they also start at zero for the first 4,422 train rows (call dates 2021-06-10 to 2021-06-30), where departure history is unobserved (< 2021-07-01).
+- Strictly exclude `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` from arrival-time prediction.
+- Anomaly baselines (Isolation Forest, One-Class SVM) should focus on July operational disruptions.
 
 ## 10. Guidance for the Evaluation Engineer
 
 - Prevalence differs by split (CRITICAL_DELAY 15.0% train, 7.4% val, 2.8% test), so compare precision-recall results with the per-split base rate, not raw accuracy.
-- Treat val as the main holdout, since it is fully observable. Test scores are optimistic for the on-time class because slow stays are missing.
+- **Right-Censoring and Survivorship Bias in Test:** The test split (call dates 2021-09-12 to 2021-09-30) has a mean observable share of 85.4% (dropping to 50.0% in the final call week of Sept 27) because the extract ends on 2021-09-30 before slow-clearing containers can exit. Evaluating only completed stays in test produces survivorship bias (artificially deflating dwell time and over-stating on-time metrics).
+- **Validation Role and Selection Bias:** While the validation split (call dates 2021-08-27 to 2021-09-11) is 99.7% observable, treating validation as an un-tainted final benchmark is flawed: repeated model selection and hyperparameter tuning on validation will introduce optimistic validation bias.
+- **Evaluation Recommendations:** Downstream evaluation should report metrics stratified by censoring risk, utilize survival analysis / inverse probability of censoring weighting (IPCW), or evaluate primarily on cohorts with sufficient follow-up horizon.
 - Alert thresholds on trailing delayed share should exceed about 5.4 pp to clear the noise floor.
-- Label maturity: some stays are labeled with outcomes that were unknowable at the split boundary:
+- Label maturity: stays labeled with outcomes that were unknowable at the split boundary:
 
 | split | next_split_starts | stays | outcome_known_after_boundary | pct_of_split | pct_critical_among_late | pct_critical_overall |
 |---|---|---|---|---|---|---|
@@ -273,15 +305,15 @@ Signal is Spearman rho against dwell for numeric features and Kruskal epsilon-sq
 
 ## 11. Recommendations for the Data Engineer (not changed by EDA)
 
-1. Treat `2021-07-01` as the start of usable data, not 2021-06-10. The 4,422 train stays before it are left-truncated and also have empty trailing windows.
-2. Re-cut train/val/test inside the clean band (call dates up to `2021-09-12`), or add a per-stay `observable_share` column so evaluation can down-weight truncated cohorts.
-3. Replace the zero-fill of trailing metrics in the cold-start window with nulls, so a model cannot read 'no history' as 'no delays'.
-4. Drop `weather_severity_index` and `has_active_disruption`, or document them as placeholders. The Indonesia filter is an assumption, not confirmed from the dataset.
-5. Set the six 1954-dated `CUSTOMS_DEL` start timestamps to null, and rebuild durations from timestamps (the `Duration` column holds Excel artifacts).
-6. `fetch_portwatch.py` returned an empty ports table in this environment.
+1. Document the cold-start window (call dates before 2021-07-01, 4,422 train stays): trailing metrics are zero due to unobserved departure history prior to July 1 in the source extract, rather than a proven zero-activity port.
+2. Retain train/val/test splits or add a per-stay `observable_share` column so evaluation can down-weight truncated test cohorts.
+3. Ensure trailing metric missingness semantics are documented for modelers to mask cold-start records during training.
+4. Clarify that `weather_severity_index` and `has_active_disruption` are constant 0 due to IMF PortWatch catalog coverage limitations (zero Indonesian alerts during June–Sept 2021) and unknown terminal UN/LOCODE, rather than confirmed absence of local adverse weather.
+5. Note date-only midnight timestamps (00:00:00) for customs events, where negative hourly offsets reflect discharge hour-of-day rather than true pre-discharge completion.
+6. Ingest terminal-level meteorological data if localized storm impact modeling is required.
 
 ## Caveats
 
 - One terminal and about three months; weekly and monthly cycles are the longest that can be studied, so seasonality is out of scope.
-- The clean-band horizon uses the 99th percentile of observed dwell; longer stays (about 1% in the reference) are still partly hidden at the right edge.
-- Delayed shares use the train-fitted cutoffs (labels in the processed files), so they describe the labeling rule, not an external standard.
+- The clean-band horizon uses the 99th percentile of observed dwell (431.4 hours); longer stays (about 1%) remain partly hidden at the right edge.
+- Delayed shares use train-fitted cutoffs (65.11h median, 160.90h 85th percentile), reflecting the empirical labeling rule rather than an external regulatory standard.

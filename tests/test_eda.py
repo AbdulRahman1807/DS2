@@ -123,3 +123,76 @@ def test_runner_end_to_end_on_real_outputs(tmp_path):
     text = report.read_text()
     assert "## 1. Headline findings" in text and "clean band" in text
     assert (tmp_path / "tables" / "truncation.csv").exists()
+    assert (tmp_path / "tables" / "signal_arrival.csv").exists()
+    assert (tmp_path / "tables" / "signal_diagnostic.csv").exists()
+
+
+def test_feature_signal_annotates_eligibility_and_filters_arrival_leakage():
+    """Verifies that feature_signal tags eligibility tiers and filter_eligible_signals removes post-discharge leakage."""
+    rng = np.random.default_rng(42)
+    n = 200
+    dwell = rng.uniform(20, 200, n)
+    df = pd.DataFrame({
+        "dwell_hours": dwell,
+        "carrier_prefix": rng.choice(["MSK", "CMA", "ONE"], n),
+        "CTR_SIZE": rng.choice([20, 40], n),
+        "JOB_DEL_DOCTYPE": rng.choice(["SPPB", "DO", "BC23"], n),
+        "total_events_in_stay": rng.integers(5, 25, n),
+        "has_behandle_inspection": rng.choice([0, 1], n),
+        "trailing_7d_volume": rng.uniform(500, 2000, n),
+    })
+
+    profiler = EventLogProfiler()
+    numeric = ["CTR_SIZE", "total_events_in_stay", "has_behandle_inspection", "trailing_7d_volume"]
+    categorical = ["carrier_prefix", "JOB_DEL_DOCTYPE"]
+
+    sig = profiler.feature_signal(df, numeric=numeric, categorical=categorical)
+    assert "eligibility_tier" in sig.columns
+    assert "arrival_eligible" in sig.columns
+
+    sig_map = sig.set_index("feature")["eligibility_tier"].to_dict()
+    assert sig_map["carrier_prefix"] == "ARRIVAL_TIME_ELIGIBLE"
+    assert sig_map["CTR_SIZE"] == "ARRIVAL_TIME_ELIGIBLE"
+    assert sig_map["trailing_7d_volume"] == "ARRIVAL_TIME_ELIGIBLE"
+    assert sig_map["JOB_DEL_DOCTYPE"] == "POST_DISCHARGE_DIAGNOSTIC"
+    assert sig_map["total_events_in_stay"] == "POST_DISCHARGE_DIAGNOSTIC"
+    assert sig_map["has_behandle_inspection"] == "POST_DISCHARGE_DIAGNOSTIC"
+
+    # Filter for arrival-time models: post-discharge features MUST NOT be present
+    arrival_sig = profiler.filter_eligible_signals(sig, scenario="ARRIVAL_TIME")
+    arrival_features = set(arrival_sig["feature"])
+    assert "JOB_DEL_DOCTYPE" not in arrival_features
+    assert "total_events_in_stay" not in arrival_features
+    assert "has_behandle_inspection" not in arrival_features
+    assert "CTR_SIZE" in arrival_features
+    assert "carrier_prefix" in arrival_features
+
+
+def test_date_only_milestone_same_vs_different_day():
+    """Verifies that date-only milestones report timestamp_precision='date_only' and calendar day breakdown."""
+    rows = [
+        # Case 1: Same calendar day (discharge at 14:00, customs midnight 00:00 -> sub-day negative offset -14h)
+        ("C1", "DISCHARGE", "2021-07-10 14:00:00", "2021-07-10 15:00:00"),
+        ("C1", "CUSTOMS_DEL", None, "2021-07-10 00:00:00"),
+        # Case 2: Strictly prior calendar day (discharge 2021-07-11 10:00, customs 2021-07-09 00:00 -> -34h)
+        ("C2", "DISCHARGE", "2021-07-11 10:00:00", "2021-07-11 11:00:00"),
+        ("C2", "CUSTOMS_DEL", None, "2021-07-09 00:00:00"),
+        # Case 3: Later calendar day (discharge 2021-07-10 10:00, customs 2021-07-12 00:00 -> +38h)
+        ("C3", "DISCHARGE", "2021-07-10 10:00:00", "2021-07-10 11:00:00"),
+        ("C3", "CUSTOMS_DEL", None, "2021-07-12 00:00:00"),
+    ]
+    df = pd.DataFrame(rows, columns=["case_id", "activity", "Start Timestamp", "End Timestamp"])
+    for c in ("Start Timestamp", "End Timestamp"):
+        df[c] = pd.to_datetime(df[c])
+
+    profiler = EventLogProfiler()
+    timing = profiler.milestone_timing(df).set_index("activity")
+
+    assert "CUSTOMS_DEL" in timing.index
+    row = timing.loc["CUSTOMS_DEL"]
+    assert row["timestamp_precision"] == "date_only"
+    # 1 of 3 strictly prior calendar day = 33.3%
+    assert 30.0 < row["pct_calendar_prior"] < 35.0
+    # 1 of 3 same calendar day = 33.3%
+    assert 30.0 < row["pct_calendar_same_day"] < 35.0
+    assert "Date-only" in row["timing_note"]

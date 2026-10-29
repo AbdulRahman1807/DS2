@@ -1,0 +1,4 @@
+feature,kind,association,n,note,eligibility_tier,arrival_eligible
+has_behandle_inspection,numeric,0.1527,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+total_events_in_stay,numeric,0.1378,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+JOB_DEL_DOCTYPE,categorical,0.008,55894,Kruskal epsilon^2 vs dwell,POST_DISCHARGE_DIAGNOSTIC,False

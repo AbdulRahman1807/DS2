@@ -10,9 +10,60 @@ Responsibilities:
 """
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 import numpy as np
 import pandas as pd
+
+# Earliest recorded completed departure (TRUCK_OUT) in the source event log.
+# For call dates prior to this cutoff, trailing departure history is unobserved (zero history).
+COLD_START_CUTOFF_DATE = "2021-07-01"
+# Date at which a full 7 days of completed departure history have accumulated.
+FULL_WINDOW_CUTOFF_DATE = "2021-07-08"
+
+
+def is_cold_start_date(call_date: Union[pd.Series, pd.Index, str, pd.Timestamp]) -> Union[pd.Series, bool]:
+    """Identifies dates in the zero-history cold-start window (< 2021-07-01) where completed departure
+    history is unobserved in the source extract.
+
+    Args:
+        call_date: Series, Index, or scalar of call_date strings or Timestamps.
+
+    Returns:
+        Boolean Series or scalar: True if call_date < 2021-07-01 (zero historical coverage).
+    """
+    if isinstance(call_date, (str, pd.Timestamp)):
+        return pd.to_datetime(call_date) < pd.Timestamp(COLD_START_CUTOFF_DATE)
+    return pd.to_datetime(call_date) < pd.Timestamp(COLD_START_CUTOFF_DATE)
+
+
+def is_partially_observed_window(call_date: Union[pd.Series, pd.Index, str, pd.Timestamp]) -> Union[pd.Series, bool]:
+    """Identifies dates in the partially observed 7-day window (2021-07-01 to 2021-07-07) where
+    between 1 and 6 days of historical departures have been recorded.
+
+    Args:
+        call_date: Series, Index, or scalar of call_date strings or Timestamps.
+
+    Returns:
+        Boolean Series or scalar: True if 2021-07-01 <= call_date < 2021-07-08.
+    """
+    dt = pd.to_datetime(call_date)
+    start = pd.Timestamp(COLD_START_CUTOFF_DATE)
+    full = pd.Timestamp(FULL_WINDOW_CUTOFF_DATE)
+    return (dt >= start) & (dt < full)
+
+
+def is_fully_observed_window(call_date: Union[pd.Series, pd.Index, str, pd.Timestamp]) -> Union[pd.Series, bool]:
+    """Identifies dates where the trailing 7-day rolling window is fully observed (>= 2021-07-08).
+
+    Args:
+        call_date: Series, Index, or scalar of call_date strings or Timestamps.
+
+    Returns:
+        Boolean Series or scalar: True if call_date >= 2021-07-08.
+    """
+    if isinstance(call_date, (str, pd.Timestamp)):
+        return pd.to_datetime(call_date) >= pd.Timestamp(FULL_WINDOW_CUTOFF_DATE)
+    return pd.to_datetime(call_date) >= pd.Timestamp(FULL_WINDOW_CUTOFF_DATE)
 
 
 class RollingMetricsEngine:
@@ -77,9 +128,9 @@ class RollingMetricsEngine:
         # 7-day rolling window lagged by 1 day (closed='left' excludes day t itself)
         rolling_7d = daily_full.rolling(f"{self.window_days}D", closed="left")
 
-        daily_full["trailing_7d_volume"] = rolling_7d["daily_volume"].sum()
-        daily_full["trailing_7d_critical"] = rolling_7d["daily_critical"].sum()
-        daily_full["trailing_7d_at_risk"] = rolling_7d["daily_at_risk"].sum()
+        daily_full["trailing_7d_volume"] = rolling_7d["daily_volume"].sum().fillna(0)
+        daily_full["trailing_7d_critical"] = rolling_7d["daily_critical"].sum().fillna(0)
+        daily_full["trailing_7d_at_risk"] = rolling_7d["daily_at_risk"].sum().fillna(0)
         daily_full["trailing_7d_mean_dwell"] = rolling_7d["daily_mean_dwell"].mean().fillna(0.0)
 
         # Historical delay rate = (critical + at_risk) / volume
@@ -108,3 +159,20 @@ class RollingMetricsEngine:
         merged["trailing_7d_volume"] = merged["trailing_7d_volume"].fillna(0.0)
         merged["trailing_7d_mean_dwell"] = merged["trailing_7d_mean_dwell"].fillna(0.0)
         return merged
+
+    @staticmethod
+    def add_cold_start_flag(
+        cases_df: pd.DataFrame,
+        call_date_col: str = "call_date",
+        flag_col: str = "is_cold_start",
+    ) -> pd.DataFrame:
+        """Adds a boolean indicator flagging records in the cold-start interval (< 2021-07-01).
+
+        Downstream models can use this flag to explicitly exclude or mask unobserved historical windows
+        without conflating missing historical data with a verified zero-activity terminal.
+        """
+        df = cases_df.copy()
+        if call_date_col not in df.columns:
+            raise KeyError(f"DataFrame must contain '{call_date_col}' column.")
+        df[flag_col] = is_cold_start_date(df[call_date_col])
+        return df

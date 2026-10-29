@@ -9,13 +9,42 @@ Responsibilities:
 - Surface data quality anomalies (unparseable timestamps, midnight signatures, negative durations)
 """
 
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 import numpy as np
 import pandas as pd
 from scipy import stats
 from scipy.signal import find_peaks
 
 PERCENTILES = (0.10, 0.25, 0.50, 0.75, 0.85, 0.90, 0.95, 0.99)
+
+# Prediction-time feature eligibility tiers aligned with ML/data_engineer/feature_contracts.py
+PREDICTION_ELIGIBILITY: Dict[str, str] = {
+    # Eligible at container discharge milestone (ARRIVAL_TIME scenario)
+    "carrier_prefix": "ARRIVAL_TIME_ELIGIBLE",
+    "CTR_SIZE": "ARRIVAL_TIME_ELIGIBLE",
+    "CTR_TYPE": "ARRIVAL_TIME_ELIGIBLE",
+    "GROSS": "ARRIVAL_TIME_ELIGIBLE",
+    "YARD_BLOCK": "ARRIVAL_TIME_ELIGIBLE",
+    "YARD_SLOT": "ARRIVAL_TIME_ELIGIBLE",
+    "discharge_hour": "ARRIVAL_TIME_ELIGIBLE",
+    "discharge_day_of_week": "ARRIVAL_TIME_ELIGIBLE",
+    "discharge_month": "ARRIVAL_TIME_ELIGIBLE",
+    "is_weekend": "ARRIVAL_TIME_ELIGIBLE",
+    "trailing_7d_volume": "ARRIVAL_TIME_ELIGIBLE",
+    "trailing_7d_critical": "ARRIVAL_TIME_ELIGIBLE",
+    "trailing_7d_at_risk": "ARRIVAL_TIME_ELIGIBLE",
+    "historical_delay_rate_7d": "ARRIVAL_TIME_ELIGIBLE",
+    "trailing_7d_mean_dwell": "ARRIVAL_TIME_ELIGIBLE",
+    "weather_severity_index": "ARRIVAL_TIME_ELIGIBLE",  # (constant 0 in 2021)
+    "has_active_disruption": "ARRIVAL_TIME_ELIGIBLE",   # (constant 0 in 2021)
+    # Conditional pre-arrival (requires explicit pre-arrival EDI notification assumption)
+    "has_quarantine_flag": "CONDITIONAL_PRE_ARRIVAL",
+    "has_red_flag_pib": "CONDITIONAL_PRE_ARRIVAL",
+    # Post-arrival / mid-stay / post-discharge diagnostic variables (FORBIDDEN at arrival)
+    "JOB_DEL_DOCTYPE": "POST_DISCHARGE_DIAGNOSTIC",
+    "total_events_in_stay": "POST_DISCHARGE_DIAGNOSTIC",
+    "has_behandle_inspection": "POST_DISCHARGE_DIAGNOSTIC",
+}
 
 
 class EventLogProfiler:
@@ -89,6 +118,8 @@ class EventLogProfiler:
 
         `pct_before_discharge` shows which activities are knowable at the moment of
         discharge and which only happen in the yard; implausible timestamps are excluded.
+        Date-only timestamps (e.g., midnight 00:00:00) are flagged and evaluated at
+        calendar-day precision to avoid intra-day discharge hour artifacts.
         """
         ev = events[[self.case_col, self.activity_col, self.start_ts_col, self.end_ts_col]].copy()
         ts = ev[self.start_ts_col].fillna(ev[self.end_ts_col])
@@ -99,17 +130,50 @@ class EventLogProfiler:
             .set_index(self.case_col)["ts"]
         )
         ev = ev[ev[self.activity_col] != self.discharge_act].copy()
-        ev["offset_h"] = (ev["ts"] - ev[self.case_col].map(discharge)).dt.total_seconds() / 3600.0
+        dis_ts = ev[self.case_col].map(discharge)
+        ev["offset_h"] = (ev["ts"] - dis_ts).dt.total_seconds() / 3600.0
         ev = ev.dropna(subset=["offset_h"])
-        g = ev.groupby(self.activity_col)["offset_h"]
-        out = pd.DataFrame({
-            "n": g.size(),
-            "pct_before_discharge": (g.apply(lambda s: (s < 0).mean()) * 100).round(1),
-            "p10_h": g.quantile(0.10).round(1),
-            "median_h": g.median().round(1),
-            "p90_h": g.quantile(0.90).round(1),
-        })
-        return out.sort_values("median_h").reset_index()
+
+        # Date-only precision check (events where timestamp is exactly midnight 00:00:00)
+        ev["is_midnight"] = (ev["ts"] == ev["ts"].dt.normalize())
+        ev["calendar_day_diff"] = (ev["ts"].dt.normalize() - dis_ts.dt.normalize()).dt.days
+
+        out_rows = []
+        for act_name, group in ev.groupby(self.activity_col):
+            n_act = len(group)
+            pct_before = round(float((group["offset_h"] < 0).mean() * 100), 1)
+            p10 = round(float(group["offset_h"].quantile(0.10)), 1)
+            med = round(float(group["offset_h"].median()), 1)
+            p90 = round(float(group["offset_h"].quantile(0.90)), 1)
+
+            is_date_only = bool(group["is_midnight"].mean() > 0.90)
+            precision = "date_only" if is_date_only else "datetime"
+            pct_prior_day = round(float((group["calendar_day_diff"] < 0).mean() * 100), 1)
+            pct_same_day = round(float((group["calendar_day_diff"] == 0).mean() * 100), 1)
+
+            if is_date_only:
+                timing_note = (
+                    "Date-only midnight (00:00:00); sub-day negative offset reflects discharge hour-of-day "
+                    "rather than true pre-discharge completion"
+                )
+            else:
+                timing_note = "Continuous datetime precision"
+
+            out_rows.append({
+                self.activity_col: act_name,
+                "n": n_act,
+                "pct_before_discharge": pct_before,
+                "p10_h": p10,
+                "median_h": med,
+                "p90_h": p90,
+                "timestamp_precision": precision,
+                "pct_calendar_prior": pct_prior_day,
+                "pct_calendar_same_day": pct_same_day,
+                "timing_note": timing_note,
+            })
+
+        out = pd.DataFrame(out_rows)
+        return out.sort_values("median_h").reset_index(drop=True)
 
     # ------------------------------------------------------------------ quality ledger
     def timestamp_quality(self, events: pd.DataFrame) -> pd.DataFrame:
@@ -210,26 +274,85 @@ class EventLogProfiler:
 
     # ------------------------------------------------------------------ signal screen
     def feature_signal(self, train: pd.DataFrame, numeric: Sequence[str], categorical: Sequence[str]) -> pd.DataFrame:
-        """Univariate association of each arrival-time feature with dwell (train only)."""
+        """Univariate association of features with dwell (train only), annotated with prediction-time eligibility tiers."""
         rows = []
         for col in numeric:
             s = train[[col, "dwell_hours"]].dropna()
+            tier = PREDICTION_ELIGIBILITY.get(col, "UNCLASSIFIED")
+            is_arr = (tier == "ARRIVAL_TIME_ELIGIBLE")
             if s[col].nunique() < 2:
-                rows.append({"feature": col, "kind": "numeric", "association": np.nan, "n": len(s), "note": "constant in train"})
+                rows.append({
+                    "feature": col,
+                    "kind": "numeric",
+                    "association": np.nan,
+                    "n": len(s),
+                    "note": "constant in train",
+                    "eligibility_tier": tier,
+                    "arrival_eligible": is_arr,
+                })
                 continue
             rho = stats.spearmanr(s[col], s["dwell_hours"])[0]
-            rows.append({"feature": col, "kind": "numeric", "association": round(float(rho), 4), "n": len(s), "note": "Spearman rho vs dwell"})
+            rows.append({
+                "feature": col,
+                "kind": "numeric",
+                "association": round(float(rho), 4),
+                "n": len(s),
+                "note": "Spearman rho vs dwell",
+                "eligibility_tier": tier,
+                "arrival_eligible": is_arr,
+            })
         for col in categorical:
             s = train[[col, "dwell_hours"]].dropna()
+            tier = PREDICTION_ELIGIBILITY.get(col, "UNCLASSIFIED")
+            is_arr = (tier == "ARRIVAL_TIME_ELIGIBLE")
             top = s[col].value_counts().loc[lambda v: v >= 30].index
             s = s[s[col].isin(top)]
             if s[col].nunique() < 2:
-                rows.append({"feature": col, "kind": "categorical", "association": np.nan, "n": len(s), "note": "single level"})
+                rows.append({
+                    "feature": col,
+                    "kind": "categorical",
+                    "association": np.nan,
+                    "n": len(s),
+                    "note": "single level",
+                    "eligibility_tier": tier,
+                    "arrival_eligible": is_arr,
+                })
                 continue
             groups = [g["dwell_hours"].to_numpy() for _, g in s.groupby(col, observed=True)]
             h = stats.kruskal(*groups)[0]
             eps2 = max((h - len(groups) + 1) / (len(s) - len(groups)), 0.0)
-            rows.append({"feature": col, "kind": "categorical", "association": round(float(eps2), 4), "n": len(s), "note": "Kruskal epsilon^2 vs dwell"})
+            rows.append({
+                "feature": col,
+                "kind": "categorical",
+                "association": round(float(eps2), 4),
+                "n": len(s),
+                "note": "Kruskal epsilon^2 vs dwell",
+                "eligibility_tier": tier,
+                "arrival_eligible": is_arr,
+            })
         out = pd.DataFrame(rows)
         out["abs_assoc"] = out["association"].abs()
         return out.sort_values("abs_assoc", ascending=False).drop(columns="abs_assoc").reset_index(drop=True)
+
+    @staticmethod
+    def filter_eligible_signals(signal_df: pd.DataFrame, scenario: str = "ARRIVAL_TIME") -> pd.DataFrame:
+        """Filters feature signal results to only include predictors valid under the declared scenario.
+
+        Args:
+            signal_df: DataFrame output by feature_signal().
+            scenario: 'ARRIVAL_TIME' (strictly arrival-safe) or 'IN_YARD_DYNAMIC' or 'ALL'.
+        """
+        if scenario == "ARRIVAL_TIME":
+            return signal_df[signal_df["arrival_eligible"] == True].copy().reset_index(drop=True)
+        elif scenario == "IN_YARD_DYNAMIC":
+            return signal_df[signal_df["eligibility_tier"].isin(
+                ["ARRIVAL_TIME_ELIGIBLE", "CONDITIONAL_PRE_ARRIVAL", "POST_DISCHARGE_DIAGNOSTIC"]
+            )].copy().reset_index(drop=True)
+        return signal_df.copy().reset_index(drop=True)
+
+    @staticmethod
+    def split_feature_signals(signal_df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """Separates feature signal analysis into eligible arrival predictors vs retrospective diagnostics."""
+        arrival_df = signal_df[signal_df["arrival_eligible"] == True].copy().reset_index(drop=True)
+        diagnostic_df = signal_df[signal_df["arrival_eligible"] == False].copy().reset_index(drop=True)
+        return arrival_df, diagnostic_df

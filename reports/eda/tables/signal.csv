@@ -1,21 +1,21 @@
-feature,kind,association,n,note
-CTR_SIZE,numeric,-0.1639,56276,Spearman rho vs dwell
-trailing_7d_volume,numeric,-0.1567,56276,Spearman rho vs dwell
-trailing_7d_critical,numeric,-0.1543,56276,Spearman rho vs dwell
-is_weekend,numeric,0.1533,56276,Spearman rho vs dwell
-has_behandle_inspection,numeric,0.1527,56276,Spearman rho vs dwell
-has_red_flag_pib,numeric,0.1414,56276,Spearman rho vs dwell
-total_events_in_stay,numeric,0.1378,56276,Spearman rho vs dwell
-historical_delay_rate_7d,numeric,0.0823,56276,Spearman rho vs dwell
-has_quarantine_flag,numeric,0.0796,56276,Spearman rho vs dwell
-CTR_TYPE,categorical,0.0499,56269,Kruskal epsilon^2 vs dwell
-YARD_BLOCK,categorical,0.0491,56198,Kruskal epsilon^2 vs dwell
-trailing_7d_mean_dwell,numeric,0.0445,56276,Spearman rho vs dwell
-carrier_prefix,categorical,0.0419,54938,Kruskal epsilon^2 vs dwell
-discharge_day_of_week,categorical,0.0351,56276,Kruskal epsilon^2 vs dwell
-GROSS,numeric,-0.0276,56276,Spearman rho vs dwell
-JOB_DEL_DOCTYPE,categorical,0.008,55894,Kruskal epsilon^2 vs dwell
-trailing_7d_at_risk,numeric,0.0075,56276,Spearman rho vs dwell
-discharge_hour,categorical,0.0032,56276,Kruskal epsilon^2 vs dwell
-weather_severity_index,numeric,,56276,constant in train
-has_active_disruption,numeric,,56276,constant in train
+feature,kind,association,n,note,eligibility_tier,arrival_eligible
+CTR_SIZE,numeric,-0.1639,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+trailing_7d_volume,numeric,-0.1567,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+trailing_7d_critical,numeric,-0.1543,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+is_weekend,numeric,0.1533,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+has_behandle_inspection,numeric,0.1527,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+has_red_flag_pib,numeric,0.1414,56276,Spearman rho vs dwell,CONDITIONAL_PRE_ARRIVAL,False
+total_events_in_stay,numeric,0.1378,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+historical_delay_rate_7d,numeric,0.0823,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+has_quarantine_flag,numeric,0.0796,56276,Spearman rho vs dwell,CONDITIONAL_PRE_ARRIVAL,False
+CTR_TYPE,categorical,0.0499,56269,Kruskal epsilon^2 vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+YARD_BLOCK,categorical,0.0491,56198,Kruskal epsilon^2 vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+trailing_7d_mean_dwell,numeric,0.0445,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+carrier_prefix,categorical,0.0419,54938,Kruskal epsilon^2 vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+discharge_day_of_week,categorical,0.0351,56276,Kruskal epsilon^2 vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+GROSS,numeric,-0.0276,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+JOB_DEL_DOCTYPE,categorical,0.008,55894,Kruskal epsilon^2 vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+trailing_7d_at_risk,numeric,0.0075,56276,Spearman rho vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+discharge_hour,categorical,0.0032,56276,Kruskal epsilon^2 vs dwell,ARRIVAL_TIME_ELIGIBLE,True
+weather_severity_index,numeric,,56276,constant in train,ARRIVAL_TIME_ELIGIBLE,True
+has_active_disruption,numeric,,56276,constant in train,ARRIVAL_TIME_ELIGIBLE,True

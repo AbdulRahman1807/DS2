@@ -168,6 +168,11 @@ def run_full_pipeline(
         size_mb = out_p.stat().st_size / (1024 * 1024)
         print(f"  • {out_p.name:<24}: {len(split_df):>6,} stays ({len(split_df.columns):>2} features, {size_mb:.2f} MB)")
 
+    # 7. Generate Dataset Manifest with Provenance and Hashes
+    from ML.data_engineer.feature_contracts import generate_dataset_manifest
+    manifest = generate_dataset_manifest(output_path=proc_dir / "dataset_manifest.json")
+    print(f"  • dataset_manifest.json   : Provenance, hashes, and contracts recorded")
+
     print("\nAudited Data Engineer pipeline completed successfully!")
     print("=" * 70)
     return saved_paths

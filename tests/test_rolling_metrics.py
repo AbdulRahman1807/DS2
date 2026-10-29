@@ -91,3 +91,79 @@ def test_missing_date_calendar_reindexing():
     # Crucially, missing day NaN does NOT dilute the mean to 50h!
     day3_mean = metrics.loc[metrics["call_date"] == "2021-07-03", "trailing_7d_mean_dwell"].iloc[0]
     assert day3_mean == 100.0, f"Expected 100.0, got {day3_mean}"
+
+
+def test_cold_start_insufficient_history_detection():
+    """Validates that call dates prior to 2021-07-01 are identified as cold-start insufficient history,
+    dates 2021-07-01 to 2021-07-07 as partially observed, and >= 2021-07-08 as fully observed."""
+    from ML.data_engineer.rolling_metrics import (
+        is_cold_start_date,
+        is_partially_observed_window,
+        is_fully_observed_window,
+        COLD_START_CUTOFF_DATE,
+        FULL_WINDOW_CUTOFF_DATE,
+    )
+
+    assert COLD_START_CUTOFF_DATE == "2021-07-01"
+    assert FULL_WINDOW_CUTOFF_DATE == "2021-07-08"
+
+    # Zero history (< 2021-07-01)
+    assert is_cold_start_date("2021-06-10") is True
+    assert is_cold_start_date("2021-06-30") is True
+    assert is_cold_start_date("2021-07-01") is False
+
+    # Partially observed window (2021-07-01 to 2021-07-07)
+    assert is_partially_observed_window("2021-06-30") is False
+    assert is_partially_observed_window("2021-07-01") is True
+    assert is_partially_observed_window("2021-07-07") is True
+    assert is_partially_observed_window("2021-07-08") is False
+
+    # Fully observed window (>= 2021-07-08)
+    assert is_fully_observed_window("2021-07-07") is False
+    assert is_fully_observed_window("2021-07-08") is True
+    assert is_fully_observed_window("2021-08-15") is True
+
+    df = pd.DataFrame({"call_date": ["2021-06-15", "2021-06-30", "2021-07-01", "2021-07-05"]})
+    df_flagged = RollingMetricsEngine.add_cold_start_flag(df)
+    assert df_flagged["is_cold_start"].tolist() == [True, True, False, False]
+
+
+def test_cold_start_to_fully_observed_transition():
+    """Verifies the progression from 0-history cold start to partially observed and fully observed rolling window."""
+    engine = RollingMetricsEngine(window_days=7)
+
+    # 10 daily departures every day from July 01 to July 14 (14 days)
+    rows = []
+    for d in range(1, 15):
+        date_str = f"2021-07-{d:02d}"
+        for i in range(10):
+            rows.append({
+                "case_id": f"STAY_{d}_{i}",
+                "call_date": date_str,
+                "truck_out_end_ts": f"{date_str} 10:00:00",
+                "dwell_hours": 40.0,
+                "target_class": 2 if i < 2 else 0,  # 20% critical delay
+            })
+    df = pd.DataFrame(rows)
+
+    metrics = engine.compute_trailing_port_delay_rates(df).set_index("call_date")
+
+    # Day 1 (July 01): No prior days exist (closed='left'). Trailing volume = 0, delay rate = 0.0.
+    assert metrics.loc["2021-07-01", "trailing_7d_volume"] == 0
+    assert metrics.loc["2021-07-01", "historical_delay_rate_7d"] == 0.0
+
+    # Day 2 (July 02): Trailing window contains exactly Day 1 (10 departures).
+    assert metrics.loc["2021-07-02", "trailing_7d_volume"] == 10
+    assert metrics.loc["2021-07-02", "historical_delay_rate_7d"] == 0.20
+
+    # Day 4 (July 04): Trailing window contains Days 1-3 (30 departures).
+    assert metrics.loc["2021-07-04", "trailing_7d_volume"] == 30
+    assert metrics.loc["2021-07-04", "historical_delay_rate_7d"] == 0.20
+
+    # Day 8 (July 08): Full 7-day window active (Days 1 to 7 = 70 departures).
+    assert metrics.loc["2021-07-08", "trailing_7d_volume"] == 70
+    assert metrics.loc["2021-07-08", "historical_delay_rate_7d"] == 0.20
+
+    # Day 14 (July 14): Full 7-day window active (Days 7 to 13 = 70 departures).
+    assert metrics.loc["2021-07-14", "trailing_7d_volume"] == 70
+    assert metrics.loc["2021-07-14", "historical_delay_rate_7d"] == 0.20

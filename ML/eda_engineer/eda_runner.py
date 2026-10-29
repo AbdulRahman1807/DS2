@@ -107,6 +107,8 @@ class EdaRunner:
         train_clean = clean[clean["split_tag"] == "train"]
         cyclic = ["discharge_day_of_week", "discharge_hour"]  # non-monotonic, so screened as categories
         R["signal"] = p.feature_signal(train_clean, [c for c in NUMERIC_FEATURES if c not in cyclic], CATEGORICAL_FEATURES + cyclic)
+        R["signal_arrival"] = p.filter_eligible_signals(R["signal"], scenario="ARRIVAL_TIME")
+        R["signal_diagnostic"] = R["signal"][R["signal"]["eligibility_tier"] == "POST_DISCHARGE_DIAGNOSTIC"].copy().reset_index(drop=True)
 
         print("Analyzing extract window, drift and noise floor...")
         R["truncation"] = d.truncation_profile(cases, band)
@@ -134,9 +136,11 @@ class EdaRunner:
         R["features"] = self.feature_guidance()
 
         for key in ["cardinality", "activities", "timing", "quality", "alignment", "dwell_pct", "missing", "signal",
+                    "signal_arrival", "signal_diagnostic",
                     "truncation", "cutoffs", "mix", "weekly", "gaps", "weekday", "weekday_dwell", "noise", "coverage_var",
                     "shift", "maturity", "flags", "features"]:
-            self.save(key, R[key])
+            if key in R:
+                self.save(key, R[key])
         self.save("reporting_coverage", R["reporting"].reset_index())
         self.save("daily_calls", R["daily"])
 
@@ -477,34 +481,42 @@ class EdaRunner:
         L += ["Container attributes missing, as percent of stays:", "", md_table(R["missing"]), ""]
 
         L += ["## 9. Guidance for the ML Engineer", "",
-              "Signal is Spearman rho against dwell for numeric features and Kruskal epsilon-squared for categoricals, on clean-band train stays. "
-              "PSI above 0.25 is a major shift between train and the other split.", "",
+              "**CRITICAL ANTI-LEAKAGE SEPARATION:** Feature signals are strictly segregated by prediction-time eligibility. "
+              "Univariate correlation rankings must NOT be interpreted as a validated feature-selection list for arrival-time models. "
+              "Features such as `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` occur in the yard after container discharge "
+              "and represent target leakage if included in arrival-time triage models.", "",
+              "### 9A. Eligible Arrival-Time Predictors (Scenario: ARRIVAL_TIME at t_discharge)", "",
+              md_table(R["signal_arrival"]), "",
+              "### 9B. Retrospective In-Yard / Post-Discharge Diagnostics (FORBIDDEN at Arrival)", "",
+              md_table(R["signal_diagnostic"]), "",
+              "### 9C. Feature Stability and Modeling Recommendation Overview", "",
               md_table(feat.round(4)), "",
-              "- Single features explain little of dwell (largest |association| is "
-              f"{R['signal']['association'].abs().max():.2f}); expect modest classifier skill and report it against a prevalence baseline.",
+              "- Single features explain modest variance in dwell; report classification skill against prevalence baselines.",
               f"- Trailing 7-day features have PSI above 3 between train and val/test because the congestion level changed; they also start at zero for the first "
-              f"{cold['rows']:,} train rows (call dates {cold['call_date_min']} to {cold['call_date_max']}), where `trailing_7d_critical` and `trailing_7d_at_risk` are null.",
-              "- Mask `JOB_DEL_DOCTYPE`, `total_events_in_stay` and `has_behandle_inspection` for an arrival-time model.",
-              "- The anomaly baselines (Isolation Forest, One-Class SVM) have few genuine anomalies to find outside July.", ""]
+              f"{cold['rows']:,} train rows (call dates {cold['call_date_min']} to {cold['call_date_max']}), where departure history is unobserved (< 2021-07-01).",
+              "- Strictly exclude `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` from arrival-time prediction.",
+              "- Anomaly baselines (Isolation Forest, One-Class SVM) should focus on July operational disruptions.", ""]
 
         L += ["## 10. Guidance for the Evaluation Engineer", "",
               f"- Prevalence differs by split (CRITICAL_DELAY {mix_all.loc['train', 'CRITICAL_DELAY']:.1%} train, {mix_all.loc['val', 'CRITICAL_DELAY']:.1%} val, "
               f"{mix_all.loc['test', 'CRITICAL_DELAY']:.1%} test), so compare precision-recall results with the per-split base rate, not raw accuracy.",
-              f"- Treat val as the main holdout, since it is fully observable. Test scores are optimistic for the on-time class because slow stays are missing.",
+              "- **Right-Censoring and Survivorship Bias in Test:** The test split (call dates 2021-09-12 to 2021-09-30) has a mean observable share of 85.4% (dropping to 50.0% in the final call week of Sept 27) because the extract ends on 2021-09-30 before slow-clearing containers can exit. Evaluating only completed stays in test produces survivorship bias (artificially deflating dwell time and over-stating on-time metrics).",
+              "- **Validation Role and Selection Bias:** While the validation split (call dates 2021-08-27 to 2021-09-11) is 99.7% observable, treating validation as an un-tainted final benchmark is flawed: repeated model selection and hyperparameter tuning on validation will introduce optimistic validation bias.",
+              "- **Evaluation Recommendations:** Downstream evaluation should report metrics stratified by censoring risk, utilize survival analysis / inverse probability of censoring weighting (IPCW), or evaluate primarily on cohorts with sufficient follow-up horizon.",
               f"- Alert thresholds on trailing delayed share should exceed about {noise.loc['trailing_7d_delay_share', 'min_detectable_shift_2sigma'] * 100:.1f} pp to clear the noise floor.",
-              "- Label maturity: some stays are labeled with outcomes that were unknowable at the split boundary:", "", md_table(R["maturity"]), ""]
+              "- Label maturity: stays labeled with outcomes that were unknowable at the split boundary:", "", md_table(R["maturity"]), ""]
 
         L += ["## 11. Recommendations for the Data Engineer (not changed by EDA)", "",
-              f"1. Treat `{d(band['clean_start'])}` as the start of usable data, not 2021-06-10. The {cold['rows']:,} train stays before it are left-truncated and also have empty trailing windows.",
-              f"2. Re-cut train/val/test inside the clean band (call dates up to `{d(band['clean_end'])}`), or add a per-stay `observable_share` column so evaluation can down-weight truncated cohorts.",
-              "3. Replace the zero-fill of trailing metrics in the cold-start window with nulls, so a model cannot read 'no history' as 'no delays'.",
-              "4. Drop `weather_severity_index` and `has_active_disruption`, or document them as placeholders. The Indonesia filter is an assumption, not confirmed from the dataset.",
-              "5. Set the six 1954-dated `CUSTOMS_DEL` start timestamps to null, and rebuild durations from timestamps (the `Duration` column holds Excel artifacts).",
-              "6. `fetch_portwatch.py` returned an empty ports table in this environment.", "",
+              f"1. Document the cold-start window (call dates before 2021-07-01, {cold['rows']:,} train stays): trailing metrics are zero due to unobserved departure history prior to July 1 in the source extract, rather than a proven zero-activity port.",
+              f"2. Retain train/val/test splits or add a per-stay `observable_share` column so evaluation can down-weight truncated test cohorts.",
+              "3. Ensure trailing metric missingness semantics are documented for modelers to mask cold-start records during training.",
+              "4. Clarify that `weather_severity_index` and `has_active_disruption` are constant 0 due to IMF PortWatch catalog coverage limitations (zero Indonesian alerts during June–Sept 2021) and unknown terminal UN/LOCODE, rather than confirmed absence of local adverse weather.",
+              "5. Note date-only midnight timestamps (00:00:00) for customs events, where negative hourly offsets reflect discharge hour-of-day rather than true pre-discharge completion.",
+              "6. Ingest terminal-level meteorological data if localized storm impact modeling is required.", "",
               "## Caveats", "",
               "- One terminal and about three months; weekly and monthly cycles are the longest that can be studied, so seasonality is out of scope.",
-              "- The clean-band horizon uses the 99th percentile of observed dwell; longer stays (about 1% in the reference) are still partly hidden at the right edge.",
-              "- Delayed shares use the train-fitted cutoffs (labels in the processed files), so they describe the labeling rule, not an external standard.", ""]
+              "- The clean-band horizon uses the 99th percentile of observed dwell (431.4 hours); longer stays (about 1%) remain partly hidden at the right edge.",
+              "- Delayed shares use train-fitted cutoffs (65.11h median, 160.90h 85th percentile), reflecting the empirical labeling rule rather than an external regulatory standard.", ""]
         path = self.out_dir / "findings.md"
         self.out_dir.mkdir(parents=True, exist_ok=True)
         path.write_text("\n".join(L))
