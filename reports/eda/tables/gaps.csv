@@ -1,0 +1,10 @@
+call_date,weekday,in_clean_band
+2021-06-15,Tuesday,False
+2021-06-22,Tuesday,False
+2021-06-25,Friday,False
+2021-07-01,Thursday,True
+2021-07-08,Thursday,True
+2021-07-29,Thursday,True
+2021-09-13,Monday,False
+2021-09-24,Friday,False
+2021-09-29,Wednesday,False

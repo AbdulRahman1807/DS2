@@ -1,0 +1,13 @@
+check,count,share_pct,note
+null_start_timestamp,54,0.0057,Start missing; end is still present.
+null_end_timestamp,0,0.0,End missing.
+implausible_start_year,6,0.0006,Start outside 2021-01-01..2022-12-31; activities: {'CUSTOMS_DEL': 6}
+implausible_end_year,6,0.0006,End outside the plausible window.
+end_before_start,0,0.0,Negative event duration.
+date_only_end_timestamp:CUSTOMS_DEL,95648,10.0463,"Every End is exactly 00:00:00, so the event has date precision only."
+date_only_end_timestamp:SP_RED_FLAG_PIB,5155,0.5415,"Every End is exactly 00:00:00, so the event has date precision only."
+tied_start_timestamps_within_case,34,0.0036,Rows sharing a start time inside one case.
+duration_column_null,54,0.0057,Pre-computed Duration is empty.
+duration_column_unparseable,3302,0.3468,Not HH:MM:SS; 3302 of these are Excel durations over 24h stored as 1900-01-0X dates. Use event_duration_minutes instead.
+truck_out_starts_before_unstack,60207,63.0202,"TRUCK_OUT start precedes UNSTACK_TO_TRUCK start; the steps overlap, so do not assume sequence (denominator is cases having both)."
+customs_release_date_before_discharge_date,16136,16.8712,"Customs release dated before the discharge date; clearance may legitimately precede discharge, so not necessarily an error."

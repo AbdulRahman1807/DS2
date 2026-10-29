@@ -1,0 +1,17 @@
+metric,value
+event_rows,952069
+distinct_cases,95648
+distinct_containers,95567
+containers_with_multiple_stays,81
+distinct_carrier_prefixes,390
+distinct_activities,20
+cases_without_truck_out,1
+labeled_stays,95647
+first_call_date,2021-05-12
+last_call_date,2021-09-30
+distinct_call_dates,113
+stays_in_train,60698
+stays_in_val,20879
+stays_in_test,13959
+stays_in_repeated_eval,73
+stays_in_burn_in,38
