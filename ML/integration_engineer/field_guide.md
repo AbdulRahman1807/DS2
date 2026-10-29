@@ -1,35 +1,38 @@
-# Logistics Ops Field Guide: Port-to-Warehouse Bottleneck Triage
-*1-Page Operational Reference Sheet for Supply Chain Planners (Stage 01 Deliverable)*
+# Logistics Operations Field Guide: Container Dwell Bottleneck Triage
+
+**Audience:** Supply Chain Planners, Port Dispatchers, & Freight Operations Leads
+**Model Version:** Stage 01 Supervised Baseline (`XGBoost / LightGBM`)
+**Prediction Horizon:** Container Discharge Commencement (`discharge_start_ts`)
+**Scope:** One-Page Operational Reference Sheet (Stage 01 Deliverable)
 
 ---
 
 ## 1. Quick-Triage Decision Matrix
 
-| Predicted Class | Estimated Dwell | Recommended Action | Operational Playbook |
+| Predicted Class | Frozen Training Dwell Threshold | Recommended Action | Operational Playbook |
 | :--- | :--- | :--- | :--- |
-| **🟢 ON_TIME** | $\le 50^{\text{th}}$ percentile | **Nominal Monitoring** | Standard rail/truck dispatch; safety-stock buffers intact. |
-| **🟡 AT_RISK** | $50^{\text{th}} - 85^{\text{th}}$ percentile | **Priority Gate Clearance** | Request expedited customs pre-clearance; notify regional warehouse of $\pm 24\text{h}$ schedule buffer. |
-| **🔴 CRITICAL_DELAY** | $> 85^{\text{th}}$ percentile | **Emergency Triage / Reroute** | Trigger alternate inland rail hub or secondary terminal reroute; escalate with ocean carrier. |
+| **🟢 ON_TIME** | $\le 65.11\text{ hours}$ ($\le 2.71\text{ days}$) | **Nominal Monitoring** | Standard rail/truck drayage dispatch; standard demurrage free-time buffers intact. |
+| **🟡 AT_RISK** | $65.11\text{h} - 160.90\text{ hours}$ ($2.71 - 6.70\text{ days}$) | **Priority Gate Clearance** | Pre-clear documentation with customs broker; proactively verify drayage appointment slots. |
+| **🔴 CRITICAL_DELAY** | $> 160.90\text{ hours}$ ($> 6.70\text{ days}$) | **Escalated Intervention** | Alert downstream warehouse of schedule buffer; prioritize yard unstacking; investigate commercial holds. |
 
 ---
 
-## 2. Top Bottleneck Pre-Warning Indicators
+## 2. Top Bottleneck Early Indicators at Discharge
 
-Planners should watch for these early-warning signals before discharge gridlock occurs:
-1. **Quarantine / Customs Holds (`SP_RED_FLAG_PIB`, `HAS_QUARANTINE_FLAG`):**
-   - High correlation with prolonged yard dwell.
-   - Immediate escalation to customs broker required if hold exceeds 24 hours.
-2. **7-Day Trailing Delay Rate Spike:**
-   - When the terminal delay rate exceeds **35%**, inbound containers experience compounding queue times.
-3. **Extreme Weather / Regional Disruption (PortWatch Alert Level: RED):**
-   - Pre-emptively hold downstream truck bookings to avoid detention and demurrage penalties.
+Planners should monitor these empirical signals available at container discharge ($t_{\text{discharge}}$):
+1. **Discharge Day of Week:** Thursday and Friday discharges encounter severe weekend drayage restrictions and customs office closures.
+2. **Container Gross Weight (`GROSS`):** Heavier units experience prolonged yard dwell due to specialized multi-axle chassis availability and road axle limits.
+3. **Specialized Container Types (`CTR_TYPE`):** Reefer, Open-Top, and Tank containers require specialized plug-in bays, inspection ramps, or quarantine.
+4. **Spatial Yard Location (`YARD_BLOCK`, `YARD_SLOT`):** Deep-stack terminal blocks require additional crane re-handling moves compared to high-turnover buffer slots.
+5. **7-Day Trailing Terminal Delay Rate:** When rolling terminal delay rate exceeds 30%, systemic yard congestion compounds queue times.
 
 ---
 
-## 3. False-Alarm Economic Trade-Offs
+## 3. Operational Trade-Offs & Threshold Setting
 
-> **Planner Caution:** Triggering an unnecessary emergency reroute costs approximately **$1,000–$1,500** per container in carrier surcharges.  
-> Only execute emergency reroutes when the **Critical Delay probability exceeds the squad-calibrated operating threshold ($\tau$)**.
+> [!WARNING]
+> **No Universal Cost Ratio:** Triggering an unnecessary emergency freight diversion wastes container capacity and incurs substantial carrier surcharges.
+> The alerting threshold ($\tau$) must be agreed with logistics operations based on the enterprise cost of an unnecessary inspection versus the demurrage penalty of a missed bottleneck. Do not treat model probabilities as autonomous rerouting directives.
 
 ---
 
@@ -41,13 +44,15 @@ Planners should watch for these early-warning signals before discharge gridlock 
 ```json
 {
   "case_id": "AAAU9001220-2021-06-28",
-  "predicted_class": "AT_RISK",
-  "class_probabilities": {
-    "ON_TIME": 0.18,
-    "AT_RISK": 0.64,
-    "CRITICAL_DELAY": 0.18
+  "predicted_class_id": 1,
+  "predicted_class_name": "AT_RISK",
+  "probabilities": {
+    "P_ON_TIME": 0.2841,
+    "P_AT_RISK": 0.5422,
+    "P_CRITICAL_DELAY": 0.1737
   },
   "is_anomaly": false,
-  "recommended_action": "Request expedited customs pre-clearance"
+  "alert_triggered": true,
+  "recommended_action": "Proactively verify drayage appointment slots and bill of lading clearance"
 }
 ```

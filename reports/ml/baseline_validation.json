@@ -1,0 +1,2362 @@
+{
+  "metadata": {
+    "task": "Stage 01 Supervised Bottleneck Baseline Classification",
+    "anchor": "discharge_start_ts",
+    "prediction_scenario": "ARRIVAL_TIME",
+    "target_definition": "dwell_hours = truck_out_end_ts - discharge_start_ts",
+    "frozen_thresholds": {
+      "p50_hours": 65.1102,
+      "p85_hours": 160.8993
+    },
+    "classes": {
+      "0": "ON_TIME",
+      "1": "AT_RISK",
+      "2": "CRITICAL_DELAY"
+    },
+    "active_features": [
+      "carrier_prefix",
+      "CTR_SIZE",
+      "CTR_TYPE",
+      "GROSS",
+      "YARD_BLOCK",
+      "YARD_SLOT",
+      "discharge_hour",
+      "discharge_day_of_week",
+      "discharge_month",
+      "is_weekend",
+      "trailing_7d_volume",
+      "trailing_7d_critical",
+      "trailing_7d_at_risk",
+      "historical_delay_rate_7d",
+      "trailing_7d_mean_dwell"
+    ],
+    "num_features": 15,
+    "execution_timestamp": "2026-10-29T17:27:59Z",
+    "random_state": 42
+  },
+  "dataset_partitions": {
+    "train": {
+      "path": "data/processed/train.parquet",
+      "num_rows": 60698,
+      "call_date_min": "2021-06-10",
+      "call_date_max": "2021-08-26",
+      "target_distribution": {
+        "0": 30349,
+        "1": 21244,
+        "2": 9105
+      }
+    },
+    "val": {
+      "path": "data/processed/val.parquet",
+      "num_rows": 20879,
+      "call_date_min": "2021-08-27",
+      "call_date_max": "2021-09-11",
+      "target_distribution": {
+        "0": 13892,
+        "1": 5449,
+        "2": 1538
+      }
+    },
+    "test_quarantine_notice": "test.parquet is strictly quarantined from model selection and tuning. Evaluation on test is withheld due to verified ~85.4% right-censoring survivorship bias."
+  },
+  "primary_validation_benchmark": {
+    "dummy_prior": {
+      "accuracy": 0.6654,
+      "balanced_accuracy": 0.3333,
+      "macro_f1": 0.2664,
+      "weighted_f1": 0.5317,
+      "multiclass_log_loss": 0.8749,
+      "critical_delay_pr_auc": 0.0737,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.6654,
+          "recall": 1.0,
+          "f1_score": 0.7991,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          13892,
+          0,
+          0
+        ],
+        [
+          5449,
+          0,
+          0
+        ],
+        [
+          1538,
+          0,
+          0
+        ]
+      ],
+      "runtime_seconds": 0.205,
+      "model_name": "DummyClassifier (Prior)",
+      "model_type": "baseline_reference",
+      "weighted": false,
+      "model_key": "dummy_prior"
+    },
+    "logistic_regression_unweighted": {
+      "accuracy": 0.663,
+      "balanced_accuracy": 0.3394,
+      "macro_f1": 0.287,
+      "weighted_f1": 0.5461,
+      "multiclass_log_loss": 0.8529,
+      "critical_delay_pr_auc": 0.0873,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.6687,
+          "recall": 0.983,
+          "f1_score": 0.796,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.408,
+          "recall": 0.0338,
+          "f1_score": 0.0624,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.2857,
+          "recall": 0.0013,
+          "f1_score": 0.0026,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          13656,
+          234,
+          2
+        ],
+        [
+          5262,
+          184,
+          3
+        ],
+        [
+          1503,
+          33,
+          2
+        ]
+      ],
+      "runtime_seconds": 1.054,
+      "model_name": "Logistic Regression (Unweighted)",
+      "model_type": "linear",
+      "weighted": false,
+      "model_key": "logistic_regression_unweighted"
+    },
+    "logistic_regression_balanced": {
+      "accuracy": 0.6583,
+      "balanced_accuracy": 0.3567,
+      "macro_f1": 0.3305,
+      "weighted_f1": 0.5772,
+      "multiclass_log_loss": 0.8177,
+      "critical_delay_pr_auc": 0.0879,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.6818,
+          "recall": 0.9385,
+          "f1_score": 0.7898,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.414,
+          "recall": 0.129,
+          "f1_score": 0.1967,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0667,
+          "recall": 0.0026,
+          "f1_score": 0.005,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          13037,
+          826,
+          29
+        ],
+        [
+          4719,
+          703,
+          27
+        ],
+        [
+          1365,
+          169,
+          4
+        ]
+      ],
+      "runtime_seconds": 1.077,
+      "model_name": "Logistic Regression (Balanced)",
+      "model_type": "linear",
+      "weighted": true,
+      "model_key": "logistic_regression_balanced"
+    },
+    "xgboost_unweighted": {
+      "accuracy": 0.6182,
+      "balanced_accuracy": 0.3942,
+      "macro_f1": 0.3809,
+      "weighted_f1": 0.5963,
+      "multiclass_log_loss": 0.8144,
+      "critical_delay_pr_auc": 0.0911,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.7166,
+          "recall": 0.7676,
+          "f1_score": 0.7412,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3767,
+          "recall": 0.4105,
+          "f1_score": 0.3929,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.1186,
+          "recall": 0.0046,
+          "f1_score": 0.0088,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          10663,
+          3203,
+          26
+        ],
+        [
+          3186,
+          2237,
+          26
+        ],
+        [
+          1032,
+          499,
+          7
+        ]
+      ],
+      "runtime_seconds": 0.919,
+      "model_name": "XGBoost (Unweighted)",
+      "model_type": "gradient_boosting",
+      "weighted": false,
+      "model_key": "xgboost_unweighted"
+    },
+    "xgboost_weighted": {
+      "accuracy": 0.5464,
+      "balanced_accuracy": 0.4076,
+      "macro_f1": 0.3968,
+      "weighted_f1": 0.5631,
+      "multiclass_log_loss": 0.9278,
+      "critical_delay_pr_auc": 0.0937,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.7442,
+          "recall": 0.6139,
+          "f1_score": 0.6728,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3526,
+          "recall": 0.4972,
+          "f1_score": 0.4126,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.099,
+          "recall": 0.1118,
+          "f1_score": 0.105,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          8528,
+          4292,
+          1072
+        ],
+        [
+          2247,
+          2709,
+          493
+        ],
+        [
+          685,
+          681,
+          172
+        ]
+      ],
+      "runtime_seconds": 0.863,
+      "model_name": "XGBoost (Sample-Weighted)",
+      "model_type": "gradient_boosting",
+      "weighted": true,
+      "model_key": "xgboost_weighted"
+    },
+    "lightgbm_unweighted": {
+      "accuracy": 0.6157,
+      "balanced_accuracy": 0.3811,
+      "macro_f1": 0.3698,
+      "weighted_f1": 0.5882,
+      "multiclass_log_loss": 0.8201,
+      "critical_delay_pr_auc": 0.091,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.7033,
+          "recall": 0.7867,
+          "f1_score": 0.7427,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3641,
+          "recall": 0.3522,
+          "f1_score": 0.358,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.1014,
+          "recall": 0.0046,
+          "f1_score": 0.0087,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          10929,
+          2930,
+          33
+        ],
+        [
+          3501,
+          1919,
+          29
+        ],
+        [
+          1109,
+          422,
+          7
+        ]
+      ],
+      "runtime_seconds": 1.049,
+      "model_name": "LightGBM (Unweighted)",
+      "model_type": "gradient_boosting",
+      "weighted": false,
+      "model_key": "lightgbm_unweighted"
+    },
+    "lightgbm_balanced": {
+      "accuracy": 0.5376,
+      "balanced_accuracy": 0.4007,
+      "macro_f1": 0.3905,
+      "weighted_f1": 0.5545,
+      "multiclass_log_loss": 0.9309,
+      "critical_delay_pr_auc": 0.0894,
+      "critical_delay_baseline_prevalence": 0.0737,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.732,
+          "recall": 0.6062,
+          "f1_score": 0.6632,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3485,
+          "recall": 0.4821,
+          "f1_score": 0.4045,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0954,
+          "recall": 0.1138,
+          "f1_score": 0.1038,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "confusion_matrix": [
+        [
+          8422,
+          4292,
+          1178
+        ],
+        [
+          2340,
+          2627,
+          482
+        ],
+        [
+          743,
+          620,
+          175
+        ]
+      ],
+      "runtime_seconds": 1.068,
+      "model_name": "LightGBM (Balanced)",
+      "model_type": "gradient_boosting",
+      "weighted": true,
+      "model_key": "lightgbm_balanced"
+    }
+  },
+  "temporal_cross_validation": {
+    "Fold 1 (Expanding July)": {
+      "train_bounds": [
+        "2021-06-10",
+        "2021-07-18"
+      ],
+      "val_bounds": [
+        "2021-07-19",
+        "2021-07-31"
+      ],
+      "train_size": 21021,
+      "val_size": 11341,
+      "train_class_dist": {
+        "1": 8561,
+        "0": 7975,
+        "2": 4485
+      },
+      "val_class_dist": {
+        "1": 4725,
+        "0": 4362,
+        "2": 2254
+      },
+      "models": {
+        "dummy_prior": {
+          "accuracy": 0.4166,
+          "balanced_accuracy": 0.3333,
+          "macro_f1": 0.1961,
+          "weighted_f1": 0.2451,
+          "multiclass_log_loss": 1.0541,
+          "critical_delay_pr_auc": 0.1987,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4166,
+              "recall": 1.0,
+              "f1_score": 0.5882,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              0,
+              4362,
+              0
+            ],
+            [
+              0,
+              4725,
+              0
+            ],
+            [
+              0,
+              2254,
+              0
+            ]
+          ],
+          "runtime_seconds": 0.078,
+          "model_name": "DummyClassifier (Prior)",
+          "model_type": "baseline_reference",
+          "weighted": false,
+          "model_key": "dummy_prior"
+        },
+        "logistic_regression_unweighted": {
+          "accuracy": 0.3767,
+          "balanced_accuracy": 0.3196,
+          "macro_f1": 0.2509,
+          "weighted_f1": 0.286,
+          "multiclass_log_loss": 3.6663,
+          "critical_delay_pr_auc": 0.1621,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.5293,
+              "recall": 0.0518,
+              "f1_score": 0.0944,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4109,
+              "recall": 0.8102,
+              "f1_score": 0.5453,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1364,
+              "recall": 0.0967,
+              "f1_score": 0.1132,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              226,
+              3531,
+              605
+            ],
+            [
+              122,
+              3828,
+              775
+            ],
+            [
+              79,
+              1957,
+              218
+            ]
+          ],
+          "runtime_seconds": 0.314,
+          "model_name": "Logistic Regression (Unweighted)",
+          "model_type": "linear",
+          "weighted": false,
+          "model_key": "logistic_regression_unweighted"
+        },
+        "logistic_regression_balanced": {
+          "accuracy": 0.2686,
+          "balanced_accuracy": 0.3023,
+          "macro_f1": 0.2416,
+          "weighted_f1": 0.2438,
+          "multiclass_log_loss": 3.7054,
+          "critical_delay_pr_auc": 0.1638,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.5258,
+              "recall": 0.0536,
+              "f1_score": 0.0974,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.391,
+              "recall": 0.3598,
+              "f1_score": 0.3747,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1698,
+              "recall": 0.4933,
+              "f1_score": 0.2527,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              234,
+              1591,
+              2537
+            ],
+            [
+              126,
+              1700,
+              2899
+            ],
+            [
+              85,
+              1057,
+              1112
+            ]
+          ],
+          "runtime_seconds": 0.368,
+          "model_name": "Logistic Regression (Balanced)",
+          "model_type": "linear",
+          "weighted": true,
+          "model_key": "logistic_regression_balanced"
+        },
+        "xgboost_unweighted": {
+          "accuracy": 0.4106,
+          "balanced_accuracy": 0.3385,
+          "macro_f1": 0.2458,
+          "weighted_f1": 0.2869,
+          "multiclass_log_loss": 1.1977,
+          "critical_delay_pr_auc": 0.199,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.5449,
+              "recall": 0.0445,
+              "f1_score": 0.0822,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4169,
+              "recall": 0.9204,
+              "f1_score": 0.5739,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.2061,
+              "recall": 0.0506,
+              "f1_score": 0.0812,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              194,
+              4013,
+              155
+            ],
+            [
+              92,
+              4349,
+              284
+            ],
+            [
+              70,
+              2070,
+              114
+            ]
+          ],
+          "runtime_seconds": 0.474,
+          "model_name": "XGBoost (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "xgboost_unweighted"
+        },
+        "xgboost_weighted": {
+          "accuracy": 0.341,
+          "balanced_accuracy": 0.3265,
+          "macro_f1": 0.2729,
+          "weighted_f1": 0.2876,
+          "multiclass_log_loss": 1.2303,
+          "critical_delay_pr_auc": 0.1974,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.618,
+              "recall": 0.0534,
+              "f1_score": 0.0983,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4017,
+              "recall": 0.626,
+              "f1_score": 0.4894,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1878,
+              "recall": 0.2999,
+              "f1_score": 0.231,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              233,
+              2894,
+              1235
+            ],
+            [
+              78,
+              2958,
+              1689
+            ],
+            [
+              66,
+              1512,
+              676
+            ]
+          ],
+          "runtime_seconds": 0.464,
+          "model_name": "XGBoost (Sample-Weighted)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "xgboost_weighted"
+        },
+        "lightgbm_unweighted": {
+          "accuracy": 0.4135,
+          "balanced_accuracy": 0.3515,
+          "macro_f1": 0.2881,
+          "weighted_f1": 0.3236,
+          "multiclass_log_loss": 1.2008,
+          "critical_delay_pr_auc": 0.195,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.5857,
+              "recall": 0.0885,
+              "f1_score": 0.1538,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4212,
+              "recall": 0.8605,
+              "f1_score": 0.5655,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.2315,
+              "recall": 0.1056,
+              "f1_score": 0.145,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              386,
+              3681,
+              295
+            ],
+            [
+              164,
+              4066,
+              495
+            ],
+            [
+              109,
+              1907,
+              238
+            ]
+          ],
+          "runtime_seconds": 0.644,
+          "model_name": "LightGBM (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "lightgbm_unweighted"
+        },
+        "lightgbm_balanced": {
+          "accuracy": 0.3106,
+          "balanced_accuracy": 0.3294,
+          "macro_f1": 0.2795,
+          "weighted_f1": 0.2866,
+          "multiclass_log_loss": 1.2668,
+          "critical_delay_pr_auc": 0.1923,
+          "critical_delay_baseline_prevalence": 0.1987,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.5766,
+              "recall": 0.0837,
+              "f1_score": 0.1461,
+              "support": 4362,
+              "prevalence": 0.3846
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4022,
+              "recall": 0.4525,
+              "f1_score": 0.4259,
+              "support": 4725,
+              "prevalence": 0.4166
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.189,
+              "recall": 0.4521,
+              "f1_score": 0.2665,
+              "support": 2254,
+              "prevalence": 0.1987
+            }
+          },
+          "confusion_matrix": [
+            [
+              365,
+              2050,
+              1947
+            ],
+            [
+              161,
+              2138,
+              2426
+            ],
+            [
+              107,
+              1128,
+              1019
+            ]
+          ],
+          "runtime_seconds": 0.634,
+          "model_name": "LightGBM (Balanced)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "lightgbm_balanced"
+        }
+      }
+    },
+    "Fold 2 (Late July - Early Aug)": {
+      "train_bounds": [
+        "2021-06-10",
+        "2021-07-31"
+      ],
+      "val_bounds": [
+        "2021-08-01",
+        "2021-08-14"
+      ],
+      "train_size": 32362,
+      "val_size": 16628,
+      "train_class_dist": {
+        "1": 13286,
+        "0": 12337,
+        "2": 6739
+      },
+      "val_class_dist": {
+        "0": 10289,
+        "1": 4862,
+        "2": 1477
+      },
+      "models": {
+        "dummy_prior": {
+          "accuracy": 0.2924,
+          "balanced_accuracy": 0.3333,
+          "macro_f1": 0.1508,
+          "weighted_f1": 0.1323,
+          "multiclass_log_loss": 0.9964,
+          "critical_delay_pr_auc": 0.0888,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.2924,
+              "recall": 1.0,
+              "f1_score": 0.4525,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              0,
+              10289,
+              0
+            ],
+            [
+              0,
+              4862,
+              0
+            ],
+            [
+              0,
+              1477,
+              0
+            ]
+          ],
+          "runtime_seconds": 0.109,
+          "model_name": "DummyClassifier (Prior)",
+          "model_type": "baseline_reference",
+          "weighted": false,
+          "model_key": "dummy_prior"
+        },
+        "logistic_regression_unweighted": {
+          "accuracy": 0.6173,
+          "balanced_accuracy": 0.3623,
+          "macro_f1": 0.3332,
+          "weighted_f1": 0.5375,
+          "multiclass_log_loss": 0.9225,
+          "critical_delay_pr_auc": 0.1021,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.6389,
+              "recall": 0.9187,
+              "f1_score": 0.7537,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4452,
+              "recall": 0.1662,
+              "f1_score": 0.242,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1667,
+              "recall": 0.002,
+              "f1_score": 0.004,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              9453,
+              834,
+              2
+            ],
+            [
+              4041,
+              808,
+              13
+            ],
+            [
+              1301,
+              173,
+              3
+            ]
+          ],
+          "runtime_seconds": 0.525,
+          "model_name": "Logistic Regression (Unweighted)",
+          "model_type": "linear",
+          "weighted": false,
+          "model_key": "logistic_regression_unweighted"
+        },
+        "logistic_regression_balanced": {
+          "accuracy": 0.6175,
+          "balanced_accuracy": 0.3602,
+          "macro_f1": 0.3296,
+          "weighted_f1": 0.5329,
+          "multiclass_log_loss": 0.9108,
+          "critical_delay_pr_auc": 0.1022,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.6372,
+              "recall": 0.9285,
+              "f1_score": 0.7558,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.4484,
+              "recall": 0.1448,
+              "f1_score": 0.2189,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1642,
+              "recall": 0.0074,
+              "f1_score": 0.0142,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              9553,
+              714,
+              22
+            ],
+            [
+              4124,
+              704,
+              34
+            ],
+            [
+              1314,
+              152,
+              11
+            ]
+          ],
+          "runtime_seconds": 0.526,
+          "model_name": "Logistic Regression (Balanced)",
+          "model_type": "linear",
+          "weighted": true,
+          "model_key": "logistic_regression_balanced"
+        },
+        "xgboost_unweighted": {
+          "accuracy": 0.4919,
+          "balanced_accuracy": 0.4014,
+          "macro_f1": 0.3619,
+          "weighted_f1": 0.4892,
+          "multiclass_log_loss": 1.0586,
+          "critical_delay_pr_auc": 0.0982,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7323,
+              "recall": 0.4493,
+              "f1_score": 0.5569,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3591,
+              "recall": 0.7211,
+              "f1_score": 0.4794,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0907,
+              "recall": 0.0339,
+              "f1_score": 0.0493,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              4623,
+              5365,
+              301
+            ],
+            [
+              1156,
+              3506,
+              200
+            ],
+            [
+              534,
+              893,
+              50
+            ]
+          ],
+          "runtime_seconds": 0.857,
+          "model_name": "XGBoost (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "xgboost_unweighted"
+        },
+        "xgboost_weighted": {
+          "accuracy": 0.4307,
+          "balanced_accuracy": 0.4149,
+          "macro_f1": 0.3733,
+          "weighted_f1": 0.4623,
+          "multiclass_log_loss": 1.1399,
+          "critical_delay_pr_auc": 0.1026,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7537,
+              "recall": 0.3958,
+              "f1_score": 0.519,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3575,
+              "recall": 0.5424,
+              "f1_score": 0.4309,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1177,
+              "recall": 0.3067,
+              "f1_score": 0.1701,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              4072,
+              4119,
+              2098
+            ],
+            [
+              928,
+              2637,
+              1297
+            ],
+            [
+              403,
+              621,
+              453
+            ]
+          ],
+          "runtime_seconds": 0.592,
+          "model_name": "XGBoost (Sample-Weighted)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "xgboost_weighted"
+        },
+        "lightgbm_unweighted": {
+          "accuracy": 0.4937,
+          "balanced_accuracy": 0.4034,
+          "macro_f1": 0.3564,
+          "weighted_f1": 0.4857,
+          "multiclass_log_loss": 1.0418,
+          "critical_delay_pr_auc": 0.1017,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7334,
+              "recall": 0.4407,
+              "f1_score": 0.5505,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3597,
+              "recall": 0.7499,
+              "f1_score": 0.4862,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0932,
+              "recall": 0.0196,
+              "f1_score": 0.0324,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              4534,
+              5584,
+              171
+            ],
+            [
+              1105,
+              3646,
+              111
+            ],
+            [
+              543,
+              905,
+              29
+            ]
+          ],
+          "runtime_seconds": 0.769,
+          "model_name": "LightGBM (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "lightgbm_unweighted"
+        },
+        "lightgbm_balanced": {
+          "accuracy": 0.4719,
+          "balanced_accuracy": 0.4094,
+          "macro_f1": 0.3789,
+          "weighted_f1": 0.4844,
+          "multiclass_log_loss": 1.1206,
+          "critical_delay_pr_auc": 0.1041,
+          "critical_delay_baseline_prevalence": 0.0888,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7358,
+              "recall": 0.4305,
+              "f1_score": 0.5432,
+              "support": 10289,
+              "prevalence": 0.6188
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.364,
+              "recall": 0.6617,
+              "f1_score": 0.4696,
+              "support": 4862,
+              "prevalence": 0.2924
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1135,
+              "recall": 0.1361,
+              "f1_score": 0.1238,
+              "support": 1477,
+              "prevalence": 0.0888
+            }
+          },
+          "confusion_matrix": [
+            [
+              4429,
+              4857,
+              1003
+            ],
+            [
+              1078,
+              3217,
+              567
+            ],
+            [
+              512,
+              764,
+              201
+            ]
+          ],
+          "runtime_seconds": 0.745,
+          "model_name": "LightGBM (Balanced)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "lightgbm_balanced"
+        }
+      }
+    },
+    "Fold 3 (Mid-August Clearance)": {
+      "train_bounds": [
+        "2021-06-10",
+        "2021-08-14"
+      ],
+      "val_bounds": [
+        "2021-08-15",
+        "2021-08-26"
+      ],
+      "train_size": 48990,
+      "val_size": 11708,
+      "train_class_dist": {
+        "0": 22626,
+        "1": 18148,
+        "2": 8216
+      },
+      "val_class_dist": {
+        "0": 7723,
+        "1": 3096,
+        "2": 889
+      },
+      "models": {
+        "dummy_prior": {
+          "accuracy": 0.6596,
+          "balanced_accuracy": 0.3333,
+          "macro_f1": 0.265,
+          "weighted_f1": 0.5244,
+          "multiclass_log_loss": 0.9078,
+          "critical_delay_pr_auc": 0.0759,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.6596,
+              "recall": 1.0,
+              "f1_score": 0.7949,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1_score": 0.0,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              7723,
+              0,
+              0
+            ],
+            [
+              3096,
+              0,
+              0
+            ],
+            [
+              889,
+              0,
+              0
+            ]
+          ],
+          "runtime_seconds": 0.162,
+          "model_name": "DummyClassifier (Prior)",
+          "model_type": "baseline_reference",
+          "weighted": false,
+          "model_key": "dummy_prior"
+        },
+        "logistic_regression_unweighted": {
+          "accuracy": 0.6157,
+          "balanced_accuracy": 0.3855,
+          "macro_f1": 0.3747,
+          "weighted_f1": 0.5866,
+          "multiclass_log_loss": 0.8395,
+          "critical_delay_pr_auc": 0.0949,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.6966,
+              "recall": 0.788,
+              "f1_score": 0.7395,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3786,
+              "recall": 0.3605,
+              "f1_score": 0.3693,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.3043,
+              "recall": 0.0079,
+              "f1_score": 0.0154,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              6086,
+              1630,
+              7
+            ],
+            [
+              1971,
+              1116,
+              9
+            ],
+            [
+              680,
+              202,
+              7
+            ]
+          ],
+          "runtime_seconds": 0.844,
+          "model_name": "Logistic Regression (Unweighted)",
+          "model_type": "linear",
+          "weighted": false,
+          "model_key": "logistic_regression_unweighted"
+        },
+        "logistic_regression_balanced": {
+          "accuracy": 0.5335,
+          "balanced_accuracy": 0.3905,
+          "macro_f1": 0.3777,
+          "weighted_f1": 0.5408,
+          "multiclass_log_loss": 0.9595,
+          "critical_delay_pr_auc": 0.0971,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7141,
+              "recall": 0.5951,
+              "f1_score": 0.6492,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3298,
+              "recall": 0.5155,
+              "f1_score": 0.4022,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.125,
+              "recall": 0.0607,
+              "f1_score": 0.0818,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              4596,
+              2894,
+              233
+            ],
+            [
+              1355,
+              1596,
+              145
+            ],
+            [
+              485,
+              350,
+              54
+            ]
+          ],
+          "runtime_seconds": 0.889,
+          "model_name": "Logistic Regression (Balanced)",
+          "model_type": "linear",
+          "weighted": true,
+          "model_key": "logistic_regression_balanced"
+        },
+        "xgboost_unweighted": {
+          "accuracy": 0.5896,
+          "balanced_accuracy": 0.4352,
+          "macro_f1": 0.398,
+          "weighted_f1": 0.5846,
+          "multiclass_log_loss": 0.8532,
+          "critical_delay_pr_auc": 0.1104,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7685,
+              "recall": 0.622,
+              "f1_score": 0.6876,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3858,
+              "recall": 0.6757,
+              "f1_score": 0.4911,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.2059,
+              "recall": 0.0079,
+              "f1_score": 0.0152,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              4804,
+              2910,
+              9
+            ],
+            [
+              986,
+              2092,
+              18
+            ],
+            [
+              461,
+              421,
+              7
+            ]
+          ],
+          "runtime_seconds": 0.836,
+          "model_name": "XGBoost (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "xgboost_unweighted"
+        },
+        "xgboost_weighted": {
+          "accuracy": 0.5401,
+          "balanced_accuracy": 0.4631,
+          "macro_f1": 0.4295,
+          "weighted_f1": 0.5629,
+          "multiclass_log_loss": 0.9632,
+          "critical_delay_pr_auc": 0.1141,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7886,
+              "recall": 0.5342,
+              "f1_score": 0.637,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3989,
+              "recall": 0.6515,
+              "f1_score": 0.4948,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1275,
+              "recall": 0.2036,
+              "f1_score": 0.1568,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              4126,
+              2685,
+              912
+            ],
+            [
+              752,
+              2017,
+              327
+            ],
+            [
+              354,
+              354,
+              181
+            ]
+          ],
+          "runtime_seconds": 0.72,
+          "model_name": "XGBoost (Sample-Weighted)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "xgboost_weighted"
+        },
+        "lightgbm_unweighted": {
+          "accuracy": 0.5829,
+          "balanced_accuracy": 0.4402,
+          "macro_f1": 0.3981,
+          "weighted_f1": 0.5792,
+          "multiclass_log_loss": 0.871,
+          "critical_delay_pr_auc": 0.1106,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7798,
+              "recall": 0.5961,
+              "f1_score": 0.6757,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3835,
+              "recall": 0.7145,
+              "f1_score": 0.4991,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.25,
+              "recall": 0.0101,
+              "f1_score": 0.0195,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              4604,
+              3113,
+              6
+            ],
+            [
+              863,
+              2212,
+              21
+            ],
+            [
+              437,
+              443,
+              9
+            ]
+          ],
+          "runtime_seconds": 0.908,
+          "model_name": "LightGBM (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "lightgbm_unweighted"
+        },
+        "lightgbm_balanced": {
+          "accuracy": 0.4939,
+          "balanced_accuracy": 0.4724,
+          "macro_f1": 0.4152,
+          "weighted_f1": 0.5246,
+          "multiclass_log_loss": 1.0084,
+          "critical_delay_pr_auc": 0.1144,
+          "critical_delay_baseline_prevalence": 0.0759,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.8135,
+              "recall": 0.4478,
+              "f1_score": 0.5776,
+              "support": 7723,
+              "prevalence": 0.6596
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3925,
+              "recall": 0.6625,
+              "f1_score": 0.4929,
+              "support": 3096,
+              "prevalence": 0.2644
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1224,
+              "recall": 0.3071,
+              "f1_score": 0.175,
+              "support": 889,
+              "prevalence": 0.0759
+            }
+          },
+          "confusion_matrix": [
+            [
+              3458,
+              2830,
+              1435
+            ],
+            [
+              522,
+              2051,
+              523
+            ],
+            [
+              271,
+              345,
+              273
+            ]
+          ],
+          "runtime_seconds": 0.941,
+          "model_name": "LightGBM (Balanced)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "lightgbm_balanced"
+        }
+      }
+    }
+  },
+  "cold_start_sensitivity": {
+    "all_training_rows": {
+      "n_train": 60698,
+      "date_range": [
+        "2021-06-10",
+        "2021-08-26"
+      ],
+      "models": {
+        "xgboost_unweighted": {
+          "accuracy": 0.6182,
+          "balanced_accuracy": 0.3942,
+          "macro_f1": 0.3809,
+          "weighted_f1": 0.5963,
+          "multiclass_log_loss": 0.8144,
+          "critical_delay_pr_auc": 0.0911,
+          "critical_delay_baseline_prevalence": 0.0737,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7166,
+              "recall": 0.7676,
+              "f1_score": 0.7412,
+              "support": 13892,
+              "prevalence": 0.6654
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3767,
+              "recall": 0.4105,
+              "f1_score": 0.3929,
+              "support": 5449,
+              "prevalence": 0.261
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.1186,
+              "recall": 0.0046,
+              "f1_score": 0.0088,
+              "support": 1538,
+              "prevalence": 0.0737
+            }
+          },
+          "confusion_matrix": [
+            [
+              10663,
+              3203,
+              26
+            ],
+            [
+              3186,
+              2237,
+              26
+            ],
+            [
+              1032,
+              499,
+              7
+            ]
+          ],
+          "runtime_seconds": 0.96,
+          "model_name": "XGBoost (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "xgboost_unweighted"
+        },
+        "xgboost_weighted": {
+          "accuracy": 0.5464,
+          "balanced_accuracy": 0.4076,
+          "macro_f1": 0.3968,
+          "weighted_f1": 0.5631,
+          "multiclass_log_loss": 0.9278,
+          "critical_delay_pr_auc": 0.0937,
+          "critical_delay_baseline_prevalence": 0.0737,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7442,
+              "recall": 0.6139,
+              "f1_score": 0.6728,
+              "support": 13892,
+              "prevalence": 0.6654
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3526,
+              "recall": 0.4972,
+              "f1_score": 0.4126,
+              "support": 5449,
+              "prevalence": 0.261
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.099,
+              "recall": 0.1118,
+              "f1_score": 0.105,
+              "support": 1538,
+              "prevalence": 0.0737
+            }
+          },
+          "confusion_matrix": [
+            [
+              8528,
+              4292,
+              1072
+            ],
+            [
+              2247,
+              2709,
+              493
+            ],
+            [
+              685,
+              681,
+              172
+            ]
+          ],
+          "runtime_seconds": 1.12,
+          "model_name": "XGBoost (Sample-Weighted)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "xgboost_weighted"
+        }
+      }
+    },
+    "cold_start_excluded": {
+      "n_train": 56276,
+      "date_range": [
+        "2021-07-02",
+        "2021-08-26"
+      ],
+      "excluded_count": 4422,
+      "models": {
+        "xgboost_unweighted": {
+          "accuracy": 0.627,
+          "balanced_accuracy": 0.3826,
+          "macro_f1": 0.3714,
+          "weighted_f1": 0.5947,
+          "multiclass_log_loss": 0.8118,
+          "critical_delay_pr_auc": 0.0866,
+          "critical_delay_baseline_prevalence": 0.0737,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7052,
+              "recall": 0.8113,
+              "f1_score": 0.7545,
+              "support": 13892,
+              "prevalence": 0.6654
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3764,
+              "recall": 0.3333,
+              "f1_score": 0.3535,
+              "support": 5449,
+              "prevalence": 0.261
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0694,
+              "recall": 0.0033,
+              "f1_score": 0.0062,
+              "support": 1538,
+              "prevalence": 0.0737
+            }
+          },
+          "confusion_matrix": [
+            [
+              11270,
+              2581,
+              41
+            ],
+            [
+              3607,
+              1816,
+              26
+            ],
+            [
+              1105,
+              428,
+              5
+            ]
+          ],
+          "runtime_seconds": 0.872,
+          "model_name": "XGBoost (Unweighted)",
+          "model_type": "gradient_boosting",
+          "weighted": false,
+          "model_key": "xgboost_unweighted"
+        },
+        "xgboost_weighted": {
+          "accuracy": 0.5308,
+          "balanced_accuracy": 0.4036,
+          "macro_f1": 0.3876,
+          "weighted_f1": 0.5489,
+          "multiclass_log_loss": 0.9336,
+          "critical_delay_pr_auc": 0.0862,
+          "critical_delay_baseline_prevalence": 0.0737,
+          "per_class": {
+            "ON_TIME": {
+              "class_id": 0,
+              "precision": 0.7468,
+              "recall": 0.5748,
+              "f1_score": 0.6496,
+              "support": 13892,
+              "prevalence": 0.6654
+            },
+            "AT_RISK": {
+              "class_id": 1,
+              "precision": 0.3443,
+              "recall": 0.5418,
+              "f1_score": 0.4211,
+              "support": 5449,
+              "prevalence": 0.261
+            },
+            "CRITICAL_DELAY": {
+              "class_id": 2,
+              "precision": 0.0899,
+              "recall": 0.0943,
+              "f1_score": 0.092,
+              "support": 1538,
+              "prevalence": 0.0737
+            }
+          },
+          "confusion_matrix": [
+            [
+              7985,
+              4879,
+              1028
+            ],
+            [
+              2057,
+              2952,
+              440
+            ],
+            [
+              651,
+              742,
+              145
+            ]
+          ],
+          "runtime_seconds": 0.898,
+          "model_name": "XGBoost (Sample-Weighted)",
+          "model_type": "gradient_boosting",
+          "weighted": true,
+          "model_key": "xgboost_weighted"
+        }
+      }
+    }
+  },
+  "feature_group_ablations": {
+    "all_features": {
+      "num_features": 15,
+      "features": [
+        "carrier_prefix",
+        "CTR_SIZE",
+        "CTR_TYPE",
+        "GROSS",
+        "YARD_BLOCK",
+        "YARD_SLOT",
+        "discharge_hour",
+        "discharge_day_of_week",
+        "discharge_month",
+        "is_weekend",
+        "trailing_7d_volume",
+        "trailing_7d_critical",
+        "trailing_7d_at_risk",
+        "historical_delay_rate_7d",
+        "trailing_7d_mean_dwell"
+      ],
+      "metrics": {
+        "accuracy": 0.6182,
+        "balanced_accuracy": 0.3942,
+        "macro_f1": 0.3809,
+        "weighted_f1": 0.5963,
+        "multiclass_log_loss": 0.8144,
+        "critical_delay_pr_auc": 0.0911,
+        "critical_delay_baseline_prevalence": 0.0737,
+        "per_class": {
+          "ON_TIME": {
+            "class_id": 0,
+            "precision": 0.7166,
+            "recall": 0.7676,
+            "f1_score": 0.7412,
+            "support": 13892,
+            "prevalence": 0.6654
+          },
+          "AT_RISK": {
+            "class_id": 1,
+            "precision": 0.3767,
+            "recall": 0.4105,
+            "f1_score": 0.3929,
+            "support": 5449,
+            "prevalence": 0.261
+          },
+          "CRITICAL_DELAY": {
+            "class_id": 2,
+            "precision": 0.1186,
+            "recall": 0.0046,
+            "f1_score": 0.0088,
+            "support": 1538,
+            "prevalence": 0.0737
+          }
+        },
+        "confusion_matrix": [
+          [
+            10663,
+            3203,
+            26
+          ],
+          [
+            3186,
+            2237,
+            26
+          ],
+          [
+            1032,
+            499,
+            7
+          ]
+        ],
+        "runtime_seconds": 0.967,
+        "model_name": "XGBoost (Unweighted)",
+        "model_type": "gradient_boosting",
+        "weighted": false,
+        "model_key": "xgboost_unweighted"
+      }
+    },
+    "without_rolling_metrics": {
+      "num_features": 10,
+      "features": [
+        "carrier_prefix",
+        "CTR_SIZE",
+        "CTR_TYPE",
+        "GROSS",
+        "YARD_BLOCK",
+        "YARD_SLOT",
+        "discharge_hour",
+        "discharge_day_of_week",
+        "discharge_month",
+        "is_weekend"
+      ],
+      "metrics": {
+        "accuracy": 0.6633,
+        "balanced_accuracy": 0.3993,
+        "macro_f1": 0.3892,
+        "weighted_f1": 0.6206,
+        "multiclass_log_loss": 0.768,
+        "critical_delay_pr_auc": 0.095,
+        "critical_delay_baseline_prevalence": 0.0737,
+        "per_class": {
+          "ON_TIME": {
+            "class_id": 0,
+            "precision": 0.7149,
+            "recall": 0.8686,
+            "f1_score": 0.7843,
+            "support": 13892,
+            "prevalence": 0.6654
+          },
+          "AT_RISK": {
+            "class_id": 1,
+            "precision": 0.4465,
+            "recall": 0.3259,
+            "f1_score": 0.3768,
+            "support": 5449,
+            "prevalence": 0.261
+          },
+          "CRITICAL_DELAY": {
+            "class_id": 2,
+            "precision": 0.2381,
+            "recall": 0.0033,
+            "f1_score": 0.0064,
+            "support": 1538,
+            "prevalence": 0.0737
+          }
+        },
+        "confusion_matrix": [
+          [
+            12067,
+            1814,
+            11
+          ],
+          [
+            3668,
+            1776,
+            5
+          ],
+          [
+            1145,
+            388,
+            5
+          ]
+        ],
+        "runtime_seconds": 0.931,
+        "model_name": "XGBoost (Unweighted)",
+        "model_type": "gradient_boosting",
+        "weighted": false,
+        "model_key": "xgboost_unweighted"
+      }
+    },
+    "without_calendar_features": {
+      "num_features": 11,
+      "features": [
+        "carrier_prefix",
+        "CTR_SIZE",
+        "CTR_TYPE",
+        "GROSS",
+        "YARD_BLOCK",
+        "YARD_SLOT",
+        "trailing_7d_volume",
+        "trailing_7d_critical",
+        "trailing_7d_at_risk",
+        "historical_delay_rate_7d",
+        "trailing_7d_mean_dwell"
+      ],
+      "metrics": {
+        "accuracy": 0.6421,
+        "balanced_accuracy": 0.3438,
+        "macro_f1": 0.3143,
+        "weighted_f1": 0.5599,
+        "multiclass_log_loss": 0.8014,
+        "critical_delay_pr_auc": 0.0943,
+        "critical_delay_baseline_prevalence": 0.0737,
+        "per_class": {
+          "ON_TIME": {
+            "class_id": 0,
+            "precision": 0.6747,
+            "recall": 0.9244,
+            "f1_score": 0.7801,
+            "support": 13892,
+            "prevalence": 0.6654
+          },
+          "AT_RISK": {
+            "class_id": 1,
+            "precision": 0.3116,
+            "recall": 0.1024,
+            "f1_score": 0.1541,
+            "support": 5449,
+            "prevalence": 0.261
+          },
+          "CRITICAL_DELAY": {
+            "class_id": 2,
+            "precision": 0.1296,
+            "recall": 0.0046,
+            "f1_score": 0.0088,
+            "support": 1538,
+            "prevalence": 0.0737
+          }
+        },
+        "confusion_matrix": [
+          [
+            12842,
+            1027,
+            23
+          ],
+          [
+            4867,
+            558,
+            24
+          ],
+          [
+            1325,
+            206,
+            7
+          ]
+        ],
+        "runtime_seconds": 1.12,
+        "model_name": "XGBoost (Unweighted)",
+        "model_type": "gradient_boosting",
+        "weighted": false,
+        "model_key": "xgboost_unweighted"
+      }
+    },
+    "without_yard_features": {
+      "num_features": 13,
+      "features": [
+        "carrier_prefix",
+        "CTR_SIZE",
+        "CTR_TYPE",
+        "GROSS",
+        "discharge_hour",
+        "discharge_day_of_week",
+        "discharge_month",
+        "is_weekend",
+        "trailing_7d_volume",
+        "trailing_7d_critical",
+        "trailing_7d_at_risk",
+        "historical_delay_rate_7d",
+        "trailing_7d_mean_dwell"
+      ],
+      "metrics": {
+        "accuracy": 0.6231,
+        "balanced_accuracy": 0.3837,
+        "macro_f1": 0.3725,
+        "weighted_f1": 0.5931,
+        "multiclass_log_loss": 0.8079,
+        "critical_delay_pr_auc": 0.0911,
+        "critical_delay_baseline_prevalence": 0.0737,
+        "per_class": {
+          "ON_TIME": {
+            "class_id": 0,
+            "precision": 0.7051,
+            "recall": 0.8,
+            "f1_score": 0.7496,
+            "support": 13892,
+            "prevalence": 0.6654
+          },
+          "AT_RISK": {
+            "class_id": 1,
+            "precision": 0.373,
+            "recall": 0.3465,
+            "f1_score": 0.3593,
+            "support": 5449,
+            "prevalence": 0.261
+          },
+          "CRITICAL_DELAY": {
+            "class_id": 2,
+            "precision": 0.125,
+            "recall": 0.0046,
+            "f1_score": 0.0088,
+            "support": 1538,
+            "prevalence": 0.0737
+          }
+        },
+        "confusion_matrix": [
+          [
+            11114,
+            2755,
+            23
+          ],
+          [
+            3535,
+            1888,
+            26
+          ],
+          [
+            1113,
+            418,
+            7
+          ]
+        ],
+        "runtime_seconds": 0.862,
+        "model_name": "XGBoost (Unweighted)",
+        "model_type": "gradient_boosting",
+        "weighted": false,
+        "model_key": "xgboost_unweighted"
+      }
+    },
+    "without_equipment_features": {
+      "num_features": 11,
+      "features": [
+        "YARD_BLOCK",
+        "YARD_SLOT",
+        "discharge_hour",
+        "discharge_day_of_week",
+        "discharge_month",
+        "is_weekend",
+        "trailing_7d_volume",
+        "trailing_7d_critical",
+        "trailing_7d_at_risk",
+        "historical_delay_rate_7d",
+        "trailing_7d_mean_dwell"
+      ],
+      "metrics": {
+        "accuracy": 0.6064,
+        "balanced_accuracy": 0.3699,
+        "macro_f1": 0.3567,
+        "weighted_f1": 0.577,
+        "multiclass_log_loss": 0.8233,
+        "critical_delay_pr_auc": 0.0833,
+        "critical_delay_baseline_prevalence": 0.0737,
+        "per_class": {
+          "ON_TIME": {
+            "class_id": 0,
+            "precision": 0.6946,
+            "recall": 0.7835,
+            "f1_score": 0.7364,
+            "support": 13892,
+            "prevalence": 0.6654
+          },
+          "AT_RISK": {
+            "class_id": 1,
+            "precision": 0.3414,
+            "recall": 0.3263,
+            "f1_score": 0.3337,
+            "support": 5449,
+            "prevalence": 0.261
+          },
+          "CRITICAL_DELAY": {
+            "class_id": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "support": 1538,
+            "prevalence": 0.0737
+          }
+        },
+        "confusion_matrix": [
+          [
+            10884,
+            3007,
+            1
+          ],
+          [
+            3671,
+            1778,
+            0
+          ],
+          [
+            1115,
+            423,
+            0
+          ]
+        ],
+        "runtime_seconds": 1.055,
+        "model_name": "XGBoost (Unweighted)",
+        "model_type": "gradient_boosting",
+        "weighted": false,
+        "model_key": "xgboost_unweighted"
+      }
+    }
+  },
+  "known_limitations": [
+    "Single-terminal operations (Surabaya, Indonesia, June-Sept 2021).",
+    "Single prominent congestion episode in July accounts for bulk of critical delays.",
+    "Right-censoring survivorship bias in test partition suppresses slow turnarounds.",
+    "PortWatch external weather and disruption indices are constant 0 in the catalog.",
+    "Arrival-time prediction scenario excludes all in-yard customs and inspection milestones."
+  ]
+}
