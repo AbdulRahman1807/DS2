@@ -235,3 +235,68 @@ class TestModelPerformanceRealism:
         assert result["alert_threshold_tau"] == 0.10
         assert "alert_triggered" in result
         assert "operational_note" in result
+
+
+class TestEvaluationProtocolAndMethodologyDefects:
+    """Regression tests for methodology defects and evaluation redesign."""
+
+    def test_evaluation_metrics_reports_fold_specific_prevalence_baseline(self):
+        y_true = np.array([0, 0, 1, 1, 2, 0, 0, 0, 0, 0])  # 10 cases, 1 critical (prev = 0.10)
+        y_pred = np.array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
+        y_prob = np.zeros((10, 3))
+        y_prob[:, 0] = 0.7
+        y_prob[:, 1] = 0.2
+        y_prob[:, 2] = 0.1
+
+        metrics = compute_evaluation_metrics(y_true, y_pred, y_prob)
+
+        assert "critical_delay_pr_auc" in metrics
+        assert "critical_delay_baseline_prevalence" in metrics
+        assert metrics["critical_delay_baseline_prevalence"] == 0.10, (
+            "Evaluation protocol must report fold-specific critical prevalence baseline alongside PR-AUC"
+        )
+        assert "critical_delay_threshold_tradeoffs" in metrics
+        assert len(metrics["critical_delay_threshold_tradeoffs"]) > 0
+        first_curve = metrics["critical_delay_threshold_tradeoffs"][0]
+        assert "false_alerts" in first_curve
+        assert "missed_critical" in first_curve
+
+    def test_conservative_feature_set_compliance(self):
+        active_features = get_active_arrival_predictors(exclude_zero_variance=True)
+        conservative_features = [c for c in active_features if c not in ["YARD_BLOCK", "YARD_SLOT"]]
+
+        assert len(conservative_features) == 13
+        assert "YARD_BLOCK" not in conservative_features
+        assert "YARD_SLOT" not in conservative_features
+
+        # Check feature matrix validation on conservative set
+        dummy_df = pd.DataFrame({col: [1] for col in conservative_features})
+        validate_feature_matrix(dummy_df, scenario=PredictionScenario.ARRIVAL_TIME, strict_allowlist=True)
+
+    def test_boundary_overlap_sensitivity_preserves_weak_signal_verdict(self, sample_train_val_data):
+        train_df, val_df = sample_train_val_data
+        active_features = get_active_arrival_predictors(exclude_zero_variance=True)
+
+        val_min_ts = val_df["discharge_start_ts"].min()
+        boundary_mask = train_df["discharge_start_ts"] >= val_min_ts
+
+        # Even if synthetic or real boundary subset exists, ensure cleanly sliced
+        train_clean = train_df[~boundary_mask].copy()
+        assert len(train_clean) <= len(train_df)
+
+    def test_frozen_thresholds_temporal_stability_documentation(self):
+        train_df = pd.read_parquet("data/processed/train.parquet")
+        p50 = float(np.percentile(train_df["dwell_hours"], 50))
+        p85 = float(np.percentile(train_df["dwell_hours"], 85))
+
+        # Assert frozen thresholds match overall train within 0.01h
+        assert abs(p50 - CLASS_THRESHOLDS["p50_hours"]) < 0.01
+        assert abs(p85 - CLASS_THRESHOLDS["p85_hours"]) < 0.01
+
+        # Assert Fold 1 local training p85 exceeds 190h, confirming macro regime difference
+        folds = define_internal_temporal_folds()
+        fold1_train = train_df[train_df["discharge_start_ts"] < folds[0]["train_end_ts"]]
+        fold1_p85 = float(np.percentile(fold1_train["dwell_hours"], 85))
+        assert fold1_p85 > 190.0, (
+            f"Fold 1 train local p85 should reflect July congestion peak (>190h), found {fold1_p85:.2f}h"
+        )

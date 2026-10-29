@@ -106,11 +106,12 @@ def compute_critical_delay_threshold_curves(
     y_prob_crit: np.ndarray,
     thresholds: Optional[List[float]] = None,
 ) -> List[Dict[str, Any]]:
-    """Computes exact Precision, Recall, and F1 across probability cutoffs for CRITICAL_DELAY."""
+    """Computes exact Precision, Recall, F1, false alerts, and missed cases across probability cutoffs for CRITICAL_DELAY."""
     if thresholds is None:
         thresholds = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
 
     crit_binary_true = (y_true == 2).astype(int)
+    n_crit = int(np.sum(crit_binary_true))
     curves = []
 
     for tau in thresholds:
@@ -119,11 +120,19 @@ def compute_critical_delay_threshold_curves(
         rec = float(recall_score(crit_binary_true, pred_crit, zero_division=0))
         f1 = float(f1_score(crit_binary_true, pred_crit, zero_division=0))
         flagged = int(np.sum(pred_crit))
+        tp = int(np.sum(pred_crit & crit_binary_true))
+        fp = int(np.sum(pred_crit & (1 - crit_binary_true)))
+        fn = int(np.sum((1 - pred_crit) & crit_binary_true))
+        tn = int(np.sum((1 - pred_crit) & (1 - crit_binary_true)))
 
         curves.append({
             "threshold_tau": round(tau, 2),
             "flagged_count": flagged,
             "flagged_pct": round(flagged / len(y_true) * 100, 2),
+            "true_positives": tp,
+            "false_alerts": fp,
+            "missed_critical": fn,
+            "true_negatives": tn,
             "precision": round(prec, 4),
             "recall": round(rec, 4),
             "f1_score": round(f1, 4),
@@ -365,6 +374,22 @@ class BaselineModelRunner:
                     verbose=-1,
                 ),
             },
+            "xgboost_conservative_noyard": {
+                "name": "XGBoost (Conservative, No Yard)",
+                "type": "gradient_boosting",
+                "weighted": True,
+                "features": [c for c in self.active_features if c not in ["YARD_BLOCK", "YARD_SLOT"]],
+                "estimator": XGBClassifier(
+                    n_estimators=100,
+                    max_depth=5,
+                    learning_rate=0.1,
+                    subsample=0.8,
+                    colsample_bytree=0.8,
+                    random_state=self.random_state,
+                    n_jobs=4,
+                    eval_metric="mlogloss",
+                ),
+            },
         }
 
     def train_and_evaluate_model(
@@ -379,17 +404,21 @@ class BaselineModelRunner:
         """Fits preprocessor and model strictly on training split and evaluates out-of-time."""
         t0 = time.time()
 
-        num_cols, cat_cols = get_feature_subsets(list(X_train.columns))
+        features = model_cfg.get("features", list(X_train.columns))
+        X_train_sub = X_train[features].copy()
+        X_eval_sub = X_eval[features].copy()
+
+        num_cols, cat_cols = get_feature_subsets(features)
         preprocessor = build_preprocessor(num_cols, cat_cols, random_state=self.random_state)
 
         # Fit preprocessor strictly on training data
-        X_train_proc = preprocessor.fit_transform(X_train, y_train)
-        X_eval_proc = preprocessor.transform(X_eval)
+        X_train_proc = preprocessor.fit_transform(X_train_sub, y_train)
+        X_eval_proc = preprocessor.transform(X_eval_sub)
 
         estimator = model_cfg["estimator"]
 
         # Handle sample weighting for XGBoost if weighted
-        if model_key == "xgboost_weighted":
+        if model_cfg.get("weighted", False) and "xgboost" in model_key:
             sample_weights = compute_sample_weight("balanced", y_train)
             estimator.fit(X_train_proc, y_train, sample_weight=sample_weights)
         else:
@@ -575,6 +604,47 @@ class BaselineModelRunner:
 
         return results
 
+    def run_boundary_overlap_sensitivity(
+        self,
+        train_df: pd.DataFrame,
+        val_df: pd.DataFrame,
+    ) -> Dict[str, Any]:
+        """Quantifies the sensitivity of removing the 113 boundary overlap cases from training."""
+        val_min_ts = str(val_df["discharge_start_ts"].min())
+        boundary_mask = train_df["discharge_start_ts"] >= val_min_ts
+        train_clean = train_df[~boundary_mask].copy()
+
+        model_cfg = self.get_models()["xgboost_weighted"]
+        X_val = val_df[self.active_features].copy()
+        y_val = val_df["target_class"].to_numpy()
+
+        res_full = self.train_and_evaluate_model(
+            "xgboost_weighted", model_cfg, train_df[self.active_features], train_df["target_class"].to_numpy(), X_val, y_val
+        )
+        res_clean = self.train_and_evaluate_model(
+            "xgboost_weighted", model_cfg, train_clean[self.active_features], train_clean["target_class"].to_numpy(), X_val, y_val
+        )
+
+        return {
+            "num_boundary_cases": int(boundary_mask.sum()),
+            "pct_of_train": round(float(boundary_mask.sum()) / len(train_df) * 100, 4),
+            "val_min_ts": val_min_ts,
+            "with_113_boundary_cases": {
+                "accuracy": res_full["accuracy"],
+                "macro_f1": res_full["macro_f1"],
+                "critical_pr_auc": res_full["critical_delay_pr_auc"],
+                "critical_recall": res_full["per_class"]["CRITICAL_DELAY"]["recall"],
+                "critical_precision": res_full["per_class"]["CRITICAL_DELAY"]["precision"],
+            },
+            "without_113_boundary_cases": {
+                "accuracy": res_clean["accuracy"],
+                "macro_f1": res_clean["macro_f1"],
+                "critical_pr_auc": res_clean["critical_delay_pr_auc"],
+                "critical_recall": res_clean["per_class"]["CRITICAL_DELAY"]["recall"],
+                "critical_precision": res_clean["per_class"]["CRITICAL_DELAY"]["precision"],
+            },
+        }
+
     def run_full_pipeline(self) -> Dict[str, Any]:
         """Executes full Stage 01 supervised baseline benchmark."""
         logger.info("Loading datasets and verifying contracts...")
@@ -591,6 +661,9 @@ class BaselineModelRunner:
 
         logger.info("Running feature-group ablations...")
         ablations = self.run_feature_group_ablations(train_df, val_df)
+
+        logger.info("Running boundary-overlap sensitivity experiment...")
+        boundary_sens = self.run_boundary_overlap_sensitivity(train_df, val_df)
 
         # Audit boundary timestamps
         train_max_discharge = str(train_df["discharge_start_ts"].max())
@@ -651,6 +724,7 @@ class BaselineModelRunner:
             "temporal_cross_validation": temporal_cv,
             "cold_start_sensitivity": cold_start,
             "feature_group_ablations": ablations,
+            "boundary_overlap_sensitivity": boundary_sens,
             "known_limitations": [
                 "Single-terminal operations (Surabaya, Indonesia, June-Sept 2021).",
                 "Single prominent congestion episode in July accounts for bulk of critical delays.",
