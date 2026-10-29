@@ -54,10 +54,26 @@ ML/
 ## Quickstart
 
 ```bash
-# 1. Install dependencies
-pip install -r requirements.txt
+# 1. Create and activate a project-local environment
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 
-# 2. Ingest datasets (Data Engineer)
+# 2. Place "Dataset of Dwelling Time Process Fix.xlsx" in the project root.
+
+# 3. Ingest datasets (Data Engineer)
 python ML/data_engineer/ingest_mendeley.py
 python ML/data_engineer/fetch_portwatch.py
+
+# 4. Build processed datasets
+python ML/data_engineer/build_pipeline.py
+
+# Run the test suite
+python -m pytest
 ```
+
+Use the activated `.venv` for all commands so dependency installation and script
+execution use the same Python interpreter. `pip` is the package installer, not an
+application dependency, so it is upgraded inside the environment rather than
+listed in `requirements.txt`.

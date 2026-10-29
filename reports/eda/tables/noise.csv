@@ -1,0 +1,6 @@
+metric,typical_level,observed_sigma,min_detectable_shift_2sigma,binomial_sigma,overdispersion
+daily_volume,1130.0,429.583,859.167,,
+daily_delay_share,0.393,0.124,0.248,0.015,8.53
+daily_median_dwell_h,51.99,16.74,33.48,,
+trailing_7d_delay_share,0.396,0.027,0.054,0.005,4.92
+trailing_7d_volume,7449.0,645.672,1291.345,,

@@ -1,0 +1,21 @@
+feature,availability,signal,signal_type,psi_val,psi_test,recommendation
+trailing_7d_mean_dwell,at arrival,0.0445,Spearman rho vs dwell,5.4532,5.1901,KEEP with care: unstable (PSI>0.25)
+trailing_7d_at_risk,at arrival,0.0075,Spearman rho vs dwell,5.1842,4.2445,KEEP with care: unstable (PSI>0.25)
+trailing_7d_volume,at arrival,-0.1567,Spearman rho vs dwell,4.8255,3.664,KEEP with care: unstable (PSI>0.25)
+historical_delay_rate_7d,at arrival,0.0823,Spearman rho vs dwell,4.6975,3.5136,KEEP with care: unstable (PSI>0.25)
+trailing_7d_critical,at arrival,-0.1543,Spearman rho vs dwell,3.8605,4.6556,KEEP with care: unstable (PSI>0.25)
+YARD_BLOCK,at arrival,0.0491,Kruskal epsilon^2 vs dwell,0.1796,0.2565,KEEP with care: unstable (PSI>0.25)
+discharge_day_of_week,at arrival,0.0351,Kruskal epsilon^2 vs dwell,0.1238,0.1221,KEEP
+is_weekend,at arrival,0.1533,Spearman rho vs dwell,0.0871,0.0225,KEEP
+JOB_DEL_DOCTYPE,post-arrival,0.008,Kruskal epsilon^2 vs dwell,0.0281,0.0247,MASK for arrival-time model
+discharge_hour,at arrival,0.0032,Kruskal epsilon^2 vs dwell,0.0231,0.0184,KEEP
+carrier_prefix,at arrival,0.0419,Kruskal epsilon^2 vs dwell,0.0195,0.0119,KEEP
+GROSS,at arrival,-0.0276,Spearman rho vs dwell,0.0179,0.018,KEEP
+CTR_TYPE,at arrival,0.0499,Kruskal epsilon^2 vs dwell,0.013,0.0008,KEEP
+has_red_flag_pib,conditional,0.1414,Spearman rho vs dwell,0.0002,0.0093,KEEP only if pre-arrival notice is guaranteed
+CTR_SIZE,at arrival,-0.1639,Spearman rho vs dwell,0.009,0.0015,KEEP
+total_events_in_stay,post-arrival,0.1378,Spearman rho vs dwell,0.0072,0.0047,MASK for arrival-time model
+has_behandle_inspection,post-arrival,0.1527,Spearman rho vs dwell,0.0,0.0052,MASK for arrival-time model
+has_quarantine_flag,conditional,0.0796,Spearman rho vs dwell,0.0001,0.0009,KEEP only if pre-arrival notice is guaranteed
+weather_severity_index,at arrival,,constant in train,0.0,0.0,DROP: constant in train
+has_active_disruption,at arrival,,constant in train,0.0,0.0,DROP: constant in train
