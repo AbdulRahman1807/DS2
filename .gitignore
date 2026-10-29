@@ -1,0 +1,40 @@
+# Python
+*.xlsx
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Data Files (Keep large data files out of version control)
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/reference/*
+!data/reference/.gitkeep
+
+# Models and artifacts
+models/*.pkl
+models/*.joblib
+models/*.json
+models/*.onnx
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IDE and OS
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
