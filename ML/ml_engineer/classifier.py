@@ -167,24 +167,35 @@ class BottleneckClassifier(BaseEstimator, ClassifierMixin):
         pred_class_name = CLASS_NAMES[pred_class_id]
 
         threshold_used = alert_threshold if alert_threshold is not None else self.critical_alert_threshold
-        # Alert is triggered if predicted probability of critical delay exceeds threshold tau
-        critical_prob = float(probs[2])
-        alert_triggered = bool(critical_prob >= threshold_used)
+        # Alert is triggered if predicted decision score for critical delay exceeds score cutoff tau
+        critical_score = float(probs[2])
+        alert_triggered = bool(critical_score >= threshold_used)
+
+        score_dict = {
+            "score_on_time": round(float(probs[0]), 4),
+            "score_at_risk": round(float(probs[1]), 4),
+            "score_critical_delay": round(critical_score, 4),
+        }
+        # Backward-compatible alias for existing test contracts
+        prob_alias = {
+            "P_ON_TIME": score_dict["score_on_time"],
+            "P_AT_RISK": score_dict["score_at_risk"],
+            "P_CRITICAL_DELAY": score_dict["score_critical_delay"],
+        }
 
         return {
             "predicted_class_id": pred_class_id,
             "predicted_class_name": pred_class_name,
-            "probabilities": {
-                "P_ON_TIME": round(float(probs[0]), 4),
-                "P_AT_RISK": round(float(probs[1]), 4),
-                "P_CRITICAL_DELAY": round(critical_prob, 4),
-            },
+            "scores": score_dict,
+            "probabilities": prob_alias,
             "is_calibrated": bool(self.calibrate),
+            "score_cutoff_tau": threshold_used,
             "alert_threshold_tau": threshold_used,
             "alert_triggered": alert_triggered,
             "frozen_thresholds": CLASS_THRESHOLDS,
             "operational_note": (
-                "Scores represent model decision-rule probabilities. At default argmax, ~88.8% of "
-                "critical delays are missed. Use alert_triggered with threshold_tau to adjust sensitivity."
+                "Scores represent uncalibrated model decision scores (NOT empirical probabilities) unless "
+                "is_calibrated=True. At default argmax, ~88.8% of critical delays are missed. "
+                "Use alert_triggered with score_cutoff_tau to adjust operational triage sensitivity."
             ),
         }

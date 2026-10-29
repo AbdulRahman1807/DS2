@@ -91,8 +91,8 @@ Horizon A (Pre-Arrival)        Horizon B (Discharge Start)          Horizon C (M
 - **Information Added:** Direct observation of the primary drivers of extreme dwell delay. A container assigned to the customs red channel with an unreleased delivery order has a $>90\%$ probability of critical delay.
 - **Leakage Risk & Safeguards:**
   - *CRITICAL LEAKAGE FOR STAGE 01:* Must **NEVER** be exposed to an arrival-time ($t_{\text{discharge}}$) baseline.
-  - *Stage 02 Design:* Must be modeled using dynamic sequence models (e.g. Recurrent Neural Networks, Temporal Fusion Transformers, or survival-hazard models) that re-evaluate risk scores as each milestone occurs:
-    $$P(\text{Delay} \mid t_{\text{discharge}}) \xrightarrow{+\text{Red Channel}} P(\text{Delay} \mid t_{\text{customs}}) \xrightarrow{+\text{DO Release}} P(\text{Delay} \mid t_{\text{DO}})$$
+  - *Stage 02 Design:* Must be modeled using classical machine learning estimators (e.g., Landmark-based LightGBM/XGBoost classifiers, classical survival analysis, or discrete-time hazard models) that re-evaluate risk scores at landmark intervals as milestones occur:
+    $$S(\text{Delay} \mid t_{\text{discharge}}) \xrightarrow{+\text{Red Channel}} S(\text{Delay} \mid t_{\text{customs}}) \xrightarrow{+\text{DO Release}} S(\text{Delay} \mid t_{\text{DO}})$$
 
 ---
 

@@ -230,7 +230,11 @@ class TestModelPerformanceRealism:
 
         assert "predicted_class_id" in result
         assert "predicted_class_name" in result
+        assert "scores" in result
         assert "probabilities" in result
+        assert "is_calibrated" in result
+        assert result["is_calibrated"] is False
+        assert "score_cutoff_tau" in result
         assert "alert_threshold_tau" in result
         assert result["alert_threshold_tau"] == 0.10
         assert "alert_triggered" in result
@@ -238,7 +242,7 @@ class TestModelPerformanceRealism:
 
 
 class TestEvaluationProtocolAndMethodologyDefects:
-    """Regression tests for methodology defects and evaluation redesign."""
+    """Regression tests for methodology defects, score contradiction resolution, and evaluation redesign."""
 
     def test_evaluation_metrics_reports_fold_specific_prevalence_baseline(self):
         y_true = np.array([0, 0, 1, 1, 2, 0, 0, 0, 0, 0])  # 10 cases, 1 critical (prev = 0.10)
@@ -300,3 +304,25 @@ class TestEvaluationProtocolAndMethodologyDefects:
         assert fold1_p85 > 190.0, (
             f"Fold 1 train local p85 should reflect July congestion peak (>190h), found {fold1_p85:.2f}h"
         )
+
+    def test_score_distribution_contradiction_resolution(self):
+        """Mathematically verifies that median critical score is LESS than on-time p75, resolving the audit contradiction."""
+        import json
+        with open("reports/ml/audit_metrics_full.json") as f:
+            d = json.load(f)
+        stats = d["score_distribution_analysis"]
+
+        med_crit = stats["critical_scores_stats"]["median"]
+        p75_ontime = stats["on_time_scores_stats"]["p75"]
+        med_noncrit = stats["non_critical_scores_stats"]["median"]
+
+        assert med_crit == 0.2674
+        assert p75_ontime == 0.3004
+        assert med_noncrit == 0.2420
+
+        # Mathematical fact: 0.2674 < 0.3004
+        assert med_crit < p75_ontime, (
+            f"Contradiction check: median critical ({med_crit}) must be less than on-time p75 ({p75_ontime})"
+        )
+        # Median critical only exceeds median non-critical
+        assert med_crit > med_noncrit

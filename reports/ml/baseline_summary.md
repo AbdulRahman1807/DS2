@@ -172,5 +172,5 @@ From [`reports/ml/feature_importance.csv`](file:///Users/abdul/Desktop/DS/report
 
 1. **Acknowledge the Data Ceiling:** Do not spend additional engineering cycles tuning arrival-time models. The available features at $t_{\text{discharge}}$ cannot distinguish administrative delays from normal dwell.
 2. **Adopt the Conservative 13-Feature Set:** Drop `YARD_BLOCK` and `YARD_SLOT` from feature pipelines.
-3. **Advance to Stage 02 Sequential Modeling:** Model dwell risk as a dynamic survival process updating as customs declarations, intermediate in-yard moves, and delivery order releases occur during the stay.
+3. **Advance to Stage 02 Landmark Modeling (Classical ML Only):** Model dwell risk at fixed landmark intervals (e.g. 12h or 24h post-discharge) using classical ML algorithms (LightGBM, Random Forest, discrete-time hazard models) incorporating early customs and in-yard milestone features.
 4. **Implement Arrival-Cohort Extraction in Future DE Releases:** Resolve the 85.4% right-censoring survivorship bias in late-period extracts.

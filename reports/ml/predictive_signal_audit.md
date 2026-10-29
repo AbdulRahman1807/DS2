@@ -247,6 +247,8 @@ For the best defensible baseline (XGBoost Sample-Weighted on validation):
 
 #### Critical Finding on Score Separation
 The ratio of the mean predicted score for actual critical cases (0.2670) to actual non-critical cases (0.2293) is only **1.1645** (a 1.16x separation). The score distributions overlap almost completely:
+- The median critical score (**0.2674**) is strictly **LOWER** than the 75th percentile of `ON_TIME` scores (**0.3004**). In fact, exactly **38.46% of all on-time containers (5,343 stays)** receive a critical delay score higher than the median critical case (0.2674).
+- The median critical score (0.2674) only exceeds the median non-critical score (0.2420) by a negligible margin of +0.0254.
 - The 25th percentile of critical cases (0.2126) is lower than the median non-critical case (0.2420).
 - The 75th percentile of critical cases (0.3111) is barely above the 75th percentile of non-critical cases (0.3010).
 
@@ -302,13 +304,13 @@ Critical delay recall varies wildly across days of the week:
 ## Phase 4 — Alert Thresholds Without Overclaiming
 
 ### 4.1 Critical-Delay Alert Threshold Trade-off Table
-Because the default argmax decision rule misses 88.82% of critical delays, dispatchers must set a probability threshold $\tau$ on the predicted critical score $P(y = \text{CRITICAL\_DELAY})$:
+Because the default argmax decision rule misses 88.82% of critical delays, dispatchers must set a decision score cutoff $\tau$ on the uncalibrated critical score $S_{\text{crit}}$:
 
-$$\text{Alert Triggered} \iff P(y = 2) \ge \tau$$
+$$\text{Alert Triggered} \iff S_{\text{crit}} \ge \tau$$
 
 Evaluated on out-of-time validation data ([`val.parquet`](file:///Users/abdul/Desktop/DS/data/processed/val.parquet), $N=20,879$, Critical Cases = 1,538, Period = 16 days):
 
-| Threshold ($\tau$) | Stays Alerted | Alerted % | Alerts / Day | True Positives ($TP$) | False Alerts ($FP$) | Missed Delays ($FN$) | Precision | Recall | F1-Score |
+| Score Cutoff ($\tau$) | Stays Alerted | Alerted % | Alerts / Day | True Positives ($TP$) | False Alerts ($FP$) | Missed Delays ($FN$) | Precision | Recall | F1-Score |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **$\tau \ge 0.05$** | 18,918 | 90.61% | 1,182.4 | 1,531 | 17,387 | 7 | 8.09% | **99.54%** | 0.1496 |
 | **$\tau \ge 0.10$** | 18,050 | 86.45% | 1,128.1 | 1,501 | 16,549 | 37 | 8.32% | **97.59%** | 0.1533 |
@@ -370,7 +372,7 @@ To break through the current predictive ceiling, the terminal must capture data 
 | **P1** | **Dynamic Yard Block Occupancy & Stacking Density** | Real-time TEU utilization %, stack height, reefer plug saturation per yard block. | Horizon B ($t_{\text{discharge}}$) | **Low Risk:** Point-in-time TOS snapshot at crane set-down. Must not include final reshuffle coordinates. |
 | **P2** | **Quay Crane & Berth Telemetry** | Vessel discharge rate (moves/hr), crane gang count, berth queue length. | Horizon B ($t_{\text{discharge}}$) | **Low Risk:** Observed prior to or at lift time. |
 | **P3** | **Gate Congestion & Drayage Appointment Queues** | Truck turnaround time at optical character recognition (OCR) gate, hourly booking demand. | Horizon B ($t_{\text{discharge}}$) | **Zero Risk:** Lagged trailing gate logs. |
-| **P4** | **Customs & Document Clearance Milestones** | Import declaration (`PPJK`) filing, customs red/green channel release, bill of lading release (`JOB_DEL_DOCTYPE`). | Horizon C ($t > t_{\text{discharge}}$) | **CRITICAL LEAKAGE IN STAGE 01:** Must NOT be used at discharge start. Must be modeled in Stage 02 sequential models. |
+| **P4** | **Customs & Document Clearance Milestones** | Import declaration (`PPJK`) filing, customs red/green channel release, bill of lading release (`JOB_DEL_DOCTYPE`). | Horizon C ($t > t_{\text{discharge}}$) | **CRITICAL LEAKAGE IN STAGE 01:** Must NOT be used at discharge start. Must be modeled in Stage 02 landmark models. |
 | **P5** | **Arrival-Based Cohort Tracking (Unfinished Stays)** | Complete tracking of all containers discharged in a calendar window, regardless of whether gate-out has completed. | Ongoing / DE Pipeline | **Zero Risk:** Eliminates the 85.4% right-censoring survivorship bias in late-period extracts. |
 
 ### 5.2 Terminal Generalization Limits
@@ -384,6 +386,6 @@ This extract represents a single terminal: **Terminal Petikemas Surabaya (TPS), 
 
 1. **Accept the Data Ceiling:** Cease efforts to optimize Stage 01 models on static arrival features. A PR-AUC of $\sim 0.094$ reflects the empirical reality of the data.
 2. **Standardize on Conservative 13-Feature Set:** Remove `YARD_BLOCK` and `YARD_SLOT` from production serving. They provide zero generalizable signal and introduce deployment coupling.
-3. **Transition to Stage 02 Sequential Architecture:** Implement recurrent or transformer architectures (e.g., LSTM, Temporal Fusion Transformer) anchored at $t_{\text{discharge}}$ that update dwell predictions dynamically as customs and in-yard events unfold.
+3. **Transition to Stage 02 Landmark Modeling (Classical ML Only):** Implement landmark-based classical ML models (e.g., LightGBM, Random Forest, or discrete-time hazard models) anchored at $t_{\text{discharge}} + 12\text{h}$ and $+24\text{h}$ that update dwell predictions using early in-yard operational events.
 4. **Data Engineering Release Remediation:** In the next pipeline version, partition datasets strictly on `discharge_start_ts < 2021-08-27 11:55:00` to permanently eliminate the 113 boundary cases.
 5. **Operational Integration:** If an alert system must be deployed today, configure it at $\tau = 0.40$ (alerting $\sim 44$ containers/day) and clearly communicate to operations that it serves as an exploratory heuristic catching $\sim 5\%$ of delays, not an automated hold trigger.
