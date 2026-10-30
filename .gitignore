@@ -27,6 +27,7 @@ models/*.pkl
 models/*.joblib
 models/*.json
 models/*.onnx
+ML/ml_engineer/artifacts/*.joblib
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
