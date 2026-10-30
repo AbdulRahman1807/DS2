@@ -124,3 +124,18 @@ Feature eligibility is governed by `ML/data_engineer/feature_contracts.py`:
 
 - Complete manifest persisted at `data/processed/dataset_manifest.json`.
 - Hashes verified via `ML/data_engineer/feature_contracts.py::verify_dataset_manifest`.
+
+---
+
+## 9. Stage 03 Corrections (Forensic Reassessment, October 2026)
+
+These corrections supersede conflicting statements above. Evidence: `reports/ml/complete_project_audit.md`, `reports/ml/data_provenance_and_acquisition.md`.
+
+1. **Source and provenance.** Mendeley "Event Log Dwelling Time Dataset" (DOI 10.17632/yvp2b4rtp3, CC BY 4.0); Prasetyo, Sarno et al., *Data in Brief* 57:110906 (2024), CC BY-NC 4.0. The terminal is anonymised under an ethics agreement; the authors' thesis and IMARA paper identify TPS Surabaya. Raw capture ran 4 June – 9 November 2021; three monthly files (July–September 2021) were published.
+2. **Selection on the outcome.** Every published stay has TRUCK_OUT in 2021-07-01 → 2021-09-30. Arrivals before July are present only if they dwelled long; late-September arrivals only if they left quickly; stays unfinished on 30 September are absent. The Stage 01 thresholds (p50/p85 = 65.1102 / 160.8993 h) were fitted on this biased sample and are retained only for comparability.
+3. **Selection-aware cohort for modelling:** discharges 2021-07-01 → 2021-09-05 (≥ 600 h follow-up), `ML/ml_engineer/reassessment/cohort.py`.
+4. **Date-precision milestones.** `CUSTOMS_DEL` end is 00:00 for every row and marks the *start* of the clearance day; treat it as known at date + 24 h. Midnight-stamped `SP_RED_FLAG_PIB` rows likewise.
+5. **Whole-stay flags.** `has_quarantine_flag`, `has_red_flag_pib`, `has_behandle_inspection` are "ever in stay" flags; use as-of versions only.
+6. **Start timestamps** follow start = end − U(17.6, 90.9) min for all activities (undocumented; likely anonymisation). Use end timestamps.
+7. **`carrier_prefix`** is the ISO 6346 container *owner* code (often a leasing company), not the shipping line.
+8. **`test.parquet`** misses an estimated ~53% of its CRITICAL stays and is not suitable for CRITICAL-class evaluation.

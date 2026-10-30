@@ -1,0 +1,30 @@
+# Final Recommendation (Stage 03 Forensic Reassessment)
+
+**Bottom line:** 0.90 Macro-F1 has **not** been achieved and is **not reachable with the current extract** while all three classes remain open at prediction time. The legacy 0.4028 is a real number from a biased protocol. Under a corrected protocol the honest current figures are ≈ 0.40 at discharge and ≈ 0.52–0.54 at 24–48 h after discharge (development folds, holdout not yet scored). The credible route to 0.90 runs through new process data (customs declaration, delivery order, truck appointment) on an extended, uncensored extract. More model tuning will not get there.
+
+| Item | Recommendation | Evidence |
+|---|---|---|
+| **Strongest current model** | LightGBM on the as-of feature table at the **48 h landmark** (`R-B48-ASOF`, 0.542 mean-fold, CI 0.517–0.572, CRITICAL recall 0.61). For a discharge-time product: `R-A1-ORDINAL` (0.406). Both are development-fold numbers awaiting one holdout run. The legacy `EXP-BASE-01-OPT-MACRO` (0.4028) should be retired: its multipliers were tuned on the reporting set and its features encode the extraction window (0.318 under the corrected protocol). | `predictability_and_ceiling_analysis.md` §1 |
+| **Strongest prediction formulation** | **Fixed landmarks (12/24/48 h)** on stays still in the yard, evaluated per landmark. Use 24 h as the operational default (0.520, ~42 h median lead time) and 48 h where later warning is acceptable. Do not headline event-driven formulations: their high scores (0.68 at customs release, 0.83 at delivery-job creation) come from stays already resolved by elapsed time (open-subset 0.455 and 0.477). | §3 of the same document |
+| **Best available dataset** | The terminal event log, **rebuilt** as the selection-aware cohort with availability-timestamped features (`ML/ml_engineer/reassessment/`). Not the Stage 01 `train/val/test.parquet` partitions. | `complete_project_audit.md` F1–F2, F4 |
+| **Most important missing information** | (1) Customs declaration lifecycle (PIB submission time, lane, document requests); (2) delivery-order / payment release; (3) truck appointment. Exact knowledge of customs + delivery-job timing is worth 0.40 → 0.83; pickup timing is the remainder. Also missing: stays still in the yard at extraction (censoring) and months beyond July–September 2021. | Oracle experiments; `dataset_suitability_assessment.md` |
+| **Highest-value next experiment (current data)** | One confirmatory holdout run (TEST: discharges 08-27 → 09-05, trained on < 08-20) for three frozen candidates (`R-A1-ORDINAL`, `R-B24-ASOF`, `R-B48-ASOF`), after the prior-shift adaptation test (Track A3) on dev folds. Establishes trustworthy current numbers; costs minutes. | `0.90_macro_f1_strategy.md` Track A/E |
+| **Highest-value next experiment (overall)** | Obtain PIB submission/lane data for the same stays and fit a "hours-to-customs-release" forecaster. If it explains ≳ 70% of release-time variance, the discharge model can approach the 0.71 oracle. If not, the 0.90 plan before customs release is falsified. | Strategy §2 |
+| **Most credible path to 0.90** | Extended uncensored extract + PIB + DO/payment + truck appointments → two-stage process model (customs → delivery job → pickup) → landmark predictions → single evaluation on never-seen months, open-class population only. | Strategy Tracks B–E |
+| **Evidence required before claiming success** | Macro-F1 ≥ 0.90 on a never-seen, temporally later window; prediction timestamp, eligible population and censoring rule fixed in advance; only stays whose class is still open at prediction time; per-class F1, CRITICAL recall, balanced accuracy, weighted F1, accuracy, CRITICAL PR-AUC and confusion matrix from one saved prediction array; 95% vessel-call bootstrap interval; leakage perturbation tests passing; number of configurations compared disclosed. | `complete_project_audit.md` §7 |
+
+## Corrections to earlier deliverables
+- `final_model_recommendation.md`: superseded. Its confusion matrix does not match its own metrics, its date ranges are wrong, and 0.4028 is a validation-tuned score.
+- `predictability_investigation.md`, `performance_ceiling_assessment.md`: the conclusion "≈ 0.40 is the ceiling" holds only for the legacy feature set at discharge. Several supporting numbers do not reproduce (R² = 1.42%, the MSCU example), and the ceiling experiments have no code. The claim that post-discharge milestones only reach 0.46 is contradicted by the landmark and oracle results.
+- `DATASET_CARD.md`: should state that the extract is selected on gate-out date and that June/September partitions are biased. Should flag `has_quarantine_flag` / `has_red_flag_pib` as whole-stay flags. Should give the CUSTOMS_DEL availability rule (date + 24 h).
+
+---
+
+## Addendum: data recovery and information-gap analysis
+
+See `data_recovery_and_0.90_feasibility.md` (decision document), `data_provenance_and_acquisition.md`, `missing_data_specification.md`, `cohort_reconstruction_design.md`, `data_request_draft.md`.
+
+- **Primary formulation is now early landmarks (discharge, +12 h, +24 h) with all three classes open.** Event-driven formulations are retired as three-class tasks: CRITICAL is only 3.5% / 1.2% / 0% of the still-open population at customs release / delivery-job creation / truck arrival.
+- **Value of information at discharge (bounds):** customs release 0.71; + delivery job 0.83; + pickup 0.92 with ±12 h forecasts per event, 0.86 with ±24 h. 0.90 requires all three stages.
+- **First acquisition:** Tier 1 re-extraction from the authors' June–November 2021 raw capture (arrival-based, unfinished stays, exact customs time, hashed Importer ID, costs). Contact: corresponding author Prof. Riyanarto Sarno (ITS).
+- **0.90 on 2021 data is not supported by the evidence**: TPS had no truck-appointment system in 2021. A 0.90 attempt needs a 2025+ extract with Terminal Booking System appointments.
