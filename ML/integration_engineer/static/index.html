@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Dwell Risk Predictor — Stage 01 ML Integration</title>
+    <meta name="description" content="Clean and intuitive interface for container dwell time risk prediction and ML model backend integration using Stage 1 features.">
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2306b6d4'/></svg>">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="brand-section">
+            <div class="brand-icon">📦</div>
+            <div>
+                <h1>Container Dwell Risk Predictor</h1>
+                <p>Port Operations Control Tower &bull; Real-Time Triage Simulator &bull; Stage 01 ML Feature Integration &bull; Port 8000</p>
+            </div>
+        </div>
+
+        <div class="header-badges">
+            <span class="badge badge-green" id="api-status-badge">
+                <span class="dot dot-green"></span> API Online (Port 8000)
+            </span>
+            <span class="badge badge-blue">
+                Model: EXP-BASE-01 (XGBoost Balanced)
+            </span>
+            <span class="badge badge-muted" id="latency-badge">
+                SLA: &lt; 25ms
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="app-container">
+
+        <!-- Critical Delay Empirical Signal Reference Box -->
+        <section class="info-banner" id="signals-guide-card">
+            <div class="info-banner-header">
+                <span style="font-size: 1.1rem;">💡</span>
+                <strong>What Feature Values Lead to Critical Delay (&gt; 160.9 hours / &gt; 6.7 days)?</strong>
+            </div>
+            <div class="signals-grid">
+                <div class="signal-item">
+                    <span class="signal-key">1. Discharge Day of Week</span>
+                    <span class="signal-val"><strong>Friday (4) or Weekend (5, 6)</strong> &rarr; Weekend customs office shutdowns &amp; rail/truck drayage restrictions.</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-key">2. Container Gross Weight</span>
+                    <span class="signal-val"><strong>GROSS &gt; 28.0 – 31.5 tonnes</strong> &rarr; Heavy units encounter multi-axle chassis shortages &amp; road limits.</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-key">3. Container Classification</span>
+                    <span class="signal-val"><strong>Reefer (RFR) / Special (OVD)</strong> &rarr; Active plug-in infrastructure hold &amp; physical customs inspection.</span>
+                </div>
+                <div class="signal-item">
+                    <span class="signal-key">4. Trailing Congestion (7d)</span>
+                    <span class="signal-val"><strong>Delay Rate &gt; 25% – 85% &amp; Mean Dwell &gt; 90h</strong> &rarr; Compounded yard queueing and unstacking bottlenecks.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick 1-Click Scenario Buttons -->
+        <section class="preset-section">
+            <span class="preset-label">Test 1-Click Verified Scenarios:</span>
+            <div class="preset-buttons">
+                <button type="button" class="preset-btn btn-preset-red" id="preset-high-risk">
+                    🔴 Critical Bottleneck (Reefer, Friday/Weekend, 31.5t, Block Q)
+                </button>
+                <button type="button" class="preset-btn btn-preset-amber" id="preset-med-risk">
+                    🟡 At-Risk Stay (Heavy Dry Van, 24.5t, Midweek, 28% Delay)
+                </button>
+                <button type="button" class="preset-btn btn-preset-green" id="preset-low-risk">
+                    🟢 On-Time Turnaround (Standard 20ft, 14.5t, Monday, 10% Delay)
+                </button>
+            </div>
+        </section>
+
+        <!-- Two Column Main Workspace -->
+        <div class="workspace-grid">
+
+            <!-- Left: All 15 Stage 1 Features Input Card -->
+            <div class="card">
+                <div class="card-title">
+                    <h2>Container Arrival Telemetry</h2>
+                    <span class="card-subtitle">All 15 Stage 01 Features</span>
+                </div>
+
+                <form id="prediction-form">
+                    <!-- Group 1: Equipment & Carrier -->
+                    <div class="form-group-title">Group 1: Equipment &amp; Commercial Line (Manifest / Stowage)</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="case_id">Container Stay ID</label>
+                            <input type="text" id="case_id" class="input-control" value="AAMU4003031-2021-06-20">
+                        </div>
+                        <div class="form-group">
+                            <label for="carrier_prefix">Carrier Prefix (1/15)</label>
+                            <input type="text" id="carrier_prefix" class="input-control" value="AAM" maxlength="4" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="CTR_TYPE">CTR_TYPE (2/15)</label>
+                            <select id="CTR_TYPE" class="input-control">
+                                <option value="DRY">DRY — Standard Dry Van</option>
+                                <option value="RFR" selected>RFR — Refrigerated (Reefer)</option>
+                                <option value="OVD">OVD — Overdimensional</option>
+                                <option value="TANK">TANK — Liquid Tank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="CTR_SIZE">CTR_SIZE (3/15)</label>
+                            <select id="CTR_SIZE" class="input-control">
+                                <option value="20.0">20 ft Standard</option>
+                                <option value="40.0" selected>40 ft High Cube</option>
+                                <option value="45.0">45 ft Extended</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="GROSS">GROSS Weight (4/15) [tonnes]</label>
+                            <input type="number" id="GROSS" class="input-control" step="0.1" value="31.5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="YARD_BLOCK">YARD_BLOCK (5/15)</label>
+                            <input type="text" id="YARD_BLOCK" class="input-control" value="Q">
+                        </div>
+                        <div class="form-group">
+                            <label for="YARD_SLOT">YARD_SLOT (6/15)</label>
+                            <input type="text" id="YARD_SLOT" class="input-control" value="8.0">
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Temporal Discharge Milestone -->
+                    <div class="form-group-title">Group 2: Temporal Discharge Milestone (t_discharge)</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="discharge_day_of_week">discharge_day_of_week (7/15)</label>
+                            <select id="discharge_day_of_week" class="input-control">
+                                <option value="0">0 — Monday (Fast Clearance)</option>
+                                <option value="1">1 — Tuesday</option>
+                                <option value="2">2 — Wednesday</option>
+                                <option value="3">3 — Thursday</option>
+                                <option value="4">4 — Friday (Weekend Hold Risk)</option>
+                                <option value="5">5 — Saturday (Weekend)</option>
+                                <option value="6" selected>6 — Sunday (Weekend)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="discharge_hour">discharge_hour (8/15) [0-23]</label>
+                            <input type="number" id="discharge_hour" class="input-control" min="0" max="23" value="16" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="discharge_month">discharge_month (9/15) [1-12]</label>
+                            <input type="number" id="discharge_month" class="input-control" min="1" max="12" value="8">
+                        </div>
+                        <div class="form-group">
+                            <label for="is_weekend">is_weekend (10/15) [0 or 1]</label>
+                            <select id="is_weekend" class="input-control">
+                                <option value="0">0 — Weekday (Mon–Fri)</option>
+                                <option value="1" selected>1 — Weekend (Sat/Sun)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Group 3: Trailing Terminal Congestion -->
+                    <div class="form-group-title">Group 3: Trailing 7-Day Congestion (Observable Departures [t-7, t-1])</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="historical_delay_rate_7d">historical_delay_rate_7d (11/15)</label>
+                            <input type="number" id="historical_delay_rate_7d" class="input-control" step="0.01" min="0" max="1" value="0.85" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trailing_7d_mean_dwell">trailing_7d_mean_dwell (12/15) [hrs]</label>
+                            <input type="number" id="trailing_7d_mean_dwell" class="input-control" step="1" value="250" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="trailing_7d_volume">trailing_7d_volume (13/15)</label>
+                            <input type="number" id="trailing_7d_volume" class="input-control" step="1" value="15" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trailing_7d_critical">trailing_7d_critical (14/15) [&gt;160.9h]</label>
+                            <input type="number" id="trailing_7d_critical" class="input-control" step="1" value="12" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trailing_7d_at_risk">trailing_7d_at_risk (15/15) [65-160h]</label>
+                            <input type="number" id="trailing_7d_at_risk" class="input-control" step="1" value="2" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group" style="width: 100%;">
+                            <label for="alert_threshold_tau">Operational Critical Alert Cutoff (&tau;)</label>
+                            <input type="number" id="alert_threshold_tau" class="input-control" step="0.01" min="0.05" max="0.50" value="0.25">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-predict" id="btn-predict">
+                        ⚡ Score with ML Model (&lt; 25ms SLA)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Prediction Results Card -->
+            <div class="card result-card">
+                <div class="card-title">
+                    <h2>ML Bottleneck Prediction</h2>
+                    <span class="card-subtitle" id="result-case-title">Container: AAMU4003031-2021-06-20</span>
+                </div>
+
+                <!-- Main Risk Level Banner -->
+                <div class="risk-banner banner-red" id="risk-banner">
+                    <div class="risk-badge" id="risk-badge">
+                        🔴 CRITICAL BOTTLENECK
+                    </div>
+                    <div class="risk-dwell-estimate" id="risk-dwell-desc">
+                        Expected Dwell: <strong>&gt; 160.9 hours (&gt; 6.7 days)</strong>
+                    </div>
+                </div>
+
+                <!-- Probability Distribution -->
+                <div class="prob-section">
+                    <h3 class="section-label">Model Probabilities / Decision Scores</h3>
+                    
+                    <div class="prob-item">
+                        <div class="prob-header">
+                            <span class="tier-label text-green">🟢 Class 0: ON_TIME (&le; 65.11h)</span>
+                            <span class="prob-val" id="prob-on-time">6.1%</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-green" id="bar-on-time" style="width: 6.1%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="prob-item">
+                        <div class="prob-header">
+                            <span class="tier-label text-amber">🟡 Class 1: AT_RISK (65.11h – 160.90h)</span>
+                            <span class="prob-val" id="prob-at-risk">4.3%</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-amber" id="bar-at-risk" style="width: 4.3%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="prob-item">
+                        <div class="prob-header">
+                            <span class="tier-label text-red">🔴 Class 2: CRITICAL_DELAY (&gt; 160.90h)</span>
+                            <span class="prob-val" id="prob-critical">89.6%</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bar-red" id="bar-critical" style="width: 89.6%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Operations Action -->
+                <div class="action-box" id="action-box">
+                    <h3 class="action-title">Operational Playbook Directive:</h3>
+                    <div class="action-headline" id="action-headline">Escalated Intervention &amp; Priority Dispatch</div>
+                    <p class="action-body" id="action-body">
+                        Flag stay for human dispatcher review; pre-clear documentation with customs broker; prioritize yard unstacking; notify receiver of potential schedule buffer.
+                    </p>
+                </div>
+
+                <!-- Key Signals Identified -->
+                <div class="signals-box">
+                    <h3 class="section-label">Key Stage 01 Risk Contributors</h3>
+                    <div class="signals-list" id="signals-list">
+                        <span class="signal-tag tag-red">⚠️ Weekend Discharge (Day 6)</span>
+                        <span class="signal-tag tag-red">⚠️ Heavy Weight (31.5t)</span>
+                        <span class="signal-tag tag-red">⚠️ Trailing Delay Rate (85%)</span>
+                        <span class="signal-tag tag-amber">⚡ Reefer Cargo (RFR)</span>
+                    </div>
+                </div>
+
+                <!-- Latency Footer -->
+                <div class="result-footer">
+                    <span>Model execution: <strong id="infer-latency">8.2 ms</strong></span>
+                    <span>Backend Status: <strong style="color: var(--color-green);">Connected (200 OK)</strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quick 5-Container Batch Demonstration Section -->
+        <section class="card batch-section">
+            <div class="batch-header">
+                <div>
+                    <h2>Multi-Container Batch Test (5 Historical Cases)</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                        Vectorized scoring via <code>POST /predict/batch</code> testing real containers across all 3 dwell risk tiers.
+                    </p>
+                </div>
+                <button type="button" class="btn-batch" id="btn-run-batch-test">
+                    🚀 Run 5-Container Batch Test
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="batch-table">
+                    <thead>
+                        <tr>
+                            <th>Container ID</th>
+                            <th>Carrier</th>
+                            <th>Type / Size</th>
+                            <th>Weight</th>
+                            <th>Discharge Day</th>
+                            <th>Predicted Risk Tier</th>
+                            <th>Critical Score</th>
+                            <th>Playbook Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batch-table-body">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                                Click "Run 5-Container Batch Test" above to score sample containers.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p>APM Terminal Dwell Bottleneck Integration Service &bull; ML Backend & FastAPI Server on Port 8000 &bull; Stage 01 Feature Contract</p>
+    </footer>
+
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
