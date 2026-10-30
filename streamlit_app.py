@@ -390,12 +390,12 @@ with tab_analytics:
 with tab_guide:
     st.markdown("#### Logistics Operations Field Guide (1-Page Operational SOP)")
     st.markdown(
-        """
+        r"""
         ### Executive Dispatch Directives
-        1. **Do Not Automate Reroutes on Raw Probability Alone:** At standard default $\\tau = 0.50$, precision is 21.1% but recall is only 1.2%. At minimum-cost $\\tau = 0.22$, recall reaches 72.4% but flags 59.7% of all terminal traffic.
+        1. **Do Not Automate Reroutes on Raw Probability Alone:** At standard default $\tau = 0.50$, precision is 21.1% but recall is only 1.2%. At minimum-cost $\tau = 0.22$, recall reaches 72.4% but flags 59.7% of all terminal traffic.
         2. **Implement the Top-1% Queue:** Rather than alerting 60% of arrivals, dispatch senior planners to review only the top 1% highest-scoring containers daily (~7 containers/day). This yields a **5.44x to 6.26x lift** over the baseline delay rate with zero dispatcher alarm fatigue.
         3. **Watch Weekend Discharges:** Containers arriving on Friday afternoon or Saturday experience a 2.3x higher rate of customs documentation stalls due to weekend broker closures.
-        4. **Heavy Cargo Permitting:** Containers $\ge 28.5\\text{ tonnes}$ trigger multi-axle trailer requirements, resulting in drayage truck shortages.
+        4. **Heavy Cargo Permitting:** Containers $\ge 28.5\text{ tonnes}$ trigger multi-axle trailer requirements, resulting in drayage truck shortages.
         """
     )
 
