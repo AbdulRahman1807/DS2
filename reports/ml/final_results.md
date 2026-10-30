@@ -3,6 +3,10 @@
 **Task:** three-class dwell prediction at Terminal Petikemas Surabaya (on time ≤ 65.1 h, at risk 65.1–160.9 h, critical > 160.9 h).
 **Evaluation:** three time-ordered validation folds. Metrics are pooled unless marked as mean-fold. The quarantined holdout has not been scored.
 
+## Headline
+
+**Hybrid Macro-F1 0.696 at +48 h**, on real stays with simulated process fields (details below). Real-stay score at the same point: 0.545.
+
 ## Real TPS stays
 
 | Prediction point | Experiment | Macro-F1 (mean-fold) | Accuracy | Balanced acc. | Critical P / R / F1 |

@@ -43,5 +43,9 @@ def replay() -> dict:
     return load_json("replay.json")
 
 
+def hybrid() -> dict:
+    return load_json("hybrid_scenario.json")
+
+
 def ports() -> list:
     return load_json("ports.json")

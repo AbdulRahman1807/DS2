@@ -57,11 +57,11 @@ Mean of three time-ordered validation folds. Full tables: [`reports/ml/final_res
 
 | Prediction point | Data | Macro-F1 |
 |---|---|---|
+| **+48 h, hybrid (headline)** | **Real stays with simulated customs, delivery and truck fields** | **0.696** |
 | At discharge | Real TPS stays | 0.413 |
 | +24 h | Real TPS stays | 0.529 |
 | +48 h | Real TPS stays | 0.545 |
 | Delivery-job creation (about 12.6 h warning) | Real TPS stays | 0.826 |
-| +48 h, projected with process data | Simulated customs, delivery and truck fields | 0.696 |
 
 ## Dashboard
 

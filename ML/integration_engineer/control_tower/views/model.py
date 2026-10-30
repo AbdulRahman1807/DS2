@@ -47,6 +47,14 @@ def render() -> None:
     m, live = data.model(), data.live()
     H = m["horizons"]
     st.markdown('<div class="thesis" style="font-size:clamp(1.8rem,3vw,2.8rem)">More time, more information, <i>better answers</i>. Not more model.</div>', unsafe_allow_html=True)
+    hy = data.hybrid()["results"]
+    hc = hy["B48"]["per_class_f1"]
+    st.markdown(f"""<div class="bento" style="margin-bottom:.5rem">
+<div class="cell s3"><div class="k">Hybrid Macro-F1 at +48 h</div><div class="v" style="font-size:3.4rem;color:{LIME}">{hy["B48"]["simulated_macro_f1"]:.3f}</div><div class="n">Hybrid data: real stays with simulated customs, delivery and truck fields. Projects what obtaining that data could deliver.</div></div>
+<div class="cell"><div class="k">+48 h accuracy</div><div class="v">{hy["B48"]["accuracy"]:.3f}</div><div class="n">Hybrid data</div></div>
+<div class="cell"><div class="k">+48 h critical recall</div><div class="v">{hy["B48"]["critical_recall"]*100:.0f}<small>%</small></div><div class="n">Hybrid data; F1 on time {hc[0]:.2f}, at risk {hc[1]:.2f}, critical {hc[2]:.2f}</div></div>
+<div class="cell"><div class="k">Real stays, +48 h</div><div class="v">{H["B48"]["mean_fold_macro_f1"]:.3f}</div><div class="n">Same point, no simulated fields</div></div>
+</div>""", unsafe_allow_html=True)
     head("The information staircase", "How good can dwell prediction get as information arrives? Solid steps are real models; dashed steps show the ceiling if future events were known.", "validation")
     visuals.show_svg(visuals.staircase_svg(H, m["oracles"]), 310)
 

@@ -63,7 +63,9 @@ def render() -> None:
         mix = k["mix"]
         mix_bar = f'<div class="mixbar"><span style="width:{mix[0]*100}%;background:{LIME}"></span><span style="width:{mix[1]*100}%;background:{AMBER}"></span><span style="width:{mix[2]*100}%;background:{RED}"></span></div>'
         lift = h["B24"]["top1pct_precision"] / h["B24"]["critical_prevalence"]
+        hy = data.hybrid()["results"]["B48"]
         cells = [
+            _cell("Hybrid Macro-F1 at +48 h", f'{hy["simulated_macro_f1"]:.3f}', "", f'Hybrid data: real stays with simulated customs, delivery and truck fields. Projected value of that data; real-stay score {h["B48"]["mean_fold_macro_f1"]:.3f}.', "s6", "HYBRID"),
             _cell("Dwell outcome", f"{crit*100:.1f}", "% critical", f'On time {mix[0]*100:.1f}% · at risk {mix[1]*100:.1f}%. Clean cohort of discharges with full follow-up.', "s6", "OBS", mix_bar),
             _cell("Median dwell", f'{k["dwell_median"]:.0f}', "h", f'Mean {k["dwell_mean"]:.0f} h: a long tail of stuck boxes pulls it up.', "s2", "OBS"),
             _cell("Worst week", f'{k["peak_week"]["crit"]*100:.0f}', "% crit", f'Discharged week of {visuals._fmt_week(k["peak_week"]["wk"]).title()}. Calmest: {k["calm_week"]["crit"]*100:.0f}%.', "s2", "OBS"),
