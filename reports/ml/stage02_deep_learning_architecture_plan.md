@@ -16,7 +16,7 @@
 
 ## 1. Deep Learning Architecture Evaluation Against Available Data
 
-Classical tabular gradient boosted trees (LightGBM/XGBoost) treat each container arrival as an independent and identically distributed (IID) tabular sample. However, terminal bottlenecks are inherently **spatio-temporal queueing phenomena**: a container delays because the crane gang is backlogged, its specific yard block is physically saturated, or an upstream customs inspection corridor is throttled.
+Classical tabular gradient boosted trees (L ightGBM/XGBoost) treat each container arrival as an independent and identically distributed (IID) tabular sample. However, terminal bottlenecks are inherently **spatio-temporal queueing phenomena**: a container delays because the crane gang is backlogged, its specific yard block is physically saturated, or an upstream customs inspection corridor is throttled.
 
 We evaluate three deep learning architectures against the raw Mendeley TOS event stream (952,069 events, 95,647 container stays, 28-week span):
 
