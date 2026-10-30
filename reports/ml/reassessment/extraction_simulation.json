@@ -1,0 +1,200 @@
+{
+  "2021-08-10": {
+    "cutoff": "2021-08-10",
+    "true_mix_all_arrivals": [
+      0.4597,
+      0.3685,
+      0.1718
+    ],
+    "true_mix_recent_arrivals": [
+      0.6607,
+      0.2579,
+      0.0814
+    ],
+    "n_arrivals": 39940,
+    "n_recent_arrivals_label_incomplete": 9487,
+    "exit_window_published_design": {
+      "n": 39627,
+      "share_rows_discharged_before_window": 0.0919,
+      "mix": [
+        0.4716,
+        0.3634,
+        0.1649
+      ],
+      "mix_recent_arrivals": [
+        0.8866,
+        0.1134,
+        0.0
+      ]
+    },
+    "completed_only_arrival_cohort": {
+      "n": 35987,
+      "mix": [
+        0.4811,
+        0.3596,
+        0.1593
+      ],
+      "mix_recent_arrivals": [
+        0.8866,
+        0.1134,
+        0.0
+      ]
+    },
+    "censoring_aware_arrival_cohort": {
+      "n_complete_labels": 30453,
+      "mix_complete_label_window": [
+        0.3971,
+        0.403,
+        0.1999
+      ],
+      "true_mix_complete_label_window": [
+        0.3971,
+        0.403,
+        0.1999
+      ],
+      "recent_label_breakdown": {
+        "exact_or_critical": 5890,
+        "partial_at_risk_or_critical": 1146,
+        "unknown": 2451
+      },
+      "recent_kaplan_meier_mix": [
+        0.6785,
+        0.2296,
+        0.0919
+      ],
+      "unfinished_at_cutoff": 3953
+    }
+  },
+  "2021-08-20": {
+    "cutoff": "2021-08-20",
+    "true_mix_all_arrivals": [
+      0.4872,
+      0.3549,
+      0.1579
+    ],
+    "true_mix_recent_arrivals": [
+      0.5902,
+      0.314,
+      0.0958
+    ],
+    "n_arrivals": 49779,
+    "n_recent_arrivals_label_incomplete": 7074,
+    "exit_window_published_design": {
+      "n": 50307,
+      "share_rows_discharged_before_window": 0.0725,
+      "mix": [
+        0.4885,
+        0.362,
+        0.1495
+      ],
+      "mix_recent_arrivals": [
+        0.7056,
+        0.2944,
+        0.0
+      ]
+    },
+    "completed_only_arrival_cohort": {
+      "n": 46658,
+      "mix": [
+        0.4973,
+        0.359,
+        0.1437
+      ],
+      "mix_recent_arrivals": [
+        0.7056,
+        0.2944,
+        0.0
+      ]
+    },
+    "censoring_aware_arrival_cohort": {
+      "n_complete_labels": 42705,
+      "mix_complete_label_window": [
+        0.4701,
+        0.3617,
+        0.1682
+      ],
+      "true_mix_complete_label_window": [
+        0.4701,
+        0.3617,
+        0.1682
+      ],
+      "recent_label_breakdown": {
+        "exact_or_critical": 4430,
+        "partial_at_risk_or_critical": 554,
+        "unknown": 2090
+      },
+      "recent_kaplan_meier_mix": [
+        0.5351,
+        0.3839,
+        0.081
+      ],
+      "unfinished_at_cutoff": 3121
+    }
+  },
+  "2021-08-30": {
+    "cutoff": "2021-08-30",
+    "true_mix_all_arrivals": [
+      0.5102,
+      0.3482,
+      0.1417
+    ],
+    "true_mix_recent_arrivals": [
+      0.6377,
+      0.2791,
+      0.0832
+    ],
+    "n_arrivals": 60815,
+    "n_recent_arrivals_label_incomplete": 7234,
+    "exit_window_published_design": {
+      "n": 60709,
+      "share_rows_discharged_before_window": 0.0601,
+      "mix": [
+        0.5153,
+        0.3439,
+        0.1408
+      ],
+      "mix_recent_arrivals": [
+        0.9308,
+        0.0692,
+        0.0
+      ]
+    },
+    "completed_only_arrival_cohort": {
+      "n": 57059,
+      "mix": [
+        0.5242,
+        0.3402,
+        0.1356
+      ],
+      "mix_recent_arrivals": [
+        0.9308,
+        0.0692,
+        0.0
+      ]
+    },
+    "censoring_aware_arrival_cohort": {
+      "n_complete_labels": 53581,
+      "mix_complete_label_window": [
+        0.493,
+        0.3575,
+        0.1495
+      ],
+      "true_mix_complete_label_window": [
+        0.493,
+        0.3575,
+        0.1495
+      ],
+      "recent_label_breakdown": {
+        "exact_or_critical": 3756,
+        "partial_at_risk_or_critical": 584,
+        "unknown": 2894
+      },
+      "recent_kaplan_meier_mix": [
+        0.6395,
+        0.177,
+        0.1835
+      ],
+      "unfinished_at_cutoff": 3756
+    }
+  }
+}

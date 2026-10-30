@@ -103,7 +103,7 @@ def stage03_rows() -> pd.DataFrame:
             round(r["three_class_open_subset"]["macro_f1"], 4),
             "median_lead_time_h": r.get("median_lead_time_h") and round(r["median_lead_time_h"], 1),
             "production_valid": "yes" if r["production_valid"]
-            else "no (uses future information)" if "ORACLE" in exp_id
+            else "no (uses future information)" if ("ORACLE" in exp_id or "VOI" in exp_id)
             else "no (decision rule tuned on the reporting set)",
             "code_available": "yes",
             "reproduced": "scored from saved predictions",

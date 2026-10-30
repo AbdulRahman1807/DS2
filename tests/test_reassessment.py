@@ -108,3 +108,127 @@ def test_score_consistency():
     assert cm.sum() == 1000
     assert abs(np.trace(cm) / cm.sum() - res["accuracy"]) < 1e-12
     assert abs(np.mean([v["f1"] for v in res["per_class"].values()]) - res["macro_f1"]) < 1e-12
+
+
+# --------------------------------------------------------------------------------------------
+# Censoring-aware labels
+# --------------------------------------------------------------------------------------------
+from ML.ml_engineer.reassessment.censoring import (  # noqa: E402
+    NOT_ON_TIME,
+    UNKNOWN,
+    exit_window_extract,
+    kaplan_meier_class_probabilities,
+    label_status,
+)
+
+
+def test_label_status_never_infers_class_from_missing_exit_alone():
+    cutoff = pd.Timestamp("2021-08-20")
+    d0 = pd.Series(pd.to_datetime(["2021-08-19", "2021-08-16", "2021-08-10", "2021-08-01"]))
+    out = pd.Series(pd.to_datetime([None, None, None, "2021-08-02"]))
+    status = label_status(d0, out, cutoff)
+    # 24 h elapsed: unknown; 96 h: AT_RISK or CRITICAL; 240 h: CRITICAL already true; exited: exact.
+    assert status["label"].tolist() == [UNKNOWN, NOT_ON_TIME, 2, 0]
+    assert status["label_known"].tolist() == [False, False, True, True]
+    assert status["censored_dwell_h"].tolist() == [24.0, 96.0, 240.0, 24.0]
+
+
+def test_exit_after_cutoff_is_treated_as_unfinished():
+    cutoff = pd.Timestamp("2021-08-20")
+    d0 = pd.Series(pd.to_datetime(["2021-08-19"]))
+    out = pd.Series(pd.to_datetime(["2021-08-25"]))
+    assert label_status(d0, out, cutoff)["label"].iloc[0] == UNKNOWN
+
+
+def test_exit_window_extract_matches_published_selection(cases):
+    sel = exit_window_extract(cases["discharge_start_ts"], cases["truck_out_end_ts"],
+                              pd.Timestamp("2021-07-01"), pd.Timestamp("2021-10-01"))
+    assert sel.all()  # every published stay satisfies the gate-out window
+
+
+def test_kaplan_meier_without_censoring_equals_empirical_mix():
+    dwell = np.array([10.0, 50.0, 70.0, 100.0, 200.0])
+    probs = kaplan_meier_class_probabilities(dwell, np.ones(5, dtype=bool))
+    np.testing.assert_allclose(probs, [0.4, 0.4, 0.2])
+
+
+# --------------------------------------------------------------------------------------------
+# Extended (sibling / calendar / PortWatch) blocks
+# --------------------------------------------------------------------------------------------
+def test_extended_asof_features_ignore_future_events(cases):
+    T = pd.Timestamp("2021-08-10 12:00")
+    in_yard = (cases["discharge_start_ts"] <= T) & (cases["truck_out_end_ts"] > T)
+    query = cases[in_yard].sample(300, random_state=2).reset_index(drop=True)
+    t = pd.Series([T] * len(query))
+    base = build_asof_features(cases, query, t, extended=True)
+    shifted = cases.copy()
+    for c in ["discharge_start_ts", "truck_out_end_ts"] + [f"avail_{m}" for m in MILESTONES]:
+        future = shifted[c] > T
+        shifted.loc[future, c] = shifted.loc[future, c] + pd.Timedelta(hours=500)
+    shifted["dwell_hours"] = (shifted["truck_out_end_ts"] - shifted["discharge_start_ts"]).dt.total_seconds() / 3600
+    shifted_query = shifted.set_index("case_id").loc[query["case_id"]].reset_index()
+    pd.testing.assert_frame_equal(base, build_asof_features(shifted, shifted_query, t, extended=True))
+
+
+def test_portwatch_uses_only_lagged_data(tmp_path):
+    from ML.ml_engineer.reassessment.asof_features import PORTWATCH_LAG_DAYS, PORTWATCH_PATH, portwatch_state
+
+    T = pd.Timestamp("2021-08-10 12:00")
+    full = pd.read_parquet(PORTWATCH_PATH)
+    cut = full[pd.to_datetime(full["date"]) <= T.normalize() - pd.Timedelta(days=PORTWATCH_LAG_DAYS)]
+    cut_path = tmp_path / "pw.parquet"
+    cut.to_parquet(cut_path)
+    t_ns = np.array([float(T.value)])
+    pd.testing.assert_frame_equal(portwatch_state(t_ns), portwatch_state(t_ns, path=str(cut_path)))
+
+
+def test_oof_stage_predictions_are_purged(monkeypatch):
+    from ML.ml_engineer.reassessment import stage_pipeline as sp
+
+    d0 = pd.Series(pd.date_range("2021-07-01", periods=600, freq="h"))
+    X = pd.DataFrame({"x": np.arange(600.0)})
+    Y = pd.DataFrame({s: np.zeros(600) for s in sp.STAGES})
+    seen = []
+
+    def fake(family, X_tr, Y_tr, X_ev):
+        seen.append((set(X_tr.index), set(X_ev.index)))
+        return pd.DataFrame({"p": np.zeros(len(X_ev))}, index=X_ev.index)
+
+    monkeypatch.setattr(sp, "stage_prediction_columns", fake)
+    out = sp.oof_stage_predictions("lgbm", X, Y, d0)
+    assert sorted(out.index) == list(range(600))  # every training row predicted exactly once
+    for fit_idx, held_idx in seen:
+        assert not fit_idx & held_idx
+        gap = min(abs(d0[i] - d0[j]) for i in held_idx for j in fit_idx) if fit_idx else pd.Timedelta(days=99)
+        assert gap >= sp.OOF_PURGE
+
+
+def test_yard_and_manifest_features_ignore_future_events(cases):
+    T = pd.Timestamp("2021-08-10 12:00")
+    in_yard = (cases["discharge_start_ts"] <= T) & (cases["truck_out_end_ts"] > T)
+    query = cases[in_yard].sample(300, random_state=3).reset_index(drop=True)
+    t = pd.Series([T] * len(query))
+    base = build_asof_features(cases, query, t, extra=("yard", "manifest"))
+    shifted = cases.copy()
+    for c in ["discharge_start_ts", "truck_out_end_ts"] + [f"avail_{m}" for m in MILESTONES]:
+        future = shifted[c] > T
+        shifted.loc[future, c] = shifted.loc[future, c] + pd.Timedelta(hours=500)
+    shifted["dwell_hours"] = (shifted["truck_out_end_ts"] - shifted["discharge_start_ts"]).dt.total_seconds() / 3600
+    shifted_query = shifted.set_index("case_id").loc[query["case_id"]].reset_index()
+    pd.testing.assert_frame_equal(base, build_asof_features(shifted, shifted_query, t, extra=("yard", "manifest")))
+
+
+def test_whole_call_manifest_uses_future_discharges(cases):
+    """Documents why the original whole-call manifest is not as-of: perturbing future discharges' GROSS changes it."""
+    from ML.ml_engineer.reassessment.asof_features import manifest_state_whole_call
+
+    spans = cases.groupby("vessel_call_id")["discharge_start_ts"].agg(["min", "max"])
+    call = (spans["max"] - spans["min"]).idxmax()
+    T = spans.loc[call, "min"] + (spans.loc[call, "max"] - spans.loc[call, "min"]) / 2  # mid-discharge of that call
+    query = cases[(cases["vessel_call_id"] == call) & (cases["discharge_start_ts"] <= T)].reset_index(drop=True)
+    assert len(query) > 0
+    altered = cases.copy()
+    altered.loc[altered["discharge_start_ts"] > T, "GROSS"] = 999.0
+    before = manifest_state_whole_call(cases, query)["call_mean_gross"]
+    after = manifest_state_whole_call(altered, query)["call_mean_gross"]
+    assert not np.allclose(before.fillna(0), after.fillna(0))

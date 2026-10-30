@@ -37,7 +37,7 @@ STATUS_MILESTONES = [
     "TRUCK_IN",
 ]
 CALL_STATUS_MILESTONES = ["CUSTOMS_DEL", "HAS_QUARANTINE_FLAG", "JOB_DEL"]
-CATEGORICAL = ["carrier_prefix", "CTR_TYPE", "YARD_BLOCK", "doc_type_known"]
+CATEGORICAL = ["carrier_prefix", "CTR_TYPE", "YARD_BLOCK", "doc_type_known", "yard_zone", "slot_depth_tier"]
 
 # Feature groups used for ablations.
 CUSTOMS_GROUP = [
@@ -188,8 +188,170 @@ def container_state(query: pd.DataFrame, t: np.ndarray) -> pd.DataFrame:
     return feats
 
 
-def build_asof_features(all_cases: pd.DataFrame, query: pd.DataFrame, t: pd.Series) -> pd.DataFrame:
-    """Feature matrix for `query` rows evaluated at prediction timestamps `t` (aligned to query)."""
+# Container-serial distance scopes; same-day customs concordance 0.74 / 0.52 / 0.39 vs 0.27 far apart.
+SIBLING_WINDOWS = {"s20": 20, "s1k": 1_000, "s10k": 10_000}
+SIBLING_MILESTONES = ["CUSTOMS_DEL", "JOB_DEL", "HAS_QUARANTINE_FLAG", "TRUCK_IN"]
+CALENDAR_PATH = "data/reference/indonesia_calendar_2021.csv"
+PORTWATCH_PATH = "data/raw/portwatch_daily_ports.parquet"
+PORTWATCH_LAG_DAYS = 7  # PortWatch publishes weekly; only values at least a week old are usable
+
+
+def sibling_state(all_cases: pd.DataFrame, query: pd.DataFrame, t: np.ndarray) -> pd.DataFrame:
+    """As-of status of probable consignment-mates: same vessel call and owner prefix ('grp'),
+    narrowed by container-serial distance (SIBLING_WINDOWS). Close serials usually belong to the
+    same declaration, so their observed customs / delivery progress at t is informative."""
+    hour = 3600e9
+    key = ["vessel_call_id", "carrier_prefix"]
+    left = pd.DataFrame({
+        "q": np.arange(len(query)),
+        "vessel_call_id": query["vessel_call_id"].to_numpy(),
+        "carrier_prefix": query["carrier_prefix"].to_numpy(),
+        "serial": pd.to_numeric(query["container_id"].str[4:10], errors="coerce").to_numpy(),
+        "case_id": query["case_id"].to_numpy(),
+        "t": t,
+    })
+    right = pd.DataFrame({
+        "vessel_call_id": all_cases["vessel_call_id"].to_numpy(),
+        "carrier_prefix": all_cases["carrier_prefix"].to_numpy(),
+        "s_serial": pd.to_numeric(all_cases["container_id"].str[4:10], errors="coerce").to_numpy(),
+        "s_case": all_cases["case_id"].to_numpy(),
+        "s_out": _ns(all_cases["truck_out_end_ts"]),
+        **{f"s_{m}": _ns(all_cases[f"avail_{m}"]) for m in SIBLING_MILESTONES},
+    })
+    pairs = left.merge(right, on=key)
+    pairs = pairs[pairs["s_case"] != pairs["case_id"]]
+    dist = (pairs["serial"] - pairs["s_serial"]).abs().to_numpy()
+    flags = {"departed": pairs["s_out"] <= pairs["t"]}
+    for m in SIBLING_MILESTONES:
+        flags[m] = pairs[f"s_{m}"] <= pairs["t"]
+    flag_df = pd.DataFrame(flags).astype(float)
+    jobdel_age = np.where(flags["JOB_DEL"], (pairs["t"] - pairs["s_JOB_DEL"]) / hour, np.nan)
+    flag_df["jobdel_age"] = jobdel_age
+    flag_df["q"] = pairs["q"].to_numpy()
+
+    out = pd.DataFrame(index=np.arange(len(query)))
+    scopes = [("grp", flag_df)] + [(name, flag_df[dist <= w]) for name, w in SIBLING_WINDOWS.items()]
+    for scope, frame in scopes:
+        g = frame.groupby("q")
+        out[f"sib_{scope}_n"] = g.size().reindex(out.index).fillna(0).to_numpy()
+        for col in ["departed"] + SIBLING_MILESTONES:
+            out[f"sib_{scope}_share_{col}"] = g[col].mean().reindex(out.index).to_numpy()
+        out[f"sib_{scope}_max_jobdel_age_h"] = g["jobdel_age"].max().reindex(out.index).to_numpy()
+    return out
+
+
+def calendar_state(t: np.ndarray, path: str = CALENDAR_PATH) -> pd.DataFrame:
+    """Restriction level, holidays and working hours ahead (all announced in advance)."""
+    cal = pd.read_csv(path, parse_dates=["date"]).set_index("date")
+    t_ts = pd.to_datetime(t.astype("int64"))
+    day = t_ts.normalize()
+    feats = pd.DataFrame(index=np.arange(len(t)))
+    feats["ppkm_level"] = pd.to_numeric(cal["ppkm_level"].reindex(day), errors="coerce").to_numpy()
+    feats["is_holiday_today"] = cal["is_public_holiday"].reindex(day).to_numpy()
+    working = cal["is_working_day"]
+    for days_ahead in (1, 2, 3):
+        window = sum(working.reindex(day + pd.Timedelta(days=k)).fillna(1).to_numpy() for k in range(1, days_ahead + 1))
+        feats[f"working_days_next_{days_ahead}d"] = window
+    level_change = cal["ppkm_level"].ne(cal["ppkm_level"].shift())
+    last_change = pd.Series(cal.index.where(level_change), index=cal.index).ffill()
+    feats["days_since_ppkm_change"] = ((day - pd.to_datetime(last_change.reindex(day).to_numpy())).days).to_numpy()
+    return feats
+
+
+def portwatch_state(t: np.ndarray, path: str = PORTWATCH_PATH) -> pd.DataFrame:
+    """Port-wide AIS activity for Surabaya, using only data at least PORTWATCH_LAG_DAYS old."""
+    pw = pd.read_parquet(path, columns=["date", "portcalls_container", "import_container", "portcalls"])
+    pw = pw.set_index(pd.to_datetime(pw["date"]).dt.normalize()).drop(columns="date").sort_index()
+    roll7 = pw.rolling("7D").mean()
+    roll28 = pw.rolling("28D").mean()
+    asof_day = pd.to_datetime(t.astype("int64")).normalize() - pd.Timedelta(days=PORTWATCH_LAG_DAYS)
+    feats = pd.DataFrame(index=np.arange(len(t)))
+    for col in pw.columns:
+        r7 = roll7[col].reindex(asof_day, method="ffill").to_numpy()
+        r28 = roll28[col].reindex(asof_day, method="ffill").to_numpy()
+        feats[f"pw_{col}_7d"] = r7
+        feats[f"pw_{col}_7d_vs_28d"] = r7 / np.where(r28 > 0, r28, np.nan)
+    return feats
+
+
+# Functional yard zones (ported from the yard/vessel feature investigation). Quarantine/reefer
+# blocks match the quarantine-flag allocation observed in the audit; the rest follow block letters.
+REEFER_QUARANTINE_BLOCKS = {"Y", "YY", "Z", "ZZ", "W1", "W3"}
+MAIN_IMPORT_BLOCKS = {"I", "J", "K", "L", "M", "N", "O", "P"}
+OVERFLOW_BLOCKS = {"H", "S", "BB", "XP", "XO", "XXP", "D"}
+
+
+def yard_state(all_cases: pd.DataFrame, query: pd.DataFrame, t: np.ndarray) -> pd.DataFrame:
+    """Yard zone, slot-depth tier and as-of inventory of the container's own block."""
+    blocks = query["YARD_BLOCK"].astype("string").str.strip()
+    zone = np.select(
+        [blocks.isin(REEFER_QUARANTINE_BLOCKS), blocks.isin(MAIN_IMPORT_BLOCKS), blocks.isin(OVERFLOW_BLOCKS), blocks.isna()],
+        ["ZONE_REEFER_QUARANTINE", "ZONE_MAIN_IMPORT", "ZONE_OVERFLOW", "ZONE_UNKNOWN"],
+        "ZONE_SECONDARY",
+    )
+    slot = pd.to_numeric(query["YARD_SLOT"], errors="coerce").to_numpy()
+    depth = np.select(
+        [np.isnan(slot), slot <= 40, slot <= 80, slot <= 120], ["SLOT_UNKNOWN", "SLOT_FRONT", "SLOT_MID", "SLOT_DEEP"], "SLOT_FAR"
+    )
+
+    d0_all, out_all = _ns(all_cases["discharge_start_ts"]), _ns(all_cases["truck_out_end_ts"])
+    blocks_all = all_cases["YARD_BLOCK"].fillna("UNKNOWN").astype(str).to_numpy()
+    q_blocks = query["YARD_BLOCK"].fillna("UNKNOWN").astype(str).to_numpy()
+    total = np.maximum(_count_le(np.sort(d0_all), t) - _count_le(np.sort(out_all), t), 1)
+    block_inv = np.zeros(len(query))
+    for b in np.unique(q_blocks):
+        idx = np.where(q_blocks == b)[0]
+        m = blocks_all == b
+        block_inv[idx] = _count_le(np.sort(d0_all[m]), t[idx]) - _count_le(np.sort(out_all[m]), t[idx])
+    return pd.DataFrame({
+        "yard_zone": zone, "slot_depth_tier": depth,
+        "block_inventory": block_inv, "block_inventory_share": block_inv / total,
+    })
+
+
+def manifest_state(all_cases: pd.DataFrame, query: pd.DataFrame, t: np.ndarray) -> pd.DataFrame:
+    """Vessel-call manifest composition as known at t: size/owner mix over call members whose
+    stowage plan (BAPLIE) is available by t; mean gross weight over members discharged by t
+    (GROSS is recorded on the DISCHARGE event; values above 100 are kilograms and are converted)."""
+    result = pd.DataFrame(index=np.arange(len(query)), columns=["call_share_40", "call_mean_gross", "call_n_carriers"], dtype=float)
+    groups = all_cases.groupby("vessel_call_id").indices
+    q_calls = query["vessel_call_id"].to_numpy()
+    for call, q_idx in pd.Series(np.arange(len(query))).groupby(q_calls).groups.items():
+        q_idx = np.asarray(q_idx)
+        members = all_cases.iloc[groups[call]]
+        baplie = _ns(members["avail_BAPLIE"])
+        d0 = _ns(members["discharge_start_ts"])
+        size40 = (members["CTR_SIZE"] == 40).to_numpy()
+        gross = members["GROSS"].to_numpy(dtype=float)
+        gross = np.where(gross > 100, gross / 1000.0, gross)  # 18.9% of rows are recorded in kg, the rest in tonnes
+        owners = members["carrier_prefix"].to_numpy()
+        for i in q_idx:
+            known = baplie <= t[i]
+            disch = d0 <= t[i]
+            result.iloc[i] = [
+                size40[known].mean() if known.any() else np.nan,
+                np.nanmean(gross[disch]) if disch.any() else np.nan,
+                len(set(owners[known])) if known.any() else np.nan,
+            ]
+    return result
+
+
+def manifest_state_whole_call(all_cases: pd.DataFrame, query: pd.DataFrame) -> pd.DataFrame:
+    """Original whole-call definition (uses members discharged after t). For verification only."""
+    stats = all_cases.groupby("vessel_call_id").agg(
+        call_share_40=("CTR_SIZE", lambda x: float((x == 40).mean())),
+        call_mean_gross=("GROSS", "mean"),
+        call_n_carriers=("carrier_prefix", "nunique"),
+    )
+    return query[["vessel_call_id"]].merge(stats, on="vessel_call_id", how="left").drop(columns="vessel_call_id").astype(float)
+
+
+def build_asof_features(
+    all_cases: pd.DataFrame, query: pd.DataFrame, t: pd.Series, extended: bool = False, extra: tuple = ()
+) -> pd.DataFrame:
+    """Feature matrix for `query` rows evaluated at prediction timestamps `t` (aligned to query).
+    `extended` adds consignment-sibling, calendar and PortWatch blocks (Stage 03 data additions);
+    `extra` may contain "yard" and/or "manifest"."""
     query = query.reset_index(drop=True)
     t_ns = _ns(pd.Series(pd.to_datetime(t.to_numpy())))
     parts = [
@@ -197,6 +359,12 @@ def build_asof_features(all_cases: pd.DataFrame, query: pd.DataFrame, t: pd.Seri
         call_state(all_cases, query, t_ns),
         terminal_state(all_cases, t_ns),
     ]
+    if extended:
+        parts += [sibling_state(all_cases, query, t_ns), calendar_state(t_ns), portwatch_state(t_ns)]
+    if "yard" in extra:
+        parts.append(yard_state(all_cases, query, t_ns))
+    if "manifest" in extra:
+        parts.append(manifest_state(all_cases, query, t_ns))
     return pd.concat(parts, axis=1)
 
 

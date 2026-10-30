@@ -17,3 +17,14 @@
 - `final_model_recommendation.md`: superseded. Its confusion matrix does not match its own metrics, its date ranges are wrong, and 0.4028 is a validation-tuned score.
 - `predictability_investigation.md`, `performance_ceiling_assessment.md`: the conclusion "≈ 0.40 is the ceiling" holds only for the legacy feature set at discharge. Several supporting numbers do not reproduce (R² = 1.42%, the MSCU example), and the ceiling experiments have no code. The claim that post-discharge milestones only reach 0.46 is contradicted by the landmark and oracle results.
 - `DATASET_CARD.md`: should state that the extract is selected on gate-out date and that June/September partitions are biased. Should flag `has_quarantine_flag` / `has_red_flag_pib` as whole-stay flags. Should give the CUSTOMS_DEL availability rule (date + 24 h).
+
+---
+
+## Addendum: data recovery and information-gap analysis
+
+See `data_recovery_and_0.90_feasibility.md` (decision document), `data_provenance_and_acquisition.md`, `missing_data_specification.md`, `cohort_reconstruction_design.md`, `data_request_draft.md`.
+
+- **Primary formulation is now early landmarks (discharge, +12 h, +24 h) with all three classes open.** Event-driven formulations are retired as three-class tasks: CRITICAL is only 3.5% / 1.2% / 0% of the still-open population at customs release / delivery-job creation / truck arrival.
+- **Value of information at discharge (bounds):** customs release 0.71; + delivery job 0.83; + pickup 0.92 with ±12 h forecasts per event, 0.86 with ±24 h. 0.90 requires all three stages.
+- **First acquisition:** Tier 1 re-extraction from the authors' June–November 2021 raw capture (arrival-based, unfinished stays, exact customs time, hashed Importer ID, costs). Contact: corresponding author Prof. Riyanarto Sarno (ITS).
+- **0.90 on 2021 data is not supported by the evidence**: TPS had no truck-appointment system in 2021. A 0.90 attempt needs a 2025+ extract with Terminal Booking System appointments.

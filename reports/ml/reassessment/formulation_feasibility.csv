@@ -1,0 +1,8 @@
+formulation,eligible_share_of_arrivals,open_three_class_share_of_arrivals,open_share_of_eligible,critical_still_possible_share_of_eligible,critical_share_in_open_population,median_lead_time_h_open
+A: discharge,1.0,1.0,1.0,1.0,0.0938,52.6
+B12: discharge + 12h,0.943,0.943,1.0,1.0,0.0995,43.9
+B24: discharge + 24h,0.7941,0.7941,1.0,1.0,0.1181,42.4
+B48: discharge + 48h,0.535,0.535,1.0,1.0,0.1753,40.5
+C: customs release known (date + 24h),0.7446,0.5693,0.7645,0.9569,0.0347,23.2
+E: delivery job created,0.9977,0.7382,0.7399,0.9424,0.0119,11.8
+T: truck arrival (appointment proxy),1.0,0.5989,0.5989,0.9068,0.0,0.5
