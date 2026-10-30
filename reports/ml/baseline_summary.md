@@ -6,8 +6,8 @@
 **Stage:** Stage 01 - Supervised Baseline Triage, Anomaly Benchmark, and Interpretability (Audited Corrective Pass)
 **Dataset Version:** 1.0.0 (`data/processed/dataset_manifest.json`)
 **Artifact Directory:** `reports/ml/`
-**Comprehensive Audit Reference:** [`reports/ml/predictive_signal_audit.md`](file:///Users/abdul/Desktop/DS/reports/ml/predictive_signal_audit.md)
-**Data Ceiling Reference:** [`reports/ml/data_ceiling_and_collection_priorities.md`](file:///Users/abdul/Desktop/DS/reports/ml/data_ceiling_and_collection_priorities.md)
+**Comprehensive Audit Reference:** [`reports/ml/stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md)
+**Data Ceiling Reference:** [`reports/ml/final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md)
 
 ---
 
