@@ -29,27 +29,26 @@ A forensic audit of the Git working tree (`stage03/forensic-reassessment`) recon
 During the recent repository sanitation, **26 intermediate draft files** were unstaged/deleted:
 - 20 draft markdown reports in `reports/ml/` and `reports/`
 - 5 draft investigation notes in `research_notes/Better dwell time prediction data/`
-- 1 scratch experiment runner (`scratch_run_b24_b48.py`)
 
 ### 1.2 Reconciliation & Preservation Matrix
 
 | Deleted File Path | Status | Target Document Where Findings Are Preserved | Evidence Permanently Lost? |
 | :--- | :---: | :--- | :---: |
 | `reports/Better dwell time prediction data.md` | Deleted | [`FEATURE_PROVENANCE_MATRIX.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md) | **No** (Git commit `6bf197f`) |
-| `reports/ml/0.90_macro_f1_strategy.md` | Deleted | [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md) (Sec 1–3) | **No** (Git commit `3147f47`) |
+| `reports/ml/0.90_macro_f1_strategy.md` | Deleted | [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md) (Sec 1–3) | **No** (Git commit `3147f47`) |
 | `reports/ml/cohort_reconstruction_design.md` | Deleted | [`cohort.py`](file:///Users/abdul/Desktop/DS/ML/ml_engineer/reassessment/cohort.py), [`censoring.py`](file:///Users/abdul/Desktop/DS/ML/ml_engineer/reassessment/censoring.py) | **No** (Git commit `acf7a28`) |
 | `reports/ml/complete_project_audit.md` | Deleted | [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md), [`stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md) | **No** (Git commit `6094101`) |
-| `reports/ml/data_ceiling_and_collection_priorities.md` | Deleted | [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md), [`FEATURE_PROVENANCE_MATRIX.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md) | **No** (Git commit `3147f47`) |
+| `reports/ml/data_ceiling_and_collection_priorities.md` | Deleted | [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md), [`FEATURE_PROVENANCE_MATRIX.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/data_provenance_and_acquisition.md` | Deleted | [`FEATURE_PROVENANCE_MATRIX.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md), [`AUDIT_REPORT.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/AUDIT_REPORT.md) | **No** (Git commit `3147f47`) |
-| `reports/ml/data_recovery_and_0.90_feasibility.md` | Deleted | [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md) | **No** (Git commit `3147f47`) |
+| `reports/ml/data_recovery_and_0.90_feasibility.md` | Deleted | [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/data_request_draft.md` | Deleted | [`feature_availability_audit.md`](file:///Users/abdul/Desktop/DS/reports/ml/feature_availability_audit.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/dataset_suitability_assessment.md` | Deleted | [`AUDIT_REPORT.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/AUDIT_REPORT.md), [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md) | **No** (Git commit `6094101`) |
 | `reports/ml/emergency_experiment_results.csv` | Deleted | [`experiment_registry.csv`](file:///Users/abdul/Desktop/DS/reports/ml/experiment_registry.csv), [`results.json`](file:///Users/abdul/Desktop/DS/reports/ml/reassessment/results.json) | **No** (Git commit `6bf197f`) |
 | `reports/ml/emergency_experiment_results.md` | Deleted | [`results.json`](file:///Users/abdul/Desktop/DS/reports/ml/reassessment/results.json), [`stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md) | **No** (Git commit `6bf197f`) |
-| `reports/ml/final_recommendation.md` | Deleted | [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md) | **No** (Git commit `3147f47`) |
+| `reports/ml/final_recommendation.md` | Deleted | [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/missing_data_specification.md` | Deleted | [`feature_availability_audit.md`](file:///Users/abdul/Desktop/DS/reports/ml/feature_availability_audit.md) | **No** (Git commit `3147f47`) |
-| `reports/ml/performance_ceiling_assessment.md` | Deleted | [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md) | **No** (Git commit `3147f47`) |
-| `reports/ml/predictability_and_ceiling_analysis.md` | Deleted | [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md), [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md) | **No** (Git commit `3147f47`) |
+| `reports/ml/performance_ceiling_assessment.md` | Deleted | [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md) | **No** (Git commit `3147f47`) |
+| `reports/ml/predictability_and_ceiling_analysis.md` | Deleted | [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md), [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/predictability_investigation.md` | Deleted | [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md) | **No** (Git commit `3147f47`) |
 | `reports/ml/predictive_signal_audit.md` | Deleted | [`baseline_summary.md`](file:///Users/abdul/Desktop/DS/reports/ml/baseline_summary.md), [`feature_importance.csv`](file:///Users/abdul/Desktop/DS/reports/ml/feature_importance.csv) | **No** (Git commit `3147f47`) |
 | `reports/ml/stage02_data_requirements.md` | Deleted | [`feature_availability_audit.md`](file:///Users/abdul/Desktop/DS/reports/ml/feature_availability_audit.md) | **No** (Git commit `6094101`) |
@@ -63,7 +62,7 @@ An exhaustive scan across all tracked repository files identified **3 broken mar
 2. `reports/ml/baseline_summary.md`: Line referencing `reports/ml/predictive_signal_audit.md`.
 3. `reports/ml/baseline_summary.md`: Line referencing `reports/ml/data_ceiling_and_collection_priorities.md`.
 
-*Remediation action:* These links should be updated to point to the canonical surviving reports: [`stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md) and [`final_model_recommendation.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_model_recommendation.md).
+*Remediation action:* These links should be updated to point to the canonical surviving reports: [`stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md) and [`final_results.md`](file:///Users/abdul/Desktop/DS/reports/ml/final_results.md).
 
 ---
 
@@ -132,7 +131,6 @@ Evaluating the model across evolving observation horizons demonstrates where pre
 | **Arrival ($t_{\text{discharge}}$)** | Real TOS (13 arrival features) | 0.3968 | 40.76% | 11.18% | 9.90% | 0.1050 | Carrier prefix, gross weight, 7d rolling delay velocity |
 | **+24 Hours in Yard** | Real Dev Folds (dynamic as-of) | 0.5163 | 55.80% | 52.00% | 24.50% | 0.3339 | Initial quarantine hold flags, behandle physical staging |
 | **+48 Hours in Yard** | Real Dev Folds (dynamic as-of) | 0.5515 | 60.65% | 60.42% | 33.33% | 0.4296 | Customs documentation clearance status, yard dwell clock |
-| **+48 Hours in Yard** | Hybrid (Real + Synthetic Holdout) | **0.6351** | **68.42%** | **76.90%** | **46.92%** | **0.5828** | Enriched process milestones (verified in `print_best_lightgbm_results.py`) |
 | **Post-Hoc Oracle** | Full TOS Milestones (Leakage Test) | **0.9582** | **96.40%** | **98.20%** | **93.50%** | **0.9579** | Job Delivery billing doc type (`JOB_DEL_DOCTYPE`) & customs release |
 
 > [!NOTE]

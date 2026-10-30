@@ -47,7 +47,27 @@ ML/
 ## Data Pillars
 1. **Container Tracking & Dwell:** Mendeley Container Dwell Event Log (`data/raw/mendeley_event_log.parquet`, 952k rows, 95k stays).
 2. **Disruptions & Weather:** IMF PortWatch Global Disruptions (`data/raw/portwatch_disruptions.parquet`, 132 GDACS events).
-3. **Ports Reference:** IMF PortWatch Ports Directory (`data/reference/portwatch_ports.parquet`, 2,000+ ports).
+3. **Ports Reference:** IMF PortWatch Ports Directory (`data/reference/portwatch_ports.parquet`, 500 ports).
+
+---
+
+## Results (Macro-F1, three-class dwell)
+
+Mean of three time-ordered validation folds. Full tables: [`reports/ml/final_results.md`](reports/ml/final_results.md).
+
+| Prediction point | Data | Macro-F1 |
+|---|---|---|
+| At discharge | Real TPS stays | 0.413 |
+| +24 h | Real TPS stays | 0.529 |
+| +48 h | Real TPS stays | 0.545 |
+| Delivery-job creation (about 12.6 h warning) | Real TPS stays | 0.826 |
+| +48 h, projected with process data | Simulated customs, delivery and truck fields | 0.696 |
+
+## Dashboard
+
+```bash
+streamlit run streamlit_app.py
+```
 
 ---
 

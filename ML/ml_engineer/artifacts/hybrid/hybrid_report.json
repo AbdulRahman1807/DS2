@@ -1,0 +1,26 @@
+{
+  "A": {
+    "real_macro_f1": 0.4142,
+    "real_critical_recall": 0.4294,
+    "real_critical_f1": 0.2187,
+    "hybrid_test_macro_f1": 0.4318
+  },
+  "B12": {
+    "real_macro_f1": 0.4647,
+    "real_critical_recall": 0.3545,
+    "real_critical_f1": 0.2411,
+    "hybrid_test_macro_f1": 0.4686
+  },
+  "B24": {
+    "real_macro_f1": 0.5183,
+    "real_critical_recall": 0.4052,
+    "real_critical_f1": 0.307,
+    "hybrid_test_macro_f1": 0.5323
+  },
+  "B48": {
+    "real_macro_f1": 0.536,
+    "real_critical_recall": 0.6136,
+    "real_critical_f1": 0.4328,
+    "hybrid_test_macro_f1": 0.5549
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "label": "SIMULATED what-if; not real performance",
+  "assumed_leads": {
+    "sim_pib_filed": [
+      "avail_CUSTOMS_DEL",
+      48,
+      0.8
+    ],
+    "sim_do_requested": [
+      "avail_JOB_DEL",
+      18,
+      0.8
+    ],
+    "sim_payment_done": [
+      "avail_JOB_DEL",
+      5,
+      0.7
+    ],
+    "sim_truck_booked": [
+      "avail_TRUCK_IN",
+      12,
+      0.8
+    ]
+  },
+  "slot_error_h": 4.0,
+  "results": {
+    "A": {
+      "simulated_macro_f1": 0.5352,
+      "per_class_f1": [
+        0.754,
+        0.513,
+        0.371
+      ],
+      "critical_recall": 0.525,
+      "accuracy": 0.618
+    },
+    "B12": {
+      "simulated_macro_f1": 0.5971,
+      "per_class_f1": [
+        0.816,
+        0.557,
+        0.421
+      ],
+      "critical_recall": 0.541,
+      "accuracy": 0.679
+    },
+    "B24": {
+      "simulated_macro_f1": 0.6238,
+      "per_class_f1": [
+        0.804,
+        0.594,
+        0.478
+      ],
+      "critical_recall": 0.604,
+      "accuracy": 0.676
+    },
+    "B48": {
+      "simulated_macro_f1": 0.6958,
+      "per_class_f1": [
+        0.78,
+        0.748,
+        0.566
+      ],
+      "critical_recall": 0.675,
+      "accuracy": 0.718
+    }
+  }
+}

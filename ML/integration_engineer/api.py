@@ -68,7 +68,7 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 SAMPLE_CASES_PATH = BASE_DIR / "sample_cases.json"
-MODEL_ARTIFACT_PATH = REPO_ROOT / "ML" / "ml_engineer" / "artifacts" / "best_macro_f1_model.joblib"
+MODEL_ARTIFACT_PATH = BASE_DIR / "control_tower" / "assets" / "deployed_model.joblib"
 THRESHOLD_TRADEOFFS_PATH = REPO_ROOT / "reports" / "ml" / "threshold_tradeoffs.csv"
 FEATURE_IMPORTANCE_PATH = REPO_ROOT / "reports" / "ml" / "feature_importance.csv"
 INDIAN_BENCHMARKS_PATH = REPO_ROOT / "data" / "reference" / "indian_ports_benchmarks.parquet"
@@ -84,7 +84,7 @@ class ModelManager:
     def __init__(self) -> None:
         self.classifier: Optional[BottleneckClassifier] = None
         self.active_features: List[str] = get_active_arrival_predictors(exclude_zero_variance=True)
-        self.model_name = "EXP-BASE-01-OPT-MACRO (XGBoost Balanced)"
+        self.model_name = "EXP-MOD-07 (LightGBM Balanced)"
         self.is_loaded = False
         self._load_or_initialize_model()
 
@@ -250,7 +250,17 @@ class ModelManager:
 
         tau = request.alert_threshold_tau if request.alert_threshold_tau is not None else 0.25
 
-        if self.classifier is not None and hasattr(self.classifier, "score_case"):
+        if isinstance(self.classifier, dict):
+            # Persisted bundle: {"estimator", "preprocessor", "features"}
+            frame = pd.DataFrame([case_dict])[self.classifier["features"]]
+            proba = self.classifier["estimator"].predict_proba(self.classifier["preprocessor"].transform(frame))[0]
+            p_on, p_risk, p_crit = (round(float(v), 4) for v in proba)
+            scores = {"score_on_time": p_on, "score_at_risk": p_risk, "score_critical_delay": p_crit}
+            probs = {"P_ON_TIME": p_on, "P_AT_RISK": p_risk, "P_CRITICAL_DELAY": p_crit}
+            alert_trig = p_crit >= tau
+            pred_id = 2 if alert_trig else int(np.argmax(proba[:2]))
+            pred_name = ["ON_TIME", "AT_RISK", "CRITICAL_DELAY"][pred_id]
+        elif self.classifier is not None and getattr(self.classifier, "is_fitted_", False):
             raw_res = self.classifier.score_case(case_dict, alert_threshold=tau)
             pred_id = int(raw_res["predicted_class_id"])
             pred_name = str(raw_res["predicted_class_name"])
@@ -258,17 +268,7 @@ class ModelManager:
             probs = raw_res["probabilities"]
             alert_trig = bool(raw_res["alert_triggered"])
         else:
-            # Deterministic heuristic scoring fallback
-            p_crit = min(0.95, max(0.02, 0.08 + (0.15 if request.discharge_day_of_week in (3, 4) else 0.0) + (0.12 if request.GROSS > 25.0 else 0.0) + (0.10 if request.CTR_TYPE == "RFR" else 0.0)))
-            p_risk = min(0.90, max(0.10, 0.28 + (0.10 if request.is_weekend else 0.0)))
-            p_on = max(0.05, 1.0 - (p_crit + p_risk))
-            total = p_on + p_risk + p_crit
-            p_on, p_risk, p_crit = round(p_on/total, 4), round(p_risk/total, 4), round(p_crit/total, 4)
-            scores = {"score_on_time": p_on, "score_at_risk": p_risk, "score_critical_delay": p_crit}
-            probs = {"P_ON_TIME": p_on, "P_AT_RISK": p_risk, "P_CRITICAL_DELAY": p_crit}
-            pred_id = 2 if p_crit >= tau else (1 if p_risk > p_on else 0)
-            pred_name = ["ON_TIME", "AT_RISK", "CRITICAL_DELAY"][pred_id]
-            alert_trig = p_crit >= tau
+            raise RuntimeError("Model artifact not available")
 
         urgency, action, playbook = self.determine_playbook(pred_id, alert_trig)
         risk_factors = self.diagnose_risk_factors(case_dict)
@@ -381,33 +381,23 @@ def get_health() -> HealthResponse:
 
 @app.get("/api/dashboard/stats", tags=["Dashboard"])
 def get_dashboard_stats():
-    """Operational control-tower summary statistics."""
+    """Summary of the historical TPS 2021 record and its highest-scored validation stays."""
+    import json
+    assets = BASE_DIR / "control_tower" / "assets"
+    kpi = json.loads((assets / "overview.json").read_text())["kpi"]
+    top = pd.read_parquet(assets / "dossier.parquet").nlargest(5, "B24_p2")
+    total, mix = kpi["stays_cohort"], kpi["mix"]
+    queue = [{
+        "case_id": r.case_id, "predicted_class_name": "CRITICAL_DELAY", "critical_delay_risk_score": float(r.B24_p2),
+        "probabilities": {"P_ON_TIME": float(r.B24_p0), "P_AT_RISK": float(r.B24_p1), "P_CRITICAL_DELAY": float(r.B24_p2)},
+    } for r in top.itertuples()]
     return {
-        "total_active_monitored": 100,
-        "on_time_count": 65,
-        "at_risk_count": 25,
-        "critical_delay_count": 10,
-        "critical_delay_percentage": 10.0,
-        "terminal_7d_mean_dwell_hours": 68.4,
-        "terminal_7d_delay_rate": 0.125,
-        "top_bottlenecks_queue": [
-            {
-                "case_id": "QUEUE-CTR-01",
-                "predicted_class_id": 2,
-                "predicted_class_name": "CRITICAL_DELAY",
-                "critical_delay_risk_score": 0.65,
-                "alert_triggered": True,
-                "recommended_action": "Escalated Intervention",
-                "probabilities": {"P_ON_TIME": 0.1, "P_AT_RISK": 0.25, "P_CRITICAL_DELAY": 0.65},
-                "scores": {"score_on_time": 0.1, "score_at_risk": 0.25, "score_critical_delay": 0.65},
-                "urgency_level": "CRITICAL",
-                "operational_playbook": "Escalated priority review",
-                "key_risk_factors": [],
-                "latency_ms": 1.2,
-                "alert_threshold_tau": 0.25,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-            }
-        ],
+        "data_scope": "historical TPS 2021 record, not live",
+        "total_active_monitored": total,
+        "on_time_count": round(total * mix[0]), "at_risk_count": round(total * mix[1]), "critical_delay_count": round(total * mix[2]),
+        "critical_delay_percentage": round(mix[2] * 100, 1),
+        "mean_dwell_hours": kpi["dwell_mean"],
+        "top_bottlenecks_queue": queue,
         "operational_threshold_tau": 0.25,
     }
 
