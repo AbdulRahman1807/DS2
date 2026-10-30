@@ -1,0 +1,3742 @@
+{
+  "R-BASE-01": {
+    "formulation": "Stage01 arrival",
+    "population": "Stage01 val.parquet",
+    "production_valid": true,
+    "hypothesis": "Reproduce EXP-BASE-01 / EXP-BASE-01-OPT-MACRO from code.",
+    "predictions": "reports/ml/reassessment/predictions/R-BASE-01.parquet",
+    "pooled": {
+      "n": 20879,
+      "macro_f1": 0.398121779263849,
+      "accuracy": 0.5429857751808037,
+      "balanced_accuracy": 0.41171528609037916,
+      "weighted_f1": 0.5613629432334595,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7508581752484191,
+          "recall": 0.5983299740858048,
+          "f1": 0.6659722778623508,
+          "support": 13892
+        },
+        "AT_RISK": {
+          "precision": 0.35580524344569286,
+          "recall": 0.5230317489447605,
+          "f1": 0.4235084330187978,
+          "support": 5449
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.09727626459143969,
+          "recall": 0.11378413524057217,
+          "f1": 0.10488462691039856,
+          "support": 1538
+        }
+      },
+      "confusion_matrix": [
+        [
+          8312,
+          4470,
+          1110
+        ],
+        [
+          2085,
+          2850,
+          514
+        ],
+        [
+          673,
+          690,
+          175
+        ]
+      ],
+      "critical_pr_auc": 0.09091995282824537,
+      "critical_prevalence": 0.07366253173044686
+    },
+    "per_fold": {
+      "STAGE01_VAL": {
+        "n": 20879,
+        "macro_f1": 0.398121779263849,
+        "accuracy": 0.5429857751808037,
+        "balanced_accuracy": 0.41171528609037916,
+        "weighted_f1": 0.5613629432334595,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7508581752484191,
+            "recall": 0.5983299740858048,
+            "f1": 0.6659722778623508,
+            "support": 13892
+          },
+          "AT_RISK": {
+            "precision": 0.35580524344569286,
+            "recall": 0.5230317489447605,
+            "f1": 0.4235084330187978,
+            "support": 5449
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.09727626459143969,
+            "recall": 0.11378413524057217,
+            "f1": 0.10488462691039856,
+            "support": 1538
+          }
+        },
+        "confusion_matrix": [
+          [
+            8312,
+            4470,
+            1110
+          ],
+          [
+            2085,
+            2850,
+            514
+          ],
+          [
+            673,
+            690,
+            175
+          ]
+        ],
+        "critical_pr_auc": 0.09091995282824537,
+        "critical_prevalence": 0.07366253173044686
+      }
+    },
+    "mean_fold_macro_f1": 0.398121779263849,
+    "pooled_macro_f1_ci95_vessel_bootstrap": null
+  },
+  "R-BASE-01-MULT": {
+    "formulation": "Stage01 arrival",
+    "population": "Stage01 val.parquet",
+    "production_valid": false,
+    "hypothesis": "Reproduce EXP-BASE-01 / EXP-BASE-01-OPT-MACRO from code.",
+    "predictions": "reports/ml/reassessment/predictions/R-BASE-01-MULT.parquet",
+    "pooled": {
+      "n": 20879,
+      "macro_f1": 0.40281159127432725,
+      "accuracy": 0.5784759806504143,
+      "balanced_accuracy": 0.4047372636513029,
+      "weighted_f1": 0.5844672754798298,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7299412915851272,
+          "recall": 0.6980996256838469,
+          "f1": 0.713665464714107,
+          "support": 13892
+        },
+        "AT_RISK": {
+          "precision": 0.37681159420289856,
+          "recall": 0.40557900532207747,
+          "f1": 0.39066643097047904,
+          "support": 5449
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.09837962962962964,
+          "recall": 0.11053315994798439,
+          "f1": 0.1041028781383956,
+          "support": 1538
+        }
+      },
+      "confusion_matrix": [
+        [
+          9698,
+          3148,
+          1046
+        ],
+        [
+          2727,
+          2210,
+          512
+        ],
+        [
+          861,
+          507,
+          170
+        ]
+      ],
+      "critical_pr_auc": 0.09091995282824537,
+      "critical_prevalence": 0.07366253173044686
+    },
+    "per_fold": {
+      "STAGE01_VAL": {
+        "n": 20879,
+        "macro_f1": 0.40281159127432725,
+        "accuracy": 0.5784759806504143,
+        "balanced_accuracy": 0.4047372636513029,
+        "weighted_f1": 0.5844672754798298,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7299412915851272,
+            "recall": 0.6980996256838469,
+            "f1": 0.713665464714107,
+            "support": 13892
+          },
+          "AT_RISK": {
+            "precision": 0.37681159420289856,
+            "recall": 0.40557900532207747,
+            "f1": 0.39066643097047904,
+            "support": 5449
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.09837962962962964,
+            "recall": 0.11053315994798439,
+            "f1": 0.1041028781383956,
+            "support": 1538
+          }
+        },
+        "confusion_matrix": [
+          [
+            9698,
+            3148,
+            1046
+          ],
+          [
+            2727,
+            2210,
+            512
+          ],
+          [
+            861,
+            507,
+            170
+          ]
+        ],
+        "critical_pr_auc": 0.09091995282824537,
+        "critical_prevalence": 0.07366253173044686
+      }
+    },
+    "mean_fold_macro_f1": 0.40281159127432725,
+    "pooled_macro_f1_ci95_vessel_bootstrap": null
+  },
+  "R-A0-LEGACY13-COHORT": {
+    "formulation": "A",
+    "population": "selection-aware cohort, dev folds",
+    "production_valid": true,
+    "hypothesis": "Stage 01 features under the corrected cohort and embargoed rolling-origin folds.",
+    "predictions": "reports/ml/reassessment/predictions/R-A0-LEGACY13-COHORT.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.35779600306349074,
+      "accuracy": 0.4077348637609224,
+      "balanced_accuracy": 0.39047164472452095,
+      "weighted_f1": 0.44430220677798743,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7012601927353596,
+          "recall": 0.4114474599860821,
+          "f1": 0.5186119182062386,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.35487924054167247,
+          "recall": 0.4214889736362129,
+          "f1": 0.3853266636349856,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.11301306828639794,
+          "recall": 0.33847850055126794,
+          "f1": 0.16944942734924798,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4730,
+          3962,
+          2804
+        ],
+        [
+          1474,
+          2542,
+          2015
+        ],
+        [
+          541,
+          659,
+          614
+        ]
+      ],
+      "critical_pr_auc": 0.11434625911988268,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.23721172075209318,
+        "accuracy": 0.28538042066995584,
+        "balanced_accuracy": 0.35170157977744504,
+        "weighted_f1": 0.202096114293945,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.94,
+            "recall": 0.023186975826344353,
+            "f1": 0.04525758305247954,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.3218433870363432,
+            "recall": 0.6542269611576542,
+            "f1": 0.43144148669010546,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.1704946996466431,
+            "recall": 0.3776908023483366,
+            "f1": 0.23493609251369446,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            47,
+            1492,
+            488
+          ],
+          [
+            3,
+            859,
+            451
+          ],
+          [
+            0,
+            318,
+            193
+          ]
+        ],
+        "critical_pr_auc": 0.16412387070049417,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.34095274403122316,
+        "accuracy": 0.3961781888997079,
+        "balanced_accuracy": 0.3738076122556411,
+        "weighted_f1": 0.4308450508153809,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7199385324625432,
+            "recall": 0.36846244593000393,
+            "f1": 0.48744960332943166,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.33662249788553705,
+            "recall": 0.49853862212943634,
+            "f1": 0.4018848872433524,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.09051306873184899,
+            "recall": 0.254421768707483,
+            "f1": 0.1335237415208854,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            1874,
+            2066,
+            1146
+          ],
+          [
+            468,
+            1194,
+            733
+          ],
+          [
+            261,
+            287,
+            187
+          ]
+        ],
+        "critical_pr_auc": 0.08818835731373731,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.37631246381419675,
+        "accuracy": 0.4855650261204289,
+        "balanced_accuracy": 0.4211202428228822,
+        "weighted_f1": 0.5079811603197132,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6864613880742912,
+            "recall": 0.6408852384211727,
+            "f1": 0.6628908554572271,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.5163674762407603,
+            "recall": 0.21050365906155832,
+            "f1": 0.29908256880733947,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10469798657718121,
+            "recall": 0.4119718309859155,
+            "f1": 0.16696396717802356,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2809,
+            404,
+            1170
+          ],
+          [
+            1003,
+            489,
+            831
+          ],
+          [
+            280,
+            54,
+            234
+          ]
+        ],
+        "critical_pr_auc": 0.11151702299791127,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.31815897619917105,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3169957481859948,
+      0.38843835754838263
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-ASOF": {
+    "formulation": "A",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Pre-discharge customs/quarantine status, vessel-call and yard state carry signal ignored in Stage 01-02.",
+    "runtime_s": 38.5,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-ASOF.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.4019664839529677,
+      "accuracy": 0.44139392999327853,
+      "balanced_accuracy": 0.46429445197860203,
+      "weighted_f1": 0.47733487749630055,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8752797558494405,
+          "recall": 0.3742171189979123,
+          "f1": 0.5242824934495156,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.39716147045137273,
+          "recall": 0.5660752777317194,
+          "f1": 0.466807957886101,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.14082332761578045,
+          "recall": 0.4525909592061742,
+          "f1": 0.21480900052328625,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4302,
+          4265,
+          2929
+        ],
+        [
+          537,
+          3414,
+          2080
+        ],
+        [
+          76,
+          917,
+          821
+        ]
+      ],
+      "critical_pr_auc": 0.1366158776886687,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.3947485315260064,
+        "accuracy": 0.416515190859517,
+        "balanced_accuracy": 0.42890490100730855,
+        "weighted_f1": 0.44738363196877096,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8252747252747252,
+            "recall": 0.3704982733103108,
+            "f1": 0.5114061967994552,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.38461538461538464,
+            "recall": 0.4798172124904798,
+            "f1": 0.4269739071501186,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.17114351496546432,
+            "recall": 0.436399217221135,
+            "f1": 0.24586549062844543,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            751,
+            763,
+            513
+          ],
+          [
+            116,
+            630,
+            567
+          ],
+          [
+            43,
+            245,
+            223
+          ]
+        ],
+        "critical_pr_auc": 0.16717168747167807,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.42617061600322037,
+        "accuracy": 0.47930866601752675,
+        "balanced_accuracy": 0.4865954484815826,
+        "weighted_f1": 0.5186728041041294,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8820093457943925,
+            "recall": 0.4453401494298073,
+            "f1": 0.5918474000522602,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.3763713080168776,
+            "recall": 0.5586638830897703,
+            "f1": 0.44974789915966384,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.16005733397037744,
+            "recall": 0.4557823129251701,
+            "f1": 0.2369165487977369,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            2265,
+            1837,
+            984
+          ],
+          [
+            283,
+            1338,
+            774
+          ],
+          [
+            20,
+            380,
+            335
+          ]
+        ],
+        "critical_pr_auc": 0.15816250624102768,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.3740685128259797,
+        "accuracy": 0.4117404454220511,
+        "balanced_accuracy": 0.45963515148272993,
+        "weighted_f1": 0.4412624045069769,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.894919972164231,
+            "recall": 0.29340634268765686,
+            "f1": 0.44192439862542954,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.4249191889509257,
+            "recall": 0.6224709427464485,
+            "f1": 0.5050646175340552,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10805258833196385,
+            "recall": 0.4630281690140845,
+            "f1": 0.17521652231845436,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            1286,
+            1665,
+            1432
+          ],
+          [
+            138,
+            1446,
+            739
+          ],
+          [
+            13,
+            292,
+            263
+          ]
+        ],
+        "critical_pr_auc": 0.10324030953342134,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.39832922011840216,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3568729853962546,
+      0.4456365730575755
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-ASOF-NOCUSTOMS": {
+    "formulation": "A",
+    "model": "lgbm",
+    "dropped": [
+      "known_CUSTOMS_DEL",
+      "age_CUSTOMS_DEL",
+      "customs_rel_discharge_h",
+      "known_HAS_QUARANTINE_FLAG",
+      "age_HAS_QUARANTINE_FLAG",
+      "known_SP_RED_FLAG_PIB",
+      "age_SP_RED_FLAG_PIB",
+      "call_share_CUSTOMS_DEL",
+      "call_share_HAS_QUARANTINE_FLAG",
+      "YARD_BLOCK"
+    ],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Ablation: how much of R-A1 comes from customs/quarantine status known at discharge.",
+    "runtime_s": 61.5,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-ASOF-NOCUSTOMS.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.34458189433508396,
+      "accuracy": 0.37991830825707046,
+      "balanced_accuracy": 0.39845031261562386,
+      "weighted_f1": 0.40401835919354884,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7014028056112225,
+          "recall": 0.30445372303409884,
+          "f1": 0.4246026931942254,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.36702311141773025,
+          "recall": 0.5292654617807993,
+          "f1": 0.43346007604562736,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.11602405376724442,
+          "recall": 0.36163175303197354,
+          "f1": 0.17568291376539905,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          3500,
+          4698,
+          3298
+        ],
+        [
+          1139,
+          3192,
+          1700
+        ],
+        [
+          351,
+          807,
+          656
+        ]
+      ],
+      "critical_pr_auc": 0.11351213519080877,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.3764211388205409,
+        "accuracy": 0.40249285899766296,
+        "balanced_accuracy": 0.39999147275425856,
+        "weighted_f1": 0.43439754542726705,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6734860883797054,
+            "recall": 0.40601874691662554,
+            "f1": 0.5066174207448446,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.41712926249008725,
+            "recall": 0.4006092916984006,
+            "f1": 0.4087024087024087,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.14692982456140352,
+            "recall": 0.3933463796477495,
+            "f1": 0.21394358701436936,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            823,
+            565,
+            639
+          ],
+          [
+            259,
+            526,
+            528
+          ],
+          [
+            140,
+            170,
+            201
+          ]
+        ],
+        "critical_pr_auc": 0.1478184416747666,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.29518925602043977,
+        "accuracy": 0.32546251217137295,
+        "balanced_accuracy": 0.39147602893466904,
+        "weighted_f1": 0.31854076537369813,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8226555246053854,
+            "recall": 0.17420369642154934,
+            "f1": 0.2875223105630375,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.32624570446735396,
+            "recall": 0.6342379958246347,
+            "f1": 0.4308608707984683,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10833668948852195,
+            "recall": 0.3659863945578231,
+            "f1": 0.16718458669981354,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            886,
+            2726,
+            1474
+          ],
+          [
+            136,
+            1519,
+            740
+          ],
+          [
+            55,
+            411,
+            269
+          ]
+        ],
+        "critical_pr_auc": 0.10821577840439933,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.3709322114261149,
+        "accuracy": 0.42947484190266705,
+        "balanced_accuracy": 0.40994903005706007,
+        "weighted_f1": 0.46092641394680356,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6655518394648829,
+            "recall": 0.4086242299794661,
+            "f1": 0.5063613231552163,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.41258992805755396,
+            "recall": 0.4937580714593198,
+            "f1": 0.4495394865765236,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10316139767054909,
+            "recall": 0.3274647887323944,
+            "f1": 0.1568958245466048,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            1791,
+            1407,
+            1185
+          ],
+          [
+            744,
+            1147,
+            432
+          ],
+          [
+            156,
+            226,
+            186
+          ]
+        ],
+        "critical_pr_auc": 0.09738101425224271,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.34751420208903183,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3054215789670875,
+      0.3782797070631283
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-ORDINAL": {
+    "formulation": "A",
+    "model": "ordinal",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Ordinal (Frank-Hall) structure improves the middle class.",
+    "runtime_s": 41.0,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-ORDINAL.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.41026838962861073,
+      "accuracy": 0.4638850111162815,
+      "balanced_accuracy": 0.45815892549941517,
+      "weighted_f1": 0.4891995040781356,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8492612680007481,
+          "recall": 0.3950069589422408,
+          "f1": 0.5392151041975896,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.3830087781253153,
+          "recall": 0.629414690764384,
+          "f1": 0.47622632041149165,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.15552289982855744,
+          "recall": 0.3500551267916207,
+          "f1": 0.2153637442767509,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4541,
+          5093,
+          1862
+        ],
+        [
+          649,
+          3796,
+          1586
+        ],
+        [
+          157,
+          1022,
+          635
+        ]
+      ],
+      "critical_pr_auc": 0.14701226107275767,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.4188974489008548,
+        "accuracy": 0.4549467670734874,
+        "balanced_accuracy": 0.4429670751164975,
+        "weighted_f1": 0.48665851087810913,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7373440939104916,
+            "recall": 0.4958066107548101,
+            "f1": 0.5929203539823009,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.4311475409836066,
+            "recall": 0.4006092916984006,
+            "f1": 0.41531780497433873,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.17429022082018927,
+            "recall": 0.4324853228962818,
+            "f1": 0.24845418774592468,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            1005,
+            536,
+            486
+          ],
+          [
+            226,
+            526,
+            561
+          ],
+          [
+            132,
+            158,
+            221
+          ]
+        ],
+        "critical_pr_auc": 0.1754943521636371,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.4374168437811042,
+        "accuracy": 0.49975657254138267,
+        "balanced_accuracy": 0.48506795971963834,
+        "weighted_f1": 0.5293692062548286,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8841743119266054,
+            "recall": 0.4547778214707039,
+            "f1": 0.6006232147494157,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.36577181208053694,
+            "recall": 0.637160751565762,
+            "f1": 0.464747982335922,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.1869747899159664,
+            "recall": 0.363265306122449,
+            "f1": 0.24687933425797504,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            2313,
+            2190,
+            583
+          ],
+          [
+            291,
+            1526,
+            578
+          ],
+          [
+            12,
+            456,
+            267
+          ]
+        ],
+        "critical_pr_auc": 0.16848395886965656,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.3618311420581754,
+        "accuracy": 0.428100082485565,
+        "balanced_accuracy": 0.42952959305326915,
+        "weighted_f1": 0.4308264596843524,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8940058479532164,
+            "recall": 0.27903262605521334,
+            "f1": 0.4253173361154582,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.38592608984288557,
+            "recall": 0.7507533362031855,
+            "f1": 0.509792458345513,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10598413842826243,
+            "recall": 0.25880281690140844,
+            "f1": 0.15038363171355498,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            1223,
+            2367,
+            793
+          ],
+          [
+            132,
+            1744,
+            447
+          ],
+          [
+            13,
+            408,
+            147
+          ]
+        ],
+        "critical_pr_auc": 0.10728318475471431,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.4060484782467115,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3686174217117515,
+      0.4531263718607193
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-REGRESSION": {
+    "formulation": "A",
+    "model": "regression",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Regressing log dwell then thresholding beats direct classification.",
+    "runtime_s": 19.1,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-REGRESSION.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.3851584245289909,
+      "accuracy": 0.5061268807197146,
+      "balanced_accuracy": 0.4265989385033145,
+      "weighted_f1": 0.4999684104425737,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8113647725379104,
+          "recall": 0.4235386221294363,
+          "f1": 0.5565525518660341,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.383604206500956,
+          "recall": 0.7983750621787432,
+          "f1": 0.5182155733735134,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.13324873096446702,
+          "recall": 0.057883131201764054,
+          "f1": 0.08070714834742505,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4869,
+          6216,
+          411
+        ],
+        [
+          944,
+          4815,
+          272
+        ],
+        [
+          188,
+          1521,
+          105
+        ]
+      ],
+      "critical_pr_auc": null,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.3891706824393329,
+        "accuracy": 0.5328486107504544,
+        "balanced_accuracy": 0.41570029166314254,
+        "weighted_f1": 0.5083652372394795,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6628540305010894,
+            "recall": 0.600394671928959,
+            "f1": 0.6300802485115196,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.42337262942080983,
+            "recall": 0.6290936785986291,
+            "f1": 0.5061274509803921,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.140625,
+            "recall": 0.01761252446183953,
+            "f1": 0.03130434782608696,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            1217,
+            791,
+            19
+          ],
+          [
+            451,
+            826,
+            36
+          ],
+          [
+            168,
+            334,
+            9
+          ]
+        ],
+        "critical_pr_auc": null,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.41082201237813404,
+        "accuracy": 0.5356621226874392,
+        "balanced_accuracy": 0.456447513571395,
+        "weighted_f1": 0.5389635162516841,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8996937212863706,
+            "recall": 0.462052693668895,
+            "f1": 0.6105481943361912,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.37944138324149723,
+            "recall": 0.8338204592901879,
+            "f1": 0.5215460955863149,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.15835777126099707,
+            "recall": 0.07346938775510205,
+            "f1": 0.10037174721189591,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            2350,
+            2592,
+            144
+          ],
+          [
+            255,
+            1997,
+            143
+          ],
+          [
+            7,
+            674,
+            54
+          ]
+        ],
+        "critical_pr_auc": null,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.34901462324874144,
+        "accuracy": 0.4586197415452296,
+        "balanced_accuracy": 0.4095041035053333,
+        "weighted_f1": 0.4373035993721248,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8383773341918866,
+            "recall": 0.29705681040383297,
+            "f1": 0.4386792452830189,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.3731734732109404,
+            "recall": 0.8575118381403358,
+            "f1": 0.5200365487534264,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10966057441253264,
+            "recall": 0.07394366197183098,
+            "f1": 0.08832807570977919,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            1302,
+            2833,
+            248
+          ],
+          [
+            238,
+            1992,
+            93
+          ],
+          [
+            13,
+            513,
+            42
+          ]
+        ],
+        "critical_pr_auc": null,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.3830024393554028,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3494262085193587,
+      0.42421027286778895
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-B12-ASOF": {
+    "formulation": "B12",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "12h landmark adds early customs/release milestones.",
+    "runtime_s": 40.2,
+    "predictions": "reports/ml/reassessment/predictions/R-B12-ASOF.parquet",
+    "pooled": {
+      "n": 18238,
+      "macro_f1": 0.48023668127301766,
+      "accuracy": 0.5403004715429324,
+      "balanced_accuracy": 0.5208348976097451,
+      "weighted_f1": 0.5723710013060019,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8349289237017696,
+          "recall": 0.5538343115558549,
+          "f1": 0.6659339387979406,
+          "support": 10393
+        },
+        "AT_RISK": {
+          "precision": 0.46871839329576653,
+          "recall": 0.5378875808323661,
+          "f1": 0.5009264978381717,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.1930816188107619,
+          "recall": 0.47078280044101434,
+          "f1": 0.2738496071829405,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          5756,
+          2843,
+          1794
+        ],
+        [
+          1012,
+          3244,
+          1775
+        ],
+        [
+          126,
+          834,
+          854
+        ]
+      ],
+      "critical_pr_auc": 0.19064339390546126,
+      "critical_prevalence": 0.09946266037942757
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3735,
+        "macro_f1": 0.4775335096859867,
+        "accuracy": 0.5092369477911647,
+        "balanced_accuracy": 0.5038054352735332,
+        "weighted_f1": 0.5290773170495385,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8234758871701547,
+            "recall": 0.4735740450026164,
+            "f1": 0.6013289036544851,
+            "support": 1911
+          },
+          "AT_RISK": {
+            "precision": 0.4405997693194925,
+            "recall": 0.5818735719725818,
+            "f1": 0.5014768624876929,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2583148558758315,
+            "recall": 0.45596868884540115,
+            "f1": 0.329794762915782,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            905,
+            715,
+            291
+          ],
+          [
+            171,
+            764,
+            378
+          ],
+          [
+            23,
+            255,
+            233
+          ]
+        ],
+        "critical_pr_auc": 0.2568882552696406,
+        "critical_prevalence": 0.13681392235609102
+      },
+      "F2": {
+        "n": 7598,
+        "macro_f1": 0.49980803320628425,
+        "accuracy": 0.5735719926296394,
+        "balanced_accuracy": 0.5338479849986669,
+        "weighted_f1": 0.5972356583219456,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8213972522654195,
+            "recall": 0.6289167412712623,
+            "f1": 0.7123843326150336,
+            "support": 4468
+          },
+          "AT_RISK": {
+            "precision": 0.4378870673952641,
+            "recall": 0.5018789144050104,
+            "f1": 0.467704280155642,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.24162011173184358,
+            "recall": 0.4707482993197279,
+            "f1": 0.3193354868481772,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            2810,
+            1208,
+            450
+          ],
+          [
+            557,
+            1202,
+            636
+          ],
+          [
+            54,
+            335,
+            346
+          ]
+        ],
+        "critical_pr_auc": 0.26362623458527445,
+        "critical_prevalence": 0.09673598315346144
+      },
+      "F3": {
+        "n": 6905,
+        "macro_f1": 0.4608074513191358,
+        "accuracy": 0.520492396813903,
+        "balanced_accuracy": 0.5142586501933119,
+        "weighted_f1": 0.5689570555177189,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8597304128053918,
+            "recall": 0.5084703537618336,
+            "f1": 0.6390106449592987,
+            "support": 4014
+          },
+          "AT_RISK": {
+            "precision": 0.5233415233415234,
+            "recall": 0.5501506672406371,
+            "f1": 0.536411332633788,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.13164193393968407,
+            "recall": 0.4841549295774648,
+            "f1": 0.20700037636432067,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2041,
+            920,
+            1053
+          ],
+          [
+            284,
+            1278,
+            761
+          ],
+          [
+            49,
+            244,
+            275
+          ]
+        ],
+        "critical_pr_auc": 0.12419201942084712,
+        "critical_prevalence": 0.08225923244026068
+      }
+    },
+    "mean_fold_macro_f1": 0.4793829980704689,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.4350737691882292,
+      0.5135388199090203
+    ],
+    "median_lead_time_h": 43.902106527777775
+  },
+  "R-B24-ASOF": {
+    "formulation": "B24",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "24h landmark: most clearances for fast boxes are observed.",
+    "runtime_s": 70.3,
+    "predictions": "reports/ml/reassessment/predictions/R-B24-ASOF.parquet",
+    "pooled": {
+      "n": 15359,
+      "macro_f1": 0.5181219042811025,
+      "accuracy": 0.5615599973956638,
+      "balanced_accuracy": 0.5515748332044077,
+      "weighted_f1": 0.5842803903721472,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8067743067743067,
+          "recall": 0.6117913228639872,
+          "f1": 0.6958825310323948,
+          "support": 7514
+        },
+        "AT_RISK": {
+          "precision": 0.5316742081447964,
+          "recall": 0.5065494942795556,
+          "f1": 0.5188078458011378,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.24853128991060025,
+          "recall": 0.5363836824696803,
+          "f1": 0.33967533600977484,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4597,
+          1941,
+          976
+        ],
+        [
+          1010,
+          3055,
+          1966
+        ],
+        [
+          91,
+          750,
+          973
+        ]
+      ],
+      "critical_pr_auc": 0.2594047450177106,
+      "critical_prevalence": 0.11810664756820105
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3234,
+        "macro_f1": 0.5356224583032848,
+        "accuracy": 0.5680272108843537,
+        "balanced_accuracy": 0.5439558871603912,
+        "weighted_f1": 0.584282891361979,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8180943214629451,
+            "recall": 0.6028368794326241,
+            "f1": 0.69416088199265,
+            "support": 1410
+          },
+          "AT_RISK": {
+            "precision": 0.5347025495750708,
+            "recall": 0.575019040365575,
+            "f1": 0.5541284403669725,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2962962962962963,
+            "recall": 0.45401174168297453,
+            "f1": 0.35857805255023184,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            850,
+            407,
+            153
+          ],
+          [
+            160,
+            755,
+            398
+          ],
+          [
+            29,
+            250,
+            232
+          ]
+        ],
+        "critical_pr_auc": 0.284089675036584,
+        "critical_prevalence": 0.15800865800865802
+      },
+      "F2": {
+        "n": 6355,
+        "macro_f1": 0.4896270881037596,
+        "accuracy": 0.5184893784421715,
+        "balanced_accuracy": 0.5414517734073286,
+        "weighted_f1": 0.5422468046363692,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.80891417733523,
+            "recall": 0.5289922480620155,
+            "f1": 0.6396700412448444,
+            "support": 3225
+          },
+          "AT_RISK": {
+            "precision": 0.45994306628710857,
+            "recall": 0.4722338204592902,
+            "f1": 0.46600741656365885,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2562954672635702,
+            "recall": 0.6231292517006802,
+            "f1": 0.36320380650277556,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            1706,
+            1073,
+            446
+          ],
+          [
+            381,
+            1131,
+            883
+          ],
+          [
+            22,
+            255,
+            458
+          ]
+        ],
+        "critical_pr_auc": 0.2983416813775496,
+        "critical_prevalence": 0.11565696302124312
+      },
+      "F3": {
+        "n": 5770,
+        "macro_f1": 0.5348967472838585,
+        "accuracy": 0.605372616984402,
+        "balanced_accuracy": 0.5701315770036938,
+        "weighted_f1": 0.6285082637306854,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8003921568627451,
+            "recall": 0.7089267106634248,
+            "f1": 0.7518880088414073,
+            "support": 2879
+          },
+          "AT_RISK": {
+            "precision": 0.6234666666666666,
+            "recall": 0.503228583727938,
+            "f1": 0.5569318723201524,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2104089219330855,
+            "recall": 0.4982394366197183,
+            "f1": 0.29587036069001565,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2041,
+            461,
+            377
+          ],
+          [
+            469,
+            1169,
+            685
+          ],
+          [
+            40,
+            245,
+            283
+          ]
+        ],
+        "critical_pr_auc": 0.19666729585301918,
+        "critical_prevalence": 0.09844020797227036
+      }
+    },
+    "mean_fold_macro_f1": 0.5200487645636342,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.48635052646672855,
+      0.5466787306574219
+    ],
+    "median_lead_time_h": 42.41909277777778
+  },
+  "R-B48-ASOF": {
+    "formulation": "B48",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "48h landmark: last landmark where all three classes remain open.",
+    "runtime_s": 55.0,
+    "predictions": "reports/ml/reassessment/predictions/R-B48-ASOF.parquet",
+    "pooled": {
+      "n": 10347,
+      "macro_f1": 0.5458370917139609,
+      "accuracy": 0.5504977288102831,
+      "balanced_accuracy": 0.6028541023444891,
+      "weighted_f1": 0.5566544883591512,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.583984985924304,
+          "recall": 0.746203037569944,
+          "f1": 0.655202667134585,
+          "support": 2502
+        },
+        "AT_RISK": {
+          "precision": 0.7197671341624768,
+          "recall": 0.45100315038965344,
+          "f1": 0.5545361875637105,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.3289824977751409,
+          "recall": 0.6113561190738699,
+          "f1": 0.42777242044358726,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          1867,
+          462,
+          173
+        ],
+        [
+          1222,
+          2720,
+          2089
+        ],
+        [
+          108,
+          597,
+          1109
+        ]
+      ],
+      "critical_pr_auc": 0.3405243586017175,
+      "critical_prevalence": 0.17531651686479172
+    },
+    "per_fold": {
+      "F1": {
+        "n": 2308,
+        "macro_f1": 0.5280959903540271,
+        "accuracy": 0.5324956672443674,
+        "balanced_accuracy": 0.5426188004236905,
+        "weighted_f1": 0.5409018683310599,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6406844106463878,
+            "recall": 0.6962809917355371,
+            "f1": 0.6673267326732674,
+            "support": 484
+          },
+          "AT_RISK": {
+            "precision": 0.6317254174397031,
+            "recall": 0.5186595582635186,
+            "f1": 0.5696361355081556,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2997159090909091,
+            "recall": 0.41291585127201563,
+            "f1": 0.34732510288065843,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            337,
+            121,
+            26
+          ],
+          [
+            165,
+            681,
+            467
+          ],
+          [
+            24,
+            276,
+            211
+          ]
+        ],
+        "critical_pr_auc": 0.28591856367051727,
+        "critical_prevalence": 0.22140381282495666
+      },
+      "F2": {
+        "n": 4217,
+        "macro_f1": 0.5642063265148617,
+        "accuracy": 0.5612995020156509,
+        "balanced_accuracy": 0.6449277801732908,
+        "weighted_f1": 0.5568539101550203,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.5780821917808219,
+            "recall": 0.7764489420423183,
+            "f1": 0.662740478994896,
+            "support": 1087
+          },
+          "AT_RISK": {
+            "precision": 0.745958429561201,
+            "recall": 0.4045929018789144,
+            "f1": 0.5246345425013536,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.37997256515775035,
+            "recall": 0.7537414965986394,
+            "f1": 0.5052439580483357,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            844,
+            176,
+            67
+          ],
+          [
+            589,
+            969,
+            837
+          ],
+          [
+            27,
+            154,
+            554
+          ]
+        ],
+        "critical_pr_auc": 0.41882003310093596,
+        "critical_prevalence": 0.1742945221721603
+      },
+      "F3": {
+        "n": 3822,
+        "macro_f1": 0.5340629689063119,
+        "accuracy": 0.5494505494505495,
+        "balanced_accuracy": 0.6010290621997386,
+        "weighted_f1": 0.5627406367546256,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.5664739884393064,
+            "recall": 0.7368421052631579,
+            "f1": 0.6405228758169934,
+            "support": 931
+          },
+          "AT_RISK": {
+            "precision": 0.7631954350927247,
+            "recall": 0.4606112785191563,
+            "f1": 0.574496644295302,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.28453267162944584,
+            "recall": 0.6056338028169014,
+            "f1": 0.3871693866066404,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            686,
+            165,
+            80
+          ],
+          [
+            468,
+            1070,
+            785
+          ],
+          [
+            57,
+            167,
+            344
+          ]
+        ],
+        "critical_pr_auc": 0.28222501679880174,
+        "critical_prevalence": 0.14861329147043434
+      }
+    },
+    "mean_fold_macro_f1": 0.5421217619250669,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.5173706382671823,
+      0.5720825906033266
+    ],
+    "median_lead_time_h": 40.54793388888889
+  },
+  "R-B24-ORDINAL": {
+    "formulation": "B24",
+    "model": "ordinal",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Ordinal structure at 24h landmark.",
+    "runtime_s": 23.4,
+    "predictions": "reports/ml/reassessment/predictions/R-B24-ORDINAL.parquet",
+    "pooled": {
+      "n": 15359,
+      "macro_f1": 0.5161358758271716,
+      "accuracy": 0.5723679927078585,
+      "balanced_accuracy": 0.5279770579858941,
+      "weighted_f1": 0.5874293534576213,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8133134994421718,
+          "recall": 0.5821133883417621,
+          "f1": 0.6785603475023271,
+          "support": 7514
+        },
+        "AT_RISK": {
+          "precision": 0.5067466266866567,
+          "recall": 0.6164815121870336,
+          "f1": 0.5562537402752843,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.2643721633888048,
+          "recall": 0.38533627342888643,
+          "f1": 0.3135935397039031,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4374,
+          2582,
+          558
+        ],
+        [
+          926,
+          3718,
+          1387
+        ],
+        [
+          78,
+          1037,
+          699
+        ]
+      ],
+      "critical_pr_auc": 0.25540104153062065,
+      "critical_prevalence": 0.11810664756820105
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3234,
+        "macro_f1": 0.5121489587928746,
+        "accuracy": 0.5674087816944959,
+        "balanced_accuracy": 0.5091185829630587,
+        "weighted_f1": 0.5734761850131969,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8219735503560529,
+            "recall": 0.573049645390071,
+            "f1": 0.6753029669870455,
+            "support": 1410
+          },
+          "AT_RISK": {
+            "precision": 0.5045714285714286,
+            "recall": 0.6725057121096725,
+            "f1": 0.5765589291544237,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2874251497005988,
+            "recall": 0.28180039138943247,
+            "f1": 0.2845849802371542,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            808,
+            520,
+            82
+          ],
+          [
+            155,
+            883,
+            275
+          ],
+          [
+            20,
+            347,
+            144
+          ]
+        ],
+        "critical_pr_auc": 0.2760403039984374,
+        "critical_prevalence": 0.15800865800865802
+      },
+      "F2": {
+        "n": 6355,
+        "macro_f1": 0.509109921745352,
+        "accuracy": 0.5416207710464201,
+        "balanced_accuracy": 0.5347444011671119,
+        "weighted_f1": 0.553224347252453,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8238120662039509,
+            "recall": 0.4784496124031008,
+            "f1": 0.6053354256571204,
+            "support": 3225
+          },
+          "AT_RISK": {
+            "precision": 0.45483965872315385,
+            "recall": 0.6455114822546972,
+            "f1": 0.5336555056955471,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.32594644506001846,
+            "recall": 0.48027210884353744,
+            "f1": 0.38833883388338836,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            1543,
+            1486,
+            196
+          ],
+          [
+            315,
+            1546,
+            534
+          ],
+          [
+            15,
+            367,
+            353
+          ]
+        ],
+        "critical_pr_auc": 0.3032889563721647,
+        "critical_prevalence": 0.11565696302124312
+      },
+      "F3": {
+        "n": 5770,
+        "macro_f1": 0.5229232300198451,
+        "accuracy": 0.6090121317157712,
+        "balanced_accuracy": 0.5377314219875339,
+        "weighted_f1": 0.6282923805841872,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8021411578112609,
+            "recall": 0.7026745397707538,
+            "f1": 0.7491205332345862,
+            "support": 2879
+          },
+          "AT_RISK": {
+            "precision": 0.5891224862888482,
+            "recall": 0.5548859233749462,
+            "f1": 0.5714919086677012,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.19056603773584907,
+            "recall": 0.35563380281690143,
+            "f1": 0.24815724815724816,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2023,
+            576,
+            280
+          ],
+          [
+            456,
+            1289,
+            578
+          ],
+          [
+            43,
+            323,
+            202
+          ]
+        ],
+        "critical_pr_auc": 0.18891937666201244,
+        "critical_prevalence": 0.09844020797227036
+      }
+    },
+    "mean_fold_macro_f1": 0.5147273701860239,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.48123057322529017,
+      0.5522455601211819
+    ],
+    "median_lead_time_h": 42.41909277777778
+  },
+  "R-C-CUSTOMS": {
+    "formulation": "C",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Event-driven prediction when customs release becomes known.",
+    "runtime_s": 39.2,
+    "predictions": "reports/ml/reassessment/predictions/R-C-CUSTOMS.parquet",
+    "pooled": {
+      "n": 14402,
+      "macro_f1": 0.7157043495833619,
+      "accuracy": 0.7455214553534232,
+      "balanced_accuracy": 0.6964201139293457,
+      "weighted_f1": 0.7448273750238029,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8053665910808768,
+          "recall": 0.8215111796453354,
+          "f1": 0.8133587786259542,
+          "support": 7782
+        },
+        "AT_RISK": {
+          "precision": 0.6486179477470655,
+          "recall": 0.675872953245216,
+          "f1": 0.6619650275335717,
+          "support": 5069
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.7766497461928934,
+          "recall": 0.5918762088974855,
+          "f1": 0.6717892425905598,
+          "support": 1551
+        }
+      },
+      "confusion_matrix": [
+        [
+          6393,
+          1329,
+          60
+        ],
+        [
+          1439,
+          3426,
+          204
+        ],
+        [
+          106,
+          527,
+          918
+        ]
+      ],
+      "critical_pr_auc": 0.7516691668607921,
+      "critical_prevalence": 0.1076933759200111
+    },
+    "per_fold": {
+      "F1": {
+        "n": 2872,
+        "macro_f1": 0.549133663976244,
+        "accuracy": 0.5564066852367688,
+        "balanced_accuracy": 0.5712283965771929,
+        "weighted_f1": 0.5317287463891294,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8571428571428571,
+            "recall": 0.3042505592841163,
+            "f1": 0.44909190974133184,
+            "support": 1341
+          },
+          "AT_RISK": {
+            "precision": 0.46905697445972494,
+            "recall": 0.8753437213565536,
+            "f1": 0.6108090821874,
+            "support": 1091
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.6527777777777778,
+            "recall": 0.5340909090909091,
+            "f1": 0.5875,
+            "support": 440
+          }
+        },
+        "confusion_matrix": [
+          [
+            408,
+            877,
+            56
+          ],
+          [
+            67,
+            955,
+            69
+          ],
+          [
+            1,
+            204,
+            235
+          ]
+        ],
+        "critical_pr_auc": 0.6938911863140391,
+        "critical_prevalence": 0.1532033426183844
+      },
+      "F2": {
+        "n": 6084,
+        "macro_f1": 0.7439946472304798,
+        "accuracy": 0.7753122945430638,
+        "balanced_accuracy": 0.7110069493213782,
+        "weighted_f1": 0.7669602730178019,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7863332508046547,
+            "recall": 0.9165945165945166,
+            "f1": 0.8464818763326226,
+            "support": 3465
+          },
+          "AT_RISK": {
+            "precision": 0.7140186915887851,
+            "recall": 0.5710014947683109,
+            "f1": 0.6345514950166113,
+            "support": 2007
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.8977272727272727,
+            "recall": 0.6454248366013072,
+            "f1": 0.7509505703422054,
+            "support": 612
+          }
+        },
+        "confusion_matrix": [
+          [
+            3176,
+            286,
+            3
+          ],
+          [
+            819,
+            1146,
+            42
+          ],
+          [
+            44,
+            173,
+            395
+          ]
+        ],
+        "critical_pr_auc": 0.8108196270553008,
+        "critical_prevalence": 0.10059171597633136
+      },
+      "F3": {
+        "n": 5446,
+        "macro_f1": 0.7551392453489045,
+        "accuracy": 0.811972089607051,
+        "balanced_accuracy": 0.7310954357583981,
+        "weighted_f1": 0.8051928956960658,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8206251825883728,
+            "recall": 0.9438844086021505,
+            "f1": 0.8779496796374433,
+            "support": 2976
+          },
+          "AT_RISK": {
+            "precision": 0.8074344911639244,
+            "recall": 0.6722475900558093,
+            "f1": 0.7336655592469546,
+            "support": 1971
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.7539267015706806,
+            "recall": 0.5771543086172345,
+            "f1": 0.6538024971623155,
+            "support": 499
+          }
+        },
+        "confusion_matrix": [
+          [
+            2809,
+            166,
+            1
+          ],
+          [
+            553,
+            1325,
+            93
+          ],
+          [
+            61,
+            150,
+            288
+          ]
+        ],
+        "critical_pr_auc": 0.7220925334565778,
+        "critical_prevalence": 0.09162688211531399
+      }
+    },
+    "mean_fold_macro_f1": 0.6827558521852094,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.6712408536616372,
+      0.7488004571212001
+    ],
+    "median_lead_time_h": 23.412777777777777,
+    "three_class_open_subset": {
+      "n": 11011,
+      "macro_f1": 0.4551484143144237,
+      "accuracy": 0.7075651621106167,
+      "balanced_accuracy": 0.4518729704357985,
+      "weighted_f1": 0.7002256755855466,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8053665910808768,
+          "recall": 0.8215111796453354,
+          "f1": 0.8133587786259542,
+          "support": 7782
+        },
+        "AT_RISK": {
+          "precision": 0.46509274873524453,
+          "recall": 0.48436951176677207,
+          "f1": 0.4745354439091535,
+          "support": 2847
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.17592592592592593,
+          "recall": 0.049738219895287955,
+          "f1": 0.07755102040816327,
+          "support": 382
+        }
+      },
+      "confusion_matrix": [
+        [
+          6393,
+          1329,
+          60
+        ],
+        [
+          1439,
+          1379,
+          29
+        ],
+        [
+          106,
+          257,
+          19
+        ]
+      ],
+      "critical_pr_auc": 0.09839916275285784,
+      "critical_prevalence": 0.034692580147125604
+    }
+  },
+  "R-ORACLE-CUSTOMS": {
+    "formulation": "ORACLE_CUSTOMS",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": false,
+    "hypothesis": "Information bound: exact customs release time known at discharge (future information).",
+    "runtime_s": 39.9,
+    "predictions": "reports/ml/reassessment/predictions/R-ORACLE-CUSTOMS.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.724006026784444,
+      "accuracy": 0.7622666873481205,
+      "balanced_accuracy": 0.6960700809978917,
+      "weighted_f1": 0.7627704522938902,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8322760059094464,
+          "recall": 0.8330723729993041,
+          "f1": 0.8326739990436031,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.622476649593251,
+          "recall": 0.6851268446360471,
+          "f1": 0.6523008919409582,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.8645484949832776,
+          "recall": 0.5700110253583242,
+          "f1": 0.6870431893687707,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          9577,
+          1900,
+          19
+        ],
+        [
+          1756,
+          4132,
+          143
+        ],
+        [
+          174,
+          606,
+          1034
+        ]
+      ],
+      "critical_pr_auc": 0.7287149909286532,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.649967037047218,
+        "accuracy": 0.6600882887561672,
+        "balanced_accuracy": 0.6424556907148794,
+        "weighted_f1": 0.6641516674217585,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8686567164179104,
+            "recall": 0.5742476566354218,
+            "f1": 0.6914166914166914,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.5106769650159019,
+            "recall": 0.856054836252856,
+            "f1": 0.6397268070574843,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.8193548387096774,
+            "recall": 0.49706457925636005,
+            "f1": 0.6187576126674786,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            1164,
+            844,
+            19
+          ],
+          [
+            152,
+            1124,
+            37
+          ],
+          [
+            24,
+            233,
+            254
+          ]
+        ],
+        "critical_pr_auc": 0.6614600353461788,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.7389066300021212,
+        "accuracy": 0.7728821811100293,
+        "balanced_accuracy": 0.7005141818393849,
+        "weighted_f1": 0.7683330151636053,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8083078582988671,
+            "recall": 0.8837986629964609,
+            "f1": 0.8443693059077675,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.6412037037037037,
+            "recall": 0.5782881002087683,
+            "f1": 0.6081229418221734,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.9494949494949495,
+            "recall": 0.6394557823129252,
+            "f1": 0.7642276422764228,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            4495,
+            591,
+            0
+          ],
+          [
+            985,
+            1385,
+            25
+          ],
+          [
+            81,
+            184,
+            470
+          ]
+        ],
+        "critical_pr_auc": 0.8081610415965905,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.7412970229462035,
+        "accuracy": 0.8043717349463844,
+        "balanced_accuracy": 0.7127828162039136,
+        "weighted_f1": 0.8011063677198966,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8506296135475466,
+            "recall": 0.893908281998631,
+            "f1": 0.8717321170319279,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.7127799736495388,
+            "recall": 0.6986655187257856,
+            "f1": 0.7056521739130435,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.7928388746803069,
+            "recall": 0.545774647887324,
+            "f1": 0.6465067778936392,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            3918,
+            465,
+            0
+          ],
+          [
+            619,
+            1623,
+            81
+          ],
+          [
+            69,
+            189,
+            310
+          ]
+        ],
+        "critical_pr_auc": 0.6823370644011931,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.7100568966651809,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.6836385587428384,
+      0.7577688335551036
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-ORACLE-CUSTOMS-JOBDEL": {
+    "formulation": "ORACLE_CUSTOMS_JOBDEL",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": false,
+    "hypothesis": "Information bound: exact customs release and delivery-order times known at discharge.",
+    "runtime_s": 38.4,
+    "predictions": "reports/ml/reassessment/predictions/R-ORACLE-CUSTOMS-JOBDEL.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.831360895484103,
+      "accuracy": 0.8560570808127811,
+      "balanced_accuracy": 0.8118457382230667,
+      "weighted_f1": 0.8547009736883855,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8843877636075685,
+          "recall": 0.9229297146833682,
+          "f1": 0.9032477759332567,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.7876547455295736,
+          "recall": 0.7595755264466921,
+          "f1": 0.7733603443909851,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.893979057591623,
+          "recall": 0.75303197353914,
+          "f1": 0.817474566128067,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          10610,
+          885,
+          1
+        ],
+        [
+          1289,
+          4581,
+          161
+        ],
+        [
+          98,
+          350,
+          1366
+        ]
+      ],
+      "critical_pr_auc": 0.8725846879238115,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.8221032947409279,
+        "accuracy": 0.8200467411062062,
+        "balanced_accuracy": 0.8106325624993821,
+        "weighted_f1": 0.8238393769165657,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.923699421965318,
+            "recall": 0.7883571780957079,
+            "f1": 0.8506787330316742,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.6838747099767981,
+            "recall": 0.897943640517898,
+            "f1": 0.7764241027329601,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.9596977329974811,
+            "recall": 0.7455968688845401,
+            "f1": 0.8392070484581498,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            1598,
+            428,
+            1
+          ],
+          [
+            119,
+            1179,
+            15
+          ],
+          [
+            13,
+            117,
+            381
+          ]
+        ],
+        "critical_pr_auc": 0.8685264671095317,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.847994087649039,
+        "accuracy": 0.8695228821811101,
+        "balanced_accuracy": 0.8197087683575096,
+        "weighted_f1": 0.8654483550405533,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8712323880863206,
+            "recall": 0.9604797483287456,
+            "f1": 0.9136818479379033,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.840463009562154,
+            "recall": 0.697286012526096,
+            "f1": 0.7622090369694203,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.9469453376205788,
+            "recall": 0.8013605442176871,
+            "f1": 0.8680913780397936,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            4885,
+            201,
+            0
+          ],
+          [
+            692,
+            1670,
+            33
+          ],
+          [
+            30,
+            116,
+            589
+          ]
+        ],
+        "critical_pr_auc": 0.91118417174441,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.8101402425665526,
+        "accuracy": 0.8599120153973054,
+        "balanced_accuracy": 0.7947877391237386,
+        "weighted_f1": 0.8572378046301794,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8856223175965665,
+            "recall": 0.9415925165411818,
+            "f1": 0.9127501935198497,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.8228028503562945,
+            "recall": 0.7455876022384847,
+            "f1": 0.7822944896115628,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.7779960707269156,
+            "recall": 0.6971830985915493,
+            "f1": 0.7353760445682451,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            4127,
+            256,
+            0
+          ],
+          [
+            478,
+            1732,
+            113
+          ],
+          [
+            55,
+            117,
+            396
+          ]
+        ],
+        "critical_pr_auc": 0.8168906419442485,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.8267458749855066,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.8037048451181057,
+      0.8558081829247012
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-UNWEIGHTED": {
+    "formulation": "A",
+    "model": "unweighted",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Balanced weights over-predict delay classes under prior shift.",
+    "runtime_s": 47.5,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-UNWEIGHTED.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.39808547360399116,
+      "accuracy": 0.4850317977353808,
+      "balanced_accuracy": 0.43678402982394643,
+      "weighted_f1": 0.4922182088346864,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.8508474576271187,
+          "recall": 0.3930062630480167,
+          "f1": 0.5376651196001428,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.38339059750272353,
+          "recall": 0.7585806665561267,
+          "f1": 0.5093520374081496,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.13727359389895138,
+          "recall": 0.1587651598676957,
+          "f1": 0.147239263803681,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4518,
+          5965,
+          1013
+        ],
+        [
+          659,
+          4575,
+          797
+        ],
+        [
+          133,
+          1393,
+          288
+        ]
+      ],
+      "critical_pr_auc": 0.14232117274613182,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.39340396630050417,
+        "accuracy": 0.4533887301999481,
+        "balanced_accuracy": 0.4032963696941205,
+        "weighted_f1": 0.47235309943101084,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7563884156729132,
+            "recall": 0.43808584114454857,
+            "f1": 0.5548266166822868,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.3922480620155039,
+            "recall": 0.5780654988575781,
+            "f1": 0.46736453201970446,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.1334231805929919,
+            "recall": 0.19373776908023482,
+            "f1": 0.15802075019952114,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            888,
+            859,
+            280
+          ],
+          [
+            191,
+            759,
+            363
+          ],
+          [
+            95,
+            317,
+            99
+          ]
+        ],
+        "critical_pr_auc": 0.1642121837495152,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.4233188504067558,
+        "accuracy": 0.5149707887049659,
+        "balanced_accuracy": 0.46408349921277986,
+        "weighted_f1": 0.5243655291285952,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8833399920095885,
+            "recall": 0.43472276838379864,
+            "f1": 0.5826854658057715,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.3712609970674487,
+            "recall": 0.792901878914405,
+            "f1": 0.5057256990679094,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.20234113712374582,
+            "recall": 0.16462585034013605,
+            "f1": 0.18154538634658665,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            2211,
+            2614,
+            261
+          ],
+          [
+            280,
+            1899,
+            216
+          ],
+          [
+            12,
+            602,
+            121
+          ]
+        ],
+        "critical_pr_auc": 0.16529451680838064,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.36878758110815396,
+        "accuracy": 0.46796810558152324,
+        "balanced_accuracy": 0.42289838876616054,
+        "weighted_f1": 0.46217613645484074,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.868952847519902,
+            "recall": 0.32375085557837097,
+            "f1": 0.47174202127659576,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.39258652467745236,
+            "recall": 0.8252260008609557,
+            "f1": 0.5320566194837635,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.08970976253298153,
+            "recall": 0.11971830985915492,
+            "f1": 0.10256410256410256,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            1419,
+            2492,
+            472
+          ],
+          [
+            188,
+            1917,
+            218
+          ],
+          [
+            26,
+            474,
+            68
+          ]
+        ],
+        "critical_pr_auc": 0.10645970431998691,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.395170132605138,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.3554548361577084,
+      0.4444769876024004
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-A1-INNER-TUNED": {
+    "formulation": "A",
+    "model": "inner_tuned",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Class multipliers chosen on an embargoed inner slice of training fix the prior-shift decision bias.",
+    "runtime_s": 118.8,
+    "predictions": "reports/ml/reassessment/predictions/R-A1-INNER-TUNED.parquet",
+    "pooled": {
+      "n": 19341,
+      "macro_f1": 0.39291996654707134,
+      "accuracy": 0.44573703531358255,
+      "balanced_accuracy": 0.4340205070273664,
+      "weighted_f1": 0.4743954634857007,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7767379679144385,
+          "recall": 0.40431454418928325,
+          "f1": 0.5318077803203661,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.37476249022018554,
+          "recall": 0.5559608688443044,
+          "f1": 0.44772332754706906,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.14058956916099774,
+          "recall": 0.34178610804851156,
+          "f1": 0.19922879177377892,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4648,
+          4602,
+          2246
+        ],
+        [
+          1134,
+          3353,
+          1544
+        ],
+        [
+          202,
+          992,
+          620
+        ]
+      ],
+      "critical_pr_auc": 0.1366158776886687,
+      "critical_prevalence": 0.09379039346466056
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3851,
+        "macro_f1": 0.3572831996717302,
+        "accuracy": 0.3713321215268761,
+        "balanced_accuracy": 0.4158939953766221,
+        "weighted_f1": 0.3848575063927777,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.9148550724637681,
+            "recall": 0.24913665515540206,
+            "f1": 0.39162466072120977,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.3604033970276008,
+            "recall": 0.5171363290175172,
+            "f1": 0.4247732248983422,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.17385159010600706,
+            "recall": 0.48140900195694714,
+            "f1": 0.2554517133956386,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            505,
+            944,
+            578
+          ],
+          [
+            43,
+            679,
+            591
+          ],
+          [
+            4,
+            261,
+            246
+          ]
+        ],
+        "critical_pr_auc": 0.16717168747167807,
+        "critical_prevalence": 0.1326928070631005
+      },
+      "F2": {
+        "n": 8216,
+        "macro_f1": 0.40186418493580317,
+        "accuracy": 0.47151898734177217,
+        "balanced_accuracy": 0.4555729199148167,
+        "weighted_f1": 0.48159219613228227,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8947115384615385,
+            "recall": 0.36590640975226113,
+            "f1": 0.5193971532235557,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.3577251552795031,
+            "recall": 0.7695198329853862,
+            "f1": 0.4884059891347555,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.17276422764227642,
+            "recall": 0.23129251700680273,
+            "f1": 0.1977894124490983,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            1861,
+            2751,
+            474
+          ],
+          [
+            212,
+            1843,
+            340
+          ],
+          [
+            7,
+            558,
+            170
+          ]
+        ],
+        "critical_pr_auc": 0.15816250624102768,
+        "critical_prevalence": 0.08945959104186953
+      },
+      "F3": {
+        "n": 7274,
+        "macro_f1": 0.3802609034402395,
+        "accuracy": 0.45600769865273577,
+        "balanced_accuracy": 0.4125099882175392,
+        "weighted_f1": 0.4932484123800957,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6807875894988067,
+            "recall": 0.5206479580196213,
+            "f1": 0.5900452488687783,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.434850863422292,
+            "recall": 0.35772707705553164,
+            "f1": 0.3925366084081247,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.10144206862257583,
+            "recall": 0.3591549295774648,
+            "f1": 0.15820085304381543,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2282,
+            907,
+            1194
+          ],
+          [
+            879,
+            831,
+            613
+          ],
+          [
+            191,
+            173,
+            204
+          ]
+        ],
+        "critical_pr_auc": 0.10324030953342134,
+        "critical_prevalence": 0.07808633489139401
+      }
+    },
+    "mean_fold_macro_f1": 0.379802762682591,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.35303708777690335,
+      0.4350315657603807
+    ],
+    "median_lead_time_h": 52.611110277777776
+  },
+  "R-B24-INNER-TUNED": {
+    "formulation": "B24",
+    "model": "inner_tuned",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Inner-tuned decision rule at the 24h landmark.",
+    "runtime_s": 89.8,
+    "predictions": "reports/ml/reassessment/predictions/R-B24-INNER-TUNED.parquet",
+    "pooled": {
+      "n": 15359,
+      "macro_f1": 0.519151964285456,
+      "accuracy": 0.5723679927078585,
+      "balanced_accuracy": 0.5337613413187988,
+      "weighted_f1": 0.5866952396325195,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.7946802696301695,
+          "recall": 0.5805163694437051,
+          "f1": 0.6709220949011766,
+          "support": 7514
+        },
+        "AT_RISK": {
+          "precision": 0.5167531193046404,
+          "recall": 0.6111755927706848,
+          "f1": 0.5600121543603768,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.2714651077822433,
+          "recall": 0.40959206174200663,
+          "f1": 0.32652164359481434,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          4362,
+          2496,
+          656
+        ],
+        [
+          1007,
+          3686,
+          1338
+        ],
+        [
+          120,
+          951,
+          743
+        ]
+      ],
+      "critical_pr_auc": 0.2594047450177106,
+      "critical_prevalence": 0.11810664756820105
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3234,
+        "macro_f1": 0.5256617551013273,
+        "accuracy": 0.543908472479901,
+        "balanced_accuracy": 0.5458542889401888,
+        "weighted_f1": 0.5634032464289926,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8417030567685589,
+            "recall": 0.5468085106382978,
+            "f1": 0.6629406706792778,
+            "support": 1410
+          },
+          "AT_RISK": {
+            "precision": 0.511611030478955,
+            "recall": 0.536938309215537,
+            "f1": 0.5239687848383501,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.30106382978723406,
+            "recall": 0.5538160469667319,
+            "f1": 0.39007580978635426,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            771,
+            455,
+            184
+          ],
+          [
+            135,
+            705,
+            473
+          ],
+          [
+            10,
+            218,
+            283
+          ]
+        ],
+        "critical_pr_auc": 0.284089675036584,
+        "critical_prevalence": 0.15800865800865802
+      },
+      "F2": {
+        "n": 6355,
+        "macro_f1": 0.48713069940896436,
+        "accuracy": 0.5235247836349332,
+        "balanced_accuracy": 0.5146897490850494,
+        "weighted_f1": 0.5319157190377138,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8352444176222088,
+            "recall": 0.42914728682170544,
+            "f1": 0.5669807455960671,
+            "support": 3225
+          },
+          "AT_RISK": {
+            "precision": 0.447542794036444,
+            "recall": 0.6768267223382046,
+            "f1": 0.5388067143094566,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2992565055762082,
+            "recall": 0.4380952380952381,
+            "f1": 0.3556046383213694,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            1384,
+            1599,
+            242
+          ],
+          [
+            262,
+            1621,
+            512
+          ],
+          [
+            11,
+            402,
+            322
+          ]
+        ],
+        "critical_pr_auc": 0.2983416813775496,
+        "critical_prevalence": 0.11565696302124312
+      },
+      "F3": {
+        "n": 5770,
+        "macro_f1": 0.5287411706263753,
+        "accuracy": 0.6421143847487002,
+        "balanced_accuracy": 0.5316644052728597,
+        "weighted_f1": 0.6468835013471439,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.7568587105624143,
+            "recall": 0.7665856200069469,
+            "f1": 0.7616911130284728,
+            "support": 2879
+          },
+          "AT_RISK": {
+            "precision": 0.6375996249413971,
+            "recall": 0.5854498493327593,
+            "f1": 0.6104129263913824,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.1914008321775312,
+            "recall": 0.24295774647887325,
+            "f1": 0.21411947245927077,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            2207,
+            442,
+            230
+          ],
+          [
+            610,
+            1360,
+            353
+          ],
+          [
+            99,
+            331,
+            138
+          ]
+        ],
+        "critical_pr_auc": 0.19666729585301918,
+        "critical_prevalence": 0.09844020797227036
+      }
+    },
+    "mean_fold_macro_f1": 0.5138445417122224,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.480495098507301,
+      0.5502134421393742
+    ],
+    "median_lead_time_h": 42.41909277777778
+  },
+  "R-B48-INNER-TUNED": {
+    "formulation": "B48",
+    "model": "inner_tuned",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Inner-tuned decision rule at the 48h landmark.",
+    "runtime_s": 60.6,
+    "predictions": "reports/ml/reassessment/predictions/R-B48-INNER-TUNED.parquet",
+    "pooled": {
+      "n": 10347,
+      "macro_f1": 0.550893797164567,
+      "accuracy": 0.5738861505750459,
+      "balanced_accuracy": 0.5781544241420614,
+      "weighted_f1": 0.5824271428557051,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.5966850828729282,
+          "recall": 0.6906474820143885,
+          "f1": 0.6402371248610597,
+          "support": 2502
+        },
+        "AT_RISK": {
+          "precision": 0.695132186319765,
+          "recall": 0.5493284695738684,
+          "f1": 0.6136889876817635,
+          "support": 6031
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.3340782122905028,
+          "recall": 0.49448732083792724,
+          "f1": 0.398755278950878,
+          "support": 1814
+        }
+      },
+      "confusion_matrix": [
+        [
+          1728,
+          635,
+          139
+        ],
+        [
+          1069,
+          3313,
+          1649
+        ],
+        [
+          99,
+          818,
+          897
+        ]
+      ],
+      "critical_pr_auc": 0.3405243586017175,
+      "critical_prevalence": 0.17531651686479172
+    },
+    "per_fold": {
+      "F1": {
+        "n": 2308,
+        "macro_f1": 0.5042632278395257,
+        "accuracy": 0.5212305025996534,
+        "balanced_accuracy": 0.49731794166648613,
+        "weighted_f1": 0.5310630733525937,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.6720867208672087,
+            "recall": 0.512396694214876,
+            "f1": 0.5814771395076201,
+            "support": 484
+          },
+          "AT_RISK": {
+            "precision": 0.6024291497975709,
+            "recall": 0.5666412795125666,
+            "f1": 0.5839874411302983,
+            "support": 1313
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.2997159090909091,
+            "recall": 0.41291585127201563,
+            "f1": 0.34732510288065843,
+            "support": 511
+          }
+        },
+        "confusion_matrix": [
+          [
+            248,
+            210,
+            26
+          ],
+          [
+            102,
+            744,
+            467
+          ],
+          [
+            19,
+            281,
+            211
+          ]
+        ],
+        "critical_pr_auc": 0.28591856367051727,
+        "critical_prevalence": 0.22140381282495666
+      },
+      "F2": {
+        "n": 4217,
+        "macro_f1": 0.5407375608257253,
+        "accuracy": 0.5335546597106948,
+        "balanced_accuracy": 0.6390169398455103,
+        "weighted_f1": 0.5225521428826039,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.5780821917808219,
+            "recall": 0.7764489420423183,
+            "f1": 0.662740478994896,
+            "support": 1087
+          },
+          "AT_RISK": {
+            "precision": 0.7445454545454545,
+            "recall": 0.3419624217118998,
+            "f1": 0.46866952789699573,
+            "support": 2395
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.35425467712733855,
+            "recall": 0.7986394557823129,
+            "f1": 0.4908026755852843,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            844,
+            160,
+            83
+          ],
+          [
+            589,
+            819,
+            987
+          ],
+          [
+            27,
+            121,
+            587
+          ]
+        ],
+        "critical_pr_auc": 0.41882003310093596,
+        "critical_prevalence": 0.1742945221721603
+      },
+      "F3": {
+        "n": 3822,
+        "macro_f1": 0.5316106198469127,
+        "accuracy": 0.6501831501831502,
+        "balanced_accuracy": 0.5369227967643814,
+        "weighted_f1": 0.635539882586572,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.5960637300843487,
+            "recall": 0.6831364124597207,
+            "f1": 0.6366366366366366,
+            "support": 931
+          },
+          "AT_RISK": {
+            "precision": 0.7198683669271905,
+            "recall": 0.753336203185536,
+            "f1": 0.736222128733698,
+            "support": 2323
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.3055555555555556,
+            "recall": 0.1742957746478873,
+            "f1": 0.2219730941704036,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            636,
+            265,
+            30
+          ],
+          [
+            378,
+            1750,
+            195
+          ],
+          [
+            53,
+            416,
+            99
+          ]
+        ],
+        "critical_pr_auc": 0.28222501679880174,
+        "critical_prevalence": 0.14861329147043434
+      }
+    },
+    "mean_fold_macro_f1": 0.5255371361707213,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.5142356091003059,
+      0.5784837188366493
+    ],
+    "median_lead_time_h": 40.54793388888889
+  },
+  "R-E-JOBDEL": {
+    "formulation": "E_JOBDEL",
+    "model": "lgbm",
+    "dropped": [],
+    "population": "selection-aware cohort, dev folds, still in yard at t",
+    "production_valid": true,
+    "hypothesis": "Event-driven prediction when the delivery job (JOB_DEL) is created.",
+    "runtime_s": 40.2,
+    "predictions": "reports/ml/reassessment/predictions/R-E-JOBDEL.parquet",
+    "pooled": {
+      "n": 19297,
+      "macro_f1": 0.8317341213807955,
+      "accuracy": 0.8576980877856661,
+      "balanced_accuracy": 0.8099262488134178,
+      "weighted_f1": 0.8555175730066199,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.878220332052016,
+          "recall": 0.9340640222686152,
+          "f1": 0.9052817940395397,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.8015858713281673,
+          "recall": 0.7428189712758851,
+          "f1": 0.7710843373493976,
+          "support": 5988
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.8974358974358975,
+          "recall": 0.752895752895753,
+          "f1": 0.8188362327534493,
+          "support": 1813
+        }
+      },
+      "confusion_matrix": [
+        [
+          10738,
+          758,
+          0
+        ],
+        [
+          1384,
+          4448,
+          156
+        ],
+        [
+          105,
+          343,
+          1365
+        ]
+      ],
+      "critical_pr_auc": 0.8749075728782906,
+      "critical_prevalence": 0.09395242783852412
+    },
+    "per_fold": {
+      "F1": {
+        "n": 3836,
+        "macro_f1": 0.8198647866173255,
+        "accuracy": 0.8175182481751825,
+        "balanced_accuracy": 0.8087144609225442,
+        "weighted_f1": 0.8208980199271292,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.9024390243902439,
+            "recall": 0.8031573754316724,
+            "f1": 0.8499086400417646,
+            "support": 2027
+          },
+          "AT_RISK": {
+            "precision": 0.6909315237507712,
+            "recall": 0.8622016936104696,
+            "f1": 0.7671232876712328,
+            "support": 1299
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.9440389294403893,
+            "recall": 0.7607843137254902,
+            "f1": 0.8425624321389794,
+            "support": 510
+          }
+        },
+        "confusion_matrix": [
+          [
+            1628,
+            399,
+            0
+          ],
+          [
+            156,
+            1120,
+            23
+          ],
+          [
+            20,
+            102,
+            388
+          ]
+        ],
+        "critical_pr_auc": 0.8818323615926892,
+        "critical_prevalence": 0.1329509906152242
+      },
+      "F2": {
+        "n": 8206,
+        "macro_f1": 0.8465270701091979,
+        "accuracy": 0.8700950524006824,
+        "balanced_accuracy": 0.819854309019535,
+        "weighted_f1": 0.8653147310560866,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.8692729524146471,
+            "recall": 0.9661816751867872,
+            "f1": 0.9151690101499208,
+            "support": 5086
+          },
+          "AT_RISK": {
+            "precision": 0.8525875588081547,
+            "recall": 0.6838574423480084,
+            "f1": 0.758957654723127,
+            "support": 2385
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.9296875,
+            "recall": 0.8095238095238095,
+            "f1": 0.8654545454545455,
+            "support": 735
+          }
+        },
+        "confusion_matrix": [
+          [
+            4914,
+            172,
+            0
+          ],
+          [
+            709,
+            1631,
+            45
+          ],
+          [
+            30,
+            110,
+            595
+          ]
+        ],
+        "critical_pr_auc": 0.9090975251702195,
+        "critical_prevalence": 0.08956860833536437
+      },
+      "F3": {
+        "n": 7255,
+        "macro_f1": 0.8129062475267029,
+        "accuracy": 0.864920744314266,
+        "balanced_accuracy": 0.7888051695745619,
+        "weighted_f1": 0.8610897253239845,
+        "per_class": {
+          "ON_TIME": {
+            "precision": 0.879664570230608,
+            "recall": 0.9573351585671914,
+            "f1": 0.9168578608106631,
+            "support": 4383
+          },
+          "AT_RISK": {
+            "precision": 0.8421836228287841,
+            "recall": 0.7365451388888888,
+            "f1": 0.7858300532530679,
+            "support": 2304
+          },
+          "CRITICAL_DELAY": {
+            "precision": 0.8127659574468085,
+            "recall": 0.6725352112676056,
+            "f1": 0.7360308285163777,
+            "support": 568
+          }
+        },
+        "confusion_matrix": [
+          [
+            4196,
+            187,
+            0
+          ],
+          [
+            519,
+            1697,
+            88
+          ],
+          [
+            55,
+            131,
+            382
+          ]
+        ],
+        "critical_pr_auc": 0.8129891993048065,
+        "critical_prevalence": 0.07829083390764989
+      }
+    },
+    "mean_fold_macro_f1": 0.8264327014177422,
+    "pooled_macro_f1_ci95_vessel_bootstrap": [
+      0.8081035895128469,
+      0.8533105928882491
+    ],
+    "median_lead_time_h": 12.578333333333333,
+    "three_class_open_subset": {
+      "n": 14278,
+      "macro_f1": 0.4769054788889043,
+      "accuracy": 0.8377924079002661,
+      "balanced_accuracy": 0.4675568180405338,
+      "weighted_f1": 0.8250143431027261,
+      "per_class": {
+        "ON_TIME": {
+          "precision": 0.878220332052016,
+          "recall": 0.9340640222686152,
+          "f1": 0.9052817940395397,
+          "support": 11496
+        },
+        "AT_RISK": {
+          "precision": 0.5979482169027845,
+          "recall": 0.4686064318529862,
+          "f1": 0.5254346426271732,
+          "support": 2612
+        },
+        "CRITICAL_DELAY": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 170
+        }
+      },
+      "confusion_matrix": [
+        [
+          10738,
+          758,
+          0
+        ],
+        [
+          1384,
+          1224,
+          4
+        ],
+        [
+          105,
+          65,
+          0
+        ]
+      ],
+      "critical_pr_auc": 0.0595707984703227,
+      "critical_prevalence": 0.011906429471914833
+    }
+  }
+}
