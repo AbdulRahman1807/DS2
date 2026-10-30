@@ -246,6 +246,8 @@ class PredictionResponse(BaseModel):
     operational_playbook: str = Field(..., description="Detailed standard operating procedure (SOP).")
     key_risk_factors: List[RiskFactor] = Field(default_factory=list, description="Primary empirical risk factors.")
     latency_ms: float = Field(..., description="Server inference execution time in milliseconds.")
+    inference_latency_ms: Optional[float] = Field(default=None, description="Alias for inference latency in ms.")
+    critical_delay_risk_score: Optional[float] = Field(default=None, description="Probability score for CRITICAL_DELAY.")
     timestamp: str = Field(..., description="ISO 8601 prediction timestamp.")
     operational_note: str = Field(
         default="Scores represent uncalibrated gradient boosting decision scores. At default argmax, ~88.8% of critical delays are missed. Use alert_triggered with threshold_tau to adjust sensitivity.",
@@ -256,13 +258,16 @@ class PredictionResponse(BaseModel):
 class BatchPredictionResponse(BaseModel):
     """Vectorized batch triage results summary and items."""
     total_cases: int = Field(..., description="Total containers scored in batch.")
+    total_processed: Optional[int] = Field(default=None, description="Alias for total_cases.")
     flagged_count: int = Field(..., description="Number of containers triggering operational alert (score >= tau).")
     flagged_percentage: float = Field(..., description="Percentage of containers flagged for intervention.")
     class_distribution: Dict[str, int] = Field(..., description="Breakdown of predictions by class name.")
     average_critical_score: float = Field(..., description="Mean critical delay score across the batch.")
     total_latency_ms: float = Field(..., description="Total batch execution time in milliseconds.")
+    total_batch_latency_ms: Optional[float] = Field(default=None, description="Alias for total_latency_ms.")
     avg_latency_per_case_ms: float = Field(..., description="Average inference latency per container.")
     predictions: List[PredictionResponse] = Field(..., description="Individual container prediction results.")
+    results: Optional[List[PredictionResponse]] = Field(default=None, description="Alias for predictions.")
 
 
 class HealthResponse(BaseModel):
@@ -272,6 +277,7 @@ class HealthResponse(BaseModel):
     version: str = Field(default="Stage 01 Final (Audited Pass)")
     model_loaded: bool = Field(..., description="Whether the ML model pipeline is active.")
     model_name: str = Field(default="EXP-BASE-01-OPT-MACRO (XGBoost Classifier)")
+    model_type: Optional[str] = Field(default="LGBMClassifier / XGBoost", description="Model architecture type.")
     sla_latency_p95: str = Field(default="< 25ms")
     active_features_count: int = Field(default=15)
     uptime_seconds: float = Field(...)

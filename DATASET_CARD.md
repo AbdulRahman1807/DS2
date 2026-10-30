@@ -129,7 +129,7 @@ Feature eligibility is governed by `ML/data_engineer/feature_contracts.py`:
 
 ## 9. Stage 03 Corrections (Forensic Reassessment, October 2026)
 
-These corrections supersede conflicting statements above. Evidence: `reports/ml/complete_project_audit.md`, `reports/ml/data_provenance_and_acquisition.md`.
+These corrections supersede conflicting statements above. Evidence: [`reports/ml/stage01_closeout.md`](file:///Users/abdul/Desktop/DS/reports/ml/stage01_closeout.md), [`ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md`](file:///Users/abdul/Desktop/DS/ML/data_engineer/FEATURE_PROVENANCE_MATRIX.md).
 
 1. **Source and provenance.** Mendeley "Event Log Dwelling Time Dataset" (DOI 10.17632/yvp2b4rtp3, CC BY 4.0); Prasetyo, Sarno et al., *Data in Brief* 57:110906 (2024), CC BY-NC 4.0. The terminal is anonymised under an ethics agreement; the authors' thesis and IMARA paper identify TPS Surabaya. Raw capture ran 4 June – 9 November 2021; three monthly files (July–September 2021) were published.
 2. **Selection on the outcome.** Every published stay has TRUCK_OUT in 2021-07-01 → 2021-09-30. Arrivals before July are present only if they dwelled long; late-September arrivals only if they left quickly; stays unfinished on 30 September are absent. The Stage 01 thresholds (p50/p85 = 65.1102 / 160.8993 h) were fitted on this biased sample and are retained only for comparability.

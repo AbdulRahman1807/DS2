@@ -46,3 +46,8 @@ logs/
 
 # CatBoost training logs
 catboost_info/
+
+# Local tooling and large generated models
+.claude/
+catboost_info/
+ML/ml_engineer/artifacts/hybrid/*.joblib
