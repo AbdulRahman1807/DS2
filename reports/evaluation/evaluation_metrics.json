@@ -1,0 +1,1693 @@
+{
+  "metadata": {
+    "evaluation_timestamp": "2026-10-30T03:13:56Z",
+    "dataset_version": "1.0.0",
+    "assumed_costs": {
+      "c_fa_usd": 300.0,
+      "c_fn_usd": 3000.0,
+      "cost_ratio": "10.0x",
+      "bayes_theoretical_tau": 0.0909,
+      "disclaimer": "ASSUMED OPERATIONAL PARAMETERS, NOT INTERNAL COMPANY FINANCIALS"
+    },
+    "environment_versions": {
+      "python": "3.12.4",
+      "sklearn": "1.9.1",
+      "xgboost": "3.4.1"
+    }
+  },
+  "audit_findings": {
+    "forbidden_in_features": [],
+    "post_arrival_in_features": [],
+    "container_overlap": {
+      "train_val": 0,
+      "train_test": 0,
+      "val_test": 0,
+      "is_strictly_disjoint": true
+    },
+    "timestamps": {
+      "train_range": [
+        "2021-06-10 11:56:34.099000",
+        "2021-08-27 23:00:34.401000"
+      ],
+      "val_range": [
+        "2021-08-27 11:55:57.742000",
+        "2021-09-12 08:28:05.417000"
+      ],
+      "test_range": [
+        "2021-09-12 15:26:42.496000",
+        "2021-09-30 18:56:47.094000"
+      ]
+    },
+    "censoring_analysis": {
+      "extract_end_truck_out": "2021-09-30 23:51:25",
+      "follow_up_7d_cutoff": "2021-09-23 23:51:25",
+      "test_full_count": 13959,
+      "test_7d_count": 9087,
+      "test_7d_pct": 65.1,
+      "prevalence": {
+        "train": 0.15,
+        "val": 0.0737,
+        "test_full": 0.0276,
+        "test_7d_follow_up": 0.0421
+      },
+      "crit_stays_distribution": {
+        "total_in_test": 385,
+        "in_7d_subset": 383,
+        "in_final_week_late": 2
+      },
+      "censoring_verdict": "RIGHT-CENSORING SURVIVORSHIP BIAS CONFIRMED: Out of 385 critical delay cases in test.parquet, exactly 383 occurred among stays with >=7 days follow-up. Only 2 critical delay was observed in the final 7 days because uncompleted slow stays were quarantined. Consequently, full test set prevalence (2.76%) is a strict lower bound on true terminal delay prevalence. The 15.00% train prevalence was fixed by construction (85th percentile cutoff). Train (15.00%) vs val (7.37%) represents genuine operational regime change rather than censoring, as val had 19+ days of observable follow-up before extract cutoff."
+    },
+    "yard_observability_flag": "PROVISIONAL STATUS: YARD_BLOCK and YARD_SLOT static coordinates reflect any non-null yard event. If reshuffling occurred between discharge and gate-out, this represents retrospective post-discharge data. Evaluated under both full (15 features) and conservative (13 features) models."
+  },
+  "validation_benchmark": {
+    "metrics": {
+      "accuracy": 0.5464,
+      "balanced_accuracy": 0.4076,
+      "macro_f1": 0.3968,
+      "weighted_f1": 0.5631,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.7442,
+          "recall": 0.6139,
+          "f1_score": 0.6728,
+          "support": 13892,
+          "prevalence": 0.6654
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3526,
+          "recall": 0.4972,
+          "f1_score": 0.4126,
+          "support": 5449,
+          "prevalence": 0.261
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.099,
+          "recall": 0.1118,
+          "f1_score": 0.105,
+          "support": 1538,
+          "prevalence": 0.0737
+        }
+      },
+      "n_samples": 20879
+    },
+    "ranking": {
+      "roc_auc_ovr": {
+        "ON_TIME": 0.6356,
+        "AT_RISK": 0.6437,
+        "CRITICAL_DELAY": 0.587
+      },
+      "pr_auc_ovr": {
+        "ON_TIME": 0.7892,
+        "AT_RISK": 0.3643,
+        "CRITICAL_DELAY": 0.0934
+      },
+      "pr_auc_lift": {
+        "ON_TIME": 1.1862,
+        "AT_RISK": 1.3959,
+        "CRITICAL_DELAY": 1.2673
+      },
+      "baseline_prevalence": {
+        "ON_TIME": 0.6654,
+        "AT_RISK": 0.261,
+        "CRITICAL_DELAY": 0.0737
+      },
+      "critical_delay_pr_auc": 0.0934,
+      "critical_delay_pr_lift": 1.2673,
+      "critical_delay_roc_auc": 0.587
+    },
+    "top_k_ranking": {
+      "top_1pct": {
+        "k_pct": 1,
+        "n_flagged": 209,
+        "true_positives": 29,
+        "precision": 0.1388,
+        "recall": 0.0189,
+        "lift": 1.88,
+        "base_prevalence": 0.0737
+      },
+      "top_5pct": {
+        "k_pct": 5,
+        "n_flagged": 1044,
+        "true_positives": 107,
+        "precision": 0.1025,
+        "recall": 0.0696,
+        "lift": 1.39,
+        "base_prevalence": 0.0737
+      },
+      "top_10pct": {
+        "k_pct": 10,
+        "n_flagged": 2088,
+        "true_positives": 211,
+        "precision": 0.1011,
+        "recall": 0.1372,
+        "lift": 1.37,
+        "base_prevalence": 0.0737
+      },
+      "top_20pct": {
+        "k_pct": 20,
+        "n_flagged": 4176,
+        "true_positives": 358,
+        "precision": 0.0857,
+        "recall": 0.2328,
+        "lift": 1.16,
+        "base_prevalence": 0.0737
+      }
+    },
+    "bootstrap_95ci": {
+      "prevalence": {
+        "point_estimate": 0.0737,
+        "ci_lower": 0.0702,
+        "ci_upper": 0.0774,
+        "ci_level": 0.95
+      },
+      "macro_f1": {
+        "point_estimate": 0.3968,
+        "ci_lower": 0.3899,
+        "ci_upper": 0.4037,
+        "ci_level": 0.95
+      },
+      "critical_delay_recall": {
+        "point_estimate": 0.1118,
+        "ci_lower": 0.0962,
+        "ci_upper": 0.1276,
+        "ci_level": 0.95
+      },
+      "critical_delay_precision": {
+        "point_estimate": 0.099,
+        "ci_lower": 0.0862,
+        "ci_upper": 0.1142,
+        "ci_level": 0.95
+      },
+      "critical_delay_pr_auc": {
+        "point_estimate": 0.0934,
+        "ci_lower": 0.0867,
+        "ci_upper": 0.1018,
+        "ci_level": 0.95
+      },
+      "critical_delay_pr_lift": {
+        "point_estimate": 1.2673,
+        "ci_lower": 1.197,
+        "ci_upper": 1.3661,
+        "ci_level": 0.95,
+        "ci_includes_one": false,
+        "statistically_distinguishable_from_random": true
+      },
+      "critical_delay_roc_auc": {
+        "point_estimate": 0.587,
+        "ci_lower": 0.5746,
+        "ci_upper": 0.6012,
+        "ci_level": 0.95
+      },
+      "top_k_ranking": {
+        "top_1pct": {
+          "precision": {
+            "point_estimate": 0.1388,
+            "ci_lower": 0.0909,
+            "ci_upper": 0.1818,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.0189,
+            "ci_lower": 0.0121,
+            "ci_upper": 0.0247,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.88,
+            "ci_lower": 1.2134,
+            "ci_upper": 2.466,
+            "ci_level": 0.95
+          }
+        },
+        "top_5pct": {
+          "precision": {
+            "point_estimate": 0.1025,
+            "ci_lower": 0.0833,
+            "ci_upper": 0.1226,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.0696,
+            "ci_lower": 0.0568,
+            "ci_upper": 0.082,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.39,
+            "ci_lower": 1.136,
+            "ci_upper": 1.6405,
+            "ci_level": 0.95
+          }
+        },
+        "top_10pct": {
+          "precision": {
+            "point_estimate": 0.1011,
+            "ci_lower": 0.0886,
+            "ci_upper": 0.1149,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.1372,
+            "ci_lower": 0.1208,
+            "ci_upper": 0.1553,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.37,
+            "ci_lower": 1.2075,
+            "ci_upper": 1.5525,
+            "ci_level": 0.95
+          }
+        },
+        "top_20pct": {
+          "precision": {
+            "point_estimate": 0.0857,
+            "ci_lower": 0.0769,
+            "ci_upper": 0.0946,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.2328,
+            "ci_lower": 0.2122,
+            "ci_upper": 0.2541,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.16,
+            "ci_lower": 1.061,
+            "ci_upper": 1.2703,
+            "ci_level": 0.95
+          }
+        }
+      }
+    },
+    "calibration": {
+      "brier_score": 0.555,
+      "log_loss": 0.9278,
+      "overall_ece": 0.1531,
+      "ece_per_class": {
+        "ON_TIME": 0.2297,
+        "AT_RISK": 0.0713,
+        "CRITICAL_DELAY": 0.1584
+      },
+      "reliability_bins": {
+        "ON_TIME": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 60,
+            "mean_predicted_prob": 0.0789,
+            "empirical_accuracy": 0.2667,
+            "calibration_gap": 0.1878
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 596,
+            "mean_predicted_prob": 0.171,
+            "empirical_accuracy": 0.4195,
+            "calibration_gap": 0.2485
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 3590,
+            "mean_predicted_prob": 0.2604,
+            "empirical_accuracy": 0.5568,
+            "calibration_gap": 0.2965
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 6700,
+            "mean_predicted_prob": 0.3495,
+            "empirical_accuracy": 0.6237,
+            "calibration_gap": 0.2742
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 5299,
+            "mean_predicted_prob": 0.4461,
+            "empirical_accuracy": 0.6835,
+            "calibration_gap": 0.2374
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 1797,
+            "mean_predicted_prob": 0.5365,
+            "empirical_accuracy": 0.6856,
+            "calibration_gap": 0.1491
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 412,
+            "mean_predicted_prob": 0.6402,
+            "empirical_accuracy": 0.7767,
+            "calibration_gap": 0.1365
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 383,
+            "mean_predicted_prob": 0.7547,
+            "empirical_accuracy": 0.8668,
+            "calibration_gap": 0.1121
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 939,
+            "mean_predicted_prob": 0.8544,
+            "empirical_accuracy": 0.9361,
+            "calibration_gap": 0.0817
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 1103,
+            "mean_predicted_prob": 0.9343,
+            "empirical_accuracy": 0.9637,
+            "calibration_gap": 0.0294
+          }
+        ],
+        "AT_RISK": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 1440,
+            "mean_predicted_prob": 0.0624,
+            "empirical_accuracy": 0.0486,
+            "calibration_gap": -0.0138
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 1278,
+            "mean_predicted_prob": 0.149,
+            "empirical_accuracy": 0.1009,
+            "calibration_gap": -0.0481
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 4346,
+            "mean_predicted_prob": 0.257,
+            "empirical_accuracy": 0.2112,
+            "calibration_gap": -0.0458
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 7454,
+            "mean_predicted_prob": 0.3506,
+            "empirical_accuracy": 0.2638,
+            "calibration_gap": -0.0869
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 5154,
+            "mean_predicted_prob": 0.4412,
+            "empirical_accuracy": 0.3582,
+            "calibration_gap": -0.083
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 1108,
+            "mean_predicted_prob": 0.5309,
+            "empirical_accuracy": 0.4296,
+            "calibration_gap": -0.1013
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 95,
+            "mean_predicted_prob": 0.6314,
+            "empirical_accuracy": 0.4211,
+            "calibration_gap": -0.2104
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 4,
+            "mean_predicted_prob": 0.7203,
+            "empirical_accuracy": 1.0,
+            "calibration_gap": 0.2797
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 0,
+            "mean_predicted_prob": 0.85,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 0,
+            "mean_predicted_prob": 0.95,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          }
+        ],
+        "CRITICAL_DELAY": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 2829,
+            "mean_predicted_prob": 0.0324,
+            "empirical_accuracy": 0.0131,
+            "calibration_gap": -0.0193
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 3898,
+            "mean_predicted_prob": 0.1681,
+            "empirical_accuracy": 0.0705,
+            "calibration_gap": -0.0975
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 8783,
+            "mean_predicted_prob": 0.2509,
+            "empirical_accuracy": 0.0869,
+            "calibration_gap": -0.1641
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 4667,
+            "mean_predicted_prob": 0.3389,
+            "empirical_accuracy": 0.0825,
+            "calibration_gap": -0.2564
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 612,
+            "mean_predicted_prob": 0.4236,
+            "empirical_accuracy": 0.0964,
+            "calibration_gap": -0.3272
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 59,
+            "mean_predicted_prob": 0.5521,
+            "empirical_accuracy": 0.2034,
+            "calibration_gap": -0.3487
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 17,
+            "mean_predicted_prob": 0.6356,
+            "empirical_accuracy": 0.2353,
+            "calibration_gap": -0.4003
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 10,
+            "mean_predicted_prob": 0.7548,
+            "empirical_accuracy": 0.1,
+            "calibration_gap": -0.6548
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 4,
+            "mean_predicted_prob": 0.8429,
+            "empirical_accuracy": 0.5,
+            "calibration_gap": -0.3429
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 0,
+            "mean_predicted_prob": 0.95,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          }
+        ]
+      }
+    },
+    "optimal_tau_star_calibrated": 0.3,
+    "optimal_tau_star_insample": 0.11,
+    "optimal_tau_star_raw": 0.37,
+    "strategies_calibrated": {
+      "do_nothing": {
+        "strategy": "Do Nothing (Never Alert)",
+        "flagged_count": 0,
+        "flagged_pct": 0.0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 1538,
+        "true_negatives": 19341,
+        "recall": 0.0,
+        "precision": 0.0,
+        "total_cost": 4614000.0,
+        "cost_per_1k_containers": 220987.6
+      },
+      "flag_everything": {
+        "strategy": "Flag Everything (Always Alert)",
+        "flagged_count": 20879,
+        "flagged_pct": 100.0,
+        "true_positives": 1538,
+        "false_positives": 19341,
+        "false_negatives": 0,
+        "true_negatives": 0,
+        "recall": 1.0,
+        "precision": 0.0737,
+        "total_cost": 5802300.0,
+        "cost_per_1k_containers": 277901.24
+      },
+      "argmax": {
+        "strategy": "Argmax (Default Decision Rule)",
+        "flagged_count": 1737,
+        "flagged_pct": 8.32,
+        "true_positives": 172,
+        "false_positives": 1565,
+        "false_negatives": 1366,
+        "true_negatives": 17776,
+        "recall": 0.1118,
+        "precision": 0.099,
+        "total_cost": 4567500.0,
+        "cost_per_1k_containers": 218760.48
+      },
+      "tau_star": {
+        "strategy": "Optimal tau* (0.30)",
+        "threshold_tau": 0.3,
+        "flagged_count": 67,
+        "flagged_pct": 0.32,
+        "true_positives": 17,
+        "false_positives": 50,
+        "false_negatives": 1521,
+        "true_negatives": 19291,
+        "precision": 0.2537,
+        "recall": 0.0111,
+        "f1_score": 0.0212,
+        "total_cost": 4578000.0,
+        "cost_per_1k_containers": 219263.37
+      },
+      "summary": {
+        "best_trivial_strategy": "do_nothing",
+        "best_trivial_cost": 4614000.0,
+        "model_beats_best_trivial": true,
+        "dollar_savings_over_best_trivial": 36000.0,
+        "percent_savings_over_best_trivial": 0.78
+      }
+    },
+    "break_even": {
+      "threshold_tau": 0.3,
+      "true_positives": 17,
+      "false_positives": 50,
+      "precision": 0.2537,
+      "break_even_cost_ratio": 2.94,
+      "interpretation": "At tau=0.30, emergency reroute failure (C_FN) must be at least 2.9x more costly than false alarm reroute waste (C_FA) for alerting to beat Do Nothing."
+    },
+    "paired_bootstrap_yard_delta": {
+      "model_a_pr_auc": 0.0934,
+      "model_b_pr_auc": 0.0906,
+      "pr_auc_delta": -0.0028,
+      "ci_lower": -0.0055,
+      "ci_upper": -0.0001,
+      "ci_level": 0.95,
+      "ci_includes_zero": false,
+      "is_statistically_significant": true
+    }
+  },
+  "test_benchmark_quarantined": {
+    "sample_size": 13959,
+    "metrics": {
+      "accuracy": 0.4387,
+      "balanced_accuracy": 0.414,
+      "macro_f1": 0.3347,
+      "weighted_f1": 0.4747,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.8305,
+          "recall": 0.3544,
+          "f1_score": 0.4968,
+          "support": 10106,
+          "prevalence": 0.724
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3364,
+          "recall": 0.7137,
+          "f1_score": 0.4573,
+          "support": 3468,
+          "prevalence": 0.2484
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0293,
+          "recall": 0.174,
+          "f1_score": 0.0501,
+          "support": 385,
+          "prevalence": 0.0276
+        }
+      },
+      "n_samples": 13959
+    },
+    "ranking": {
+      "roc_auc_ovr": {
+        "ON_TIME": 0.6418,
+        "AT_RISK": 0.6777,
+        "CRITICAL_DELAY": 0.5648
+      },
+      "pr_auc_ovr": {
+        "ON_TIME": 0.831,
+        "AT_RISK": 0.3712,
+        "CRITICAL_DELAY": 0.0415
+      },
+      "pr_auc_lift": {
+        "ON_TIME": 1.1479,
+        "AT_RISK": 1.4939,
+        "CRITICAL_DELAY": 1.5036
+      },
+      "baseline_prevalence": {
+        "ON_TIME": 0.724,
+        "AT_RISK": 0.2484,
+        "CRITICAL_DELAY": 0.0276
+      },
+      "critical_delay_pr_auc": 0.0415,
+      "critical_delay_pr_lift": 1.5036,
+      "critical_delay_roc_auc": 0.5648
+    },
+    "calibration": {
+      "brier_score": 0.6223,
+      "log_loss": 1.0353,
+      "overall_ece": 0.2465,
+      "ece_per_class": {
+        "ON_TIME": 0.3698,
+        "AT_RISK": 0.1262,
+        "CRITICAL_DELAY": 0.2436
+      },
+      "reliability_bins": {
+        "ON_TIME": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 118,
+            "mean_predicted_prob": 0.0637,
+            "empirical_accuracy": 0.2373,
+            "calibration_gap": 0.1736
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 2040,
+            "mean_predicted_prob": 0.1716,
+            "empirical_accuracy": 0.6147,
+            "calibration_gap": 0.4431
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 4748,
+            "mean_predicted_prob": 0.249,
+            "empirical_accuracy": 0.662,
+            "calibration_gap": 0.4129
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 3334,
+            "mean_predicted_prob": 0.3465,
+            "empirical_accuracy": 0.7594,
+            "calibration_gap": 0.413
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 1696,
+            "mean_predicted_prob": 0.4415,
+            "empirical_accuracy": 0.7807,
+            "calibration_gap": 0.3391
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 662,
+            "mean_predicted_prob": 0.5435,
+            "empirical_accuracy": 0.7885,
+            "calibration_gap": 0.245
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 209,
+            "mean_predicted_prob": 0.6374,
+            "empirical_accuracy": 0.866,
+            "calibration_gap": 0.2286
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 236,
+            "mean_predicted_prob": 0.7613,
+            "empirical_accuracy": 0.9237,
+            "calibration_gap": 0.1624
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 361,
+            "mean_predicted_prob": 0.8548,
+            "empirical_accuracy": 0.9751,
+            "calibration_gap": 0.1203
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 555,
+            "mean_predicted_prob": 0.9351,
+            "empirical_accuracy": 0.9946,
+            "calibration_gap": 0.0595
+          }
+        ],
+        "AT_RISK": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 626,
+            "mean_predicted_prob": 0.0616,
+            "empirical_accuracy": 0.0064,
+            "calibration_gap": -0.0552
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 843,
+            "mean_predicted_prob": 0.1517,
+            "empirical_accuracy": 0.0676,
+            "calibration_gap": -0.0841
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 2589,
+            "mean_predicted_prob": 0.2579,
+            "empirical_accuracy": 0.1244,
+            "calibration_gap": -0.1335
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 3264,
+            "mean_predicted_prob": 0.3537,
+            "empirical_accuracy": 0.2344,
+            "calibration_gap": -0.1193
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 4161,
+            "mean_predicted_prob": 0.4506,
+            "empirical_accuracy": 0.3213,
+            "calibration_gap": -0.1292
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 2109,
+            "mean_predicted_prob": 0.5376,
+            "empirical_accuracy": 0.3874,
+            "calibration_gap": -0.1503
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 354,
+            "mean_predicted_prob": 0.6303,
+            "empirical_accuracy": 0.452,
+            "calibration_gap": -0.1783
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 13,
+            "mean_predicted_prob": 0.7251,
+            "empirical_accuracy": 0.4615,
+            "calibration_gap": -0.2636
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 0,
+            "mean_predicted_prob": 0.85,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 0,
+            "mean_predicted_prob": 0.95,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          }
+        ],
+        "CRITICAL_DELAY": [
+          {
+            "bin_index": 0,
+            "bin_lower": 0.0,
+            "bin_upper": 0.1,
+            "count": 1388,
+            "mean_predicted_prob": 0.033,
+            "empirical_accuracy": 0.0058,
+            "calibration_gap": -0.0272
+          },
+          {
+            "bin_index": 1,
+            "bin_lower": 0.1,
+            "bin_upper": 0.2,
+            "count": 1735,
+            "mean_predicted_prob": 0.1695,
+            "empirical_accuracy": 0.0225,
+            "calibration_gap": -0.147
+          },
+          {
+            "bin_index": 2,
+            "bin_lower": 0.2,
+            "bin_upper": 0.3,
+            "count": 5305,
+            "mean_predicted_prob": 0.2517,
+            "empirical_accuracy": 0.0302,
+            "calibration_gap": -0.2215
+          },
+          {
+            "bin_index": 3,
+            "bin_lower": 0.3,
+            "bin_upper": 0.4,
+            "count": 3807,
+            "mean_predicted_prob": 0.3446,
+            "empirical_accuracy": 0.0334,
+            "calibration_gap": -0.3112
+          },
+          {
+            "bin_index": 4,
+            "bin_lower": 0.4,
+            "bin_upper": 0.5,
+            "count": 1387,
+            "mean_predicted_prob": 0.4406,
+            "empirical_accuracy": 0.0195,
+            "calibration_gap": -0.4211
+          },
+          {
+            "bin_index": 5,
+            "bin_lower": 0.5,
+            "bin_upper": 0.6,
+            "count": 279,
+            "mean_predicted_prob": 0.5297,
+            "empirical_accuracy": 0.0394,
+            "calibration_gap": -0.4903
+          },
+          {
+            "bin_index": 6,
+            "bin_lower": 0.6,
+            "bin_upper": 0.7,
+            "count": 42,
+            "mean_predicted_prob": 0.653,
+            "empirical_accuracy": 0.2143,
+            "calibration_gap": -0.4387
+          },
+          {
+            "bin_index": 7,
+            "bin_lower": 0.7,
+            "bin_upper": 0.8,
+            "count": 13,
+            "mean_predicted_prob": 0.7323,
+            "empirical_accuracy": 0.2308,
+            "calibration_gap": -0.5015
+          },
+          {
+            "bin_index": 8,
+            "bin_lower": 0.8,
+            "bin_upper": 0.9,
+            "count": 3,
+            "mean_predicted_prob": 0.8346,
+            "empirical_accuracy": 0.3333,
+            "calibration_gap": -0.5012
+          },
+          {
+            "bin_index": 9,
+            "bin_lower": 0.9,
+            "bin_upper": 1.0,
+            "count": 0,
+            "mean_predicted_prob": 0.95,
+            "empirical_accuracy": 0.0,
+            "calibration_gap": 0.0
+          }
+        ]
+      }
+    },
+    "top_k_ranking": {
+      "top_1pct": {
+        "k_pct": 1,
+        "n_flagged": 140,
+        "true_positives": 21,
+        "precision": 0.15,
+        "recall": 0.0545,
+        "lift": 5.44,
+        "base_prevalence": 0.0276
+      },
+      "top_5pct": {
+        "k_pct": 5,
+        "n_flagged": 698,
+        "true_positives": 32,
+        "precision": 0.0458,
+        "recall": 0.0831,
+        "lift": 1.66,
+        "base_prevalence": 0.0276
+      },
+      "top_10pct": {
+        "k_pct": 10,
+        "n_flagged": 1396,
+        "true_positives": 43,
+        "precision": 0.0308,
+        "recall": 0.1117,
+        "lift": 1.12,
+        "base_prevalence": 0.0276
+      },
+      "top_20pct": {
+        "k_pct": 20,
+        "n_flagged": 2792,
+        "true_positives": 91,
+        "precision": 0.0326,
+        "recall": 0.2364,
+        "lift": 1.18,
+        "base_prevalence": 0.0276
+      }
+    },
+    "bootstrap_95ci": {
+      "prevalence": {
+        "point_estimate": 0.0276,
+        "ci_lower": 0.0249,
+        "ci_upper": 0.0303,
+        "ci_level": 0.95
+      },
+      "macro_f1": {
+        "point_estimate": 0.3347,
+        "ci_lower": 0.3278,
+        "ci_upper": 0.342,
+        "ci_level": 0.95
+      },
+      "critical_delay_recall": {
+        "point_estimate": 0.174,
+        "ci_lower": 0.137,
+        "ci_upper": 0.2124,
+        "ci_level": 0.95
+      },
+      "critical_delay_precision": {
+        "point_estimate": 0.0293,
+        "ci_lower": 0.0229,
+        "ci_upper": 0.0365,
+        "ci_level": 0.95
+      },
+      "critical_delay_pr_auc": {
+        "point_estimate": 0.0415,
+        "ci_lower": 0.0324,
+        "ci_upper": 0.0557,
+        "ci_level": 0.95
+      },
+      "critical_delay_pr_lift": {
+        "point_estimate": 1.5036,
+        "ci_lower": 1.2036,
+        "ci_upper": 2.0052,
+        "ci_level": 0.95,
+        "ci_includes_one": false,
+        "statistically_distinguishable_from_random": true
+      },
+      "critical_delay_roc_auc": {
+        "point_estimate": 0.5648,
+        "ci_lower": 0.5371,
+        "ci_upper": 0.5916,
+        "ci_level": 0.95
+      },
+      "top_k_ranking": {
+        "top_1pct": {
+          "precision": {
+            "point_estimate": 0.1429,
+            "ci_lower": 0.0857,
+            "ci_upper": 0.2,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.0519,
+            "ci_lower": 0.0304,
+            "ci_upper": 0.0724,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 5.18,
+            "ci_lower": 3.0289,
+            "ci_upper": 7.2215,
+            "ci_level": 0.95
+          }
+        },
+        "top_5pct": {
+          "precision": {
+            "point_estimate": 0.0401,
+            "ci_lower": 0.0272,
+            "ci_upper": 0.0544,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.0727,
+            "ci_lower": 0.05,
+            "ci_upper": 0.1003,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.45,
+            "ci_lower": 0.9997,
+            "ci_upper": 2.0054,
+            "ci_level": 0.95
+          }
+        },
+        "top_10pct": {
+          "precision": {
+            "point_estimate": 0.0294,
+            "ci_lower": 0.0208,
+            "ci_upper": 0.038,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.1065,
+            "ci_lower": 0.0755,
+            "ci_upper": 0.1351,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.06,
+            "ci_lower": 0.7545,
+            "ci_upper": 1.3513,
+            "ci_level": 0.95
+          }
+        },
+        "top_20pct": {
+          "precision": {
+            "point_estimate": 0.0297,
+            "ci_lower": 0.024,
+            "ci_upper": 0.0365,
+            "ci_level": 0.95
+          },
+          "recall": {
+            "point_estimate": 0.2156,
+            "ci_lower": 0.1775,
+            "ci_upper": 0.2592,
+            "ci_level": 0.95
+          },
+          "lift": {
+            "point_estimate": 1.08,
+            "ci_lower": 0.8877,
+            "ci_upper": 1.2958,
+            "ci_level": 0.95
+          }
+        }
+      }
+    },
+    "strategies_at_calibrated_tau_star": {
+      "do_nothing": {
+        "strategy": "Do Nothing (Never Alert)",
+        "flagged_count": 0,
+        "flagged_pct": 0.0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 385,
+        "true_negatives": 13574,
+        "recall": 0.0,
+        "precision": 0.0,
+        "total_cost": 1155000.0,
+        "cost_per_1k_containers": 82742.32
+      },
+      "flag_everything": {
+        "strategy": "Flag Everything (Always Alert)",
+        "flagged_count": 13959,
+        "flagged_pct": 100.0,
+        "true_positives": 385,
+        "false_positives": 13574,
+        "false_negatives": 0,
+        "true_negatives": 0,
+        "recall": 1.0,
+        "precision": 0.0276,
+        "total_cost": 4072200.0,
+        "cost_per_1k_containers": 291725.77
+      },
+      "argmax": {
+        "strategy": "Argmax (Default Decision Rule)",
+        "flagged_count": 2289,
+        "flagged_pct": 16.4,
+        "true_positives": 67,
+        "false_positives": 2222,
+        "false_negatives": 318,
+        "true_negatives": 11352,
+        "recall": 0.174,
+        "precision": 0.0293,
+        "total_cost": 1620600.0,
+        "cost_per_1k_containers": 116097.14
+      },
+      "tau_star": {
+        "strategy": "Optimal tau* (0.30)",
+        "threshold_tau": 0.3,
+        "flagged_count": 125,
+        "flagged_pct": 0.9,
+        "true_positives": 20,
+        "false_positives": 105,
+        "false_negatives": 365,
+        "true_negatives": 13469,
+        "precision": 0.16,
+        "recall": 0.0519,
+        "f1_score": 0.0784,
+        "total_cost": 1126500.0,
+        "cost_per_1k_containers": 80700.62,
+        "bootstrap_net_saving_95ci": {
+          "point": 28500,
+          "ci_lower": 3285,
+          "ci_upper": 55200,
+          "includes_zero": false
+        }
+      },
+      "summary": {
+        "best_trivial_strategy": "do_nothing",
+        "best_trivial_cost": 1155000.0,
+        "model_beats_best_trivial": true,
+        "dollar_savings_over_best_trivial": 28500.0,
+        "percent_savings_over_best_trivial": 2.47
+      }
+    },
+    "strategies_at_insample_tau_star": {
+      "do_nothing": {
+        "strategy": "Do Nothing (Never Alert)",
+        "flagged_count": 0,
+        "flagged_pct": 0.0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 385,
+        "true_negatives": 13574,
+        "recall": 0.0,
+        "precision": 0.0,
+        "total_cost": 1155000.0,
+        "cost_per_1k_containers": 82742.32
+      },
+      "flag_everything": {
+        "strategy": "Flag Everything (Always Alert)",
+        "flagged_count": 13959,
+        "flagged_pct": 100.0,
+        "true_positives": 385,
+        "false_positives": 13574,
+        "false_negatives": 0,
+        "true_negatives": 0,
+        "recall": 1.0,
+        "precision": 0.0276,
+        "total_cost": 4072200.0,
+        "cost_per_1k_containers": 291725.77
+      },
+      "argmax": {
+        "strategy": "Argmax (Default Decision Rule)",
+        "flagged_count": 2289,
+        "flagged_pct": 16.4,
+        "true_positives": 67,
+        "false_positives": 2222,
+        "false_negatives": 318,
+        "true_negatives": 11352,
+        "recall": 0.174,
+        "precision": 0.0293,
+        "total_cost": 1620600.0,
+        "cost_per_1k_containers": 116097.14
+      },
+      "tau_star": {
+        "strategy": "Optimal tau* (0.11)",
+        "threshold_tau": 0.11,
+        "flagged_count": 2042,
+        "flagged_pct": 14.63,
+        "true_positives": 57,
+        "false_positives": 1985,
+        "false_negatives": 328,
+        "true_negatives": 11589,
+        "precision": 0.0279,
+        "recall": 0.1481,
+        "f1_score": 0.047,
+        "total_cost": 1579500.0,
+        "cost_per_1k_containers": 113152.8
+      },
+      "summary": {
+        "best_trivial_strategy": "do_nothing",
+        "best_trivial_cost": 1155000.0,
+        "model_beats_best_trivial": false,
+        "dollar_savings_over_best_trivial": -424500.0,
+        "percent_savings_over_best_trivial": -36.75
+      }
+    },
+    "break_even": {
+      "threshold_tau": 0.3,
+      "true_positives": 20,
+      "false_positives": 105,
+      "precision": 0.16,
+      "break_even_cost_ratio": 5.25,
+      "interpretation": "At tau=0.30, emergency reroute failure (C_FN) must be at least 5.2x more costly than false alarm reroute waste (C_FA) for alerting to beat Do Nothing."
+    }
+  },
+  "test_7d_follow_up_subset": {
+    "sample_size": 9087,
+    "critical_prevalence": 0.0421,
+    "metrics": {
+      "accuracy": 0.5004,
+      "balanced_accuracy": 0.4282,
+      "macro_f1": 0.3828,
+      "weighted_f1": 0.5273,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.798,
+          "recall": 0.4589,
+          "f1_score": 0.5827,
+          "support": 6173,
+          "prevalence": 0.6793
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3501,
+          "recall": 0.6507,
+          "f1_score": 0.4552,
+          "support": 2531,
+          "prevalence": 0.2785
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0805,
+          "recall": 0.1749,
+          "f1_score": 0.1103,
+          "support": 383,
+          "prevalence": 0.0421
+        }
+      },
+      "n_samples": 9087
+    },
+    "ranking": {
+      "roc_auc_ovr": {
+        "ON_TIME": 0.678,
+        "AT_RISK": 0.6459,
+        "CRITICAL_DELAY": 0.5983
+      },
+      "pr_auc_ovr": {
+        "ON_TIME": 0.8171,
+        "AT_RISK": 0.3849,
+        "CRITICAL_DELAY": 0.0809
+      },
+      "pr_auc_lift": {
+        "ON_TIME": 1.2028,
+        "AT_RISK": 1.3819,
+        "CRITICAL_DELAY": 1.9191
+      },
+      "baseline_prevalence": {
+        "ON_TIME": 0.6793,
+        "AT_RISK": 0.2785,
+        "CRITICAL_DELAY": 0.0421
+      },
+      "critical_delay_pr_auc": 0.0809,
+      "critical_delay_pr_lift": 1.9191,
+      "critical_delay_roc_auc": 0.5983
+    },
+    "top_k_ranking": {
+      "top_1pct": {
+        "k_pct": 1,
+        "n_flagged": 91,
+        "true_positives": 24,
+        "precision": 0.2637,
+        "recall": 0.0627,
+        "lift": 6.26,
+        "base_prevalence": 0.0421
+      },
+      "top_5pct": {
+        "k_pct": 5,
+        "n_flagged": 454,
+        "true_positives": 52,
+        "precision": 0.1145,
+        "recall": 0.1358,
+        "lift": 2.72,
+        "base_prevalence": 0.0421
+      },
+      "top_10pct": {
+        "k_pct": 10,
+        "n_flagged": 909,
+        "true_positives": 77,
+        "precision": 0.0847,
+        "recall": 0.201,
+        "lift": 2.01,
+        "base_prevalence": 0.0421
+      },
+      "top_20pct": {
+        "k_pct": 20,
+        "n_flagged": 1817,
+        "true_positives": 125,
+        "precision": 0.0688,
+        "recall": 0.3264,
+        "lift": 1.63,
+        "base_prevalence": 0.0421
+      }
+    },
+    "strategies_at_calibrated_tau_star": {
+      "do_nothing": {
+        "strategy": "Do Nothing (Never Alert)",
+        "flagged_count": 0,
+        "flagged_pct": 0.0,
+        "true_positives": 0,
+        "false_positives": 0,
+        "false_negatives": 383,
+        "true_negatives": 8704,
+        "recall": 0.0,
+        "precision": 0.0,
+        "total_cost": 1149000.0,
+        "cost_per_1k_containers": 126444.37
+      },
+      "flag_everything": {
+        "strategy": "Flag Everything (Always Alert)",
+        "flagged_count": 9087,
+        "flagged_pct": 100.0,
+        "true_positives": 383,
+        "false_positives": 8704,
+        "false_negatives": 0,
+        "true_negatives": 0,
+        "recall": 1.0,
+        "precision": 0.0421,
+        "total_cost": 2611200.0,
+        "cost_per_1k_containers": 287355.56
+      },
+      "argmax": {
+        "strategy": "Argmax (Default Decision Rule)",
+        "flagged_count": 832,
+        "flagged_pct": 9.16,
+        "true_positives": 67,
+        "false_positives": 765,
+        "false_negatives": 316,
+        "true_negatives": 7939,
+        "recall": 0.1749,
+        "precision": 0.0805,
+        "total_cost": 1177500.0,
+        "cost_per_1k_containers": 129580.72
+      },
+      "tau_star": {
+        "strategy": "Optimal tau* (0.30)",
+        "threshold_tau": 0.3,
+        "flagged_count": 68,
+        "flagged_pct": 0.75,
+        "true_positives": 20,
+        "false_positives": 48,
+        "false_negatives": 363,
+        "true_negatives": 8656,
+        "precision": 0.2941,
+        "recall": 0.0522,
+        "f1_score": 0.0887,
+        "total_cost": 1103400.0,
+        "cost_per_1k_containers": 121426.21,
+        "bootstrap_net_saving_95ci": {
+          "point": 45600,
+          "ci_lower": 21278,
+          "ci_upper": 71100,
+          "includes_zero": false
+        }
+      },
+      "summary": {
+        "best_trivial_strategy": "do_nothing",
+        "best_trivial_cost": 1149000.0,
+        "model_beats_best_trivial": true,
+        "dollar_savings_over_best_trivial": 45600.0,
+        "percent_savings_over_best_trivial": 3.97
+      }
+    },
+    "break_even": {
+      "threshold_tau": 0.3,
+      "true_positives": 20,
+      "false_positives": 48,
+      "precision": 0.2941,
+      "break_even_cost_ratio": 2.4,
+      "interpretation": "At tau=0.30, emergency reroute failure (C_FN) must be at least 2.4x more costly than false alarm reroute waste (C_FA) for alerting to beat Do Nothing."
+    }
+  },
+  "conservative_model_noyard": {
+    "metrics": {
+      "accuracy": 0.5119,
+      "balanced_accuracy": 0.442,
+      "macro_f1": 0.3771,
+      "weighted_f1": 0.5506,
+      "per_class": {
+        "ON_TIME": {
+          "class_id": 0,
+          "precision": 0.8397,
+          "recall": 0.4645,
+          "f1_score": 0.5981,
+          "support": 10106,
+          "prevalence": 0.724
+        },
+        "AT_RISK": {
+          "class_id": 1,
+          "precision": 0.3521,
+          "recall": 0.6874,
+          "f1_score": 0.4657,
+          "support": 3468,
+          "prevalence": 0.2484
+        },
+        "CRITICAL_DELAY": {
+          "class_id": 2,
+          "precision": 0.0419,
+          "recall": 0.174,
+          "f1_score": 0.0675,
+          "support": 385,
+          "prevalence": 0.0276
+        }
+      },
+      "n_samples": 13959
+    },
+    "ranking": {
+      "roc_auc_ovr": {
+        "ON_TIME": 0.664,
+        "AT_RISK": 0.6847,
+        "CRITICAL_DELAY": 0.5846
+      },
+      "pr_auc_ovr": {
+        "ON_TIME": 0.8385,
+        "AT_RISK": 0.3915,
+        "CRITICAL_DELAY": 0.0473
+      },
+      "pr_auc_lift": {
+        "ON_TIME": 1.1582,
+        "AT_RISK": 1.576,
+        "CRITICAL_DELAY": 1.7166
+      },
+      "baseline_prevalence": {
+        "ON_TIME": 0.724,
+        "AT_RISK": 0.2484,
+        "CRITICAL_DELAY": 0.0276
+      },
+      "critical_delay_pr_auc": 0.0473,
+      "critical_delay_pr_lift": 1.7166,
+      "critical_delay_roc_auc": 0.5846
+    },
+    "paired_bootstrap_delta": {
+      "model_a_pr_auc": 0.0415,
+      "model_b_pr_auc": 0.0473,
+      "pr_auc_delta": 0.0059,
+      "ci_lower": 0.0008,
+      "ci_upper": 0.0112,
+      "ci_level": 0.95,
+      "ci_includes_zero": false,
+      "is_statistically_significant": true
+    },
+    "val_paired_bootstrap_delta": {
+      "model_a_pr_auc": 0.0934,
+      "model_b_pr_auc": 0.0906,
+      "pr_auc_delta": -0.0028,
+      "ci_lower": -0.0055,
+      "ci_upper": -0.0001,
+      "ci_level": 0.95,
+      "ci_includes_zero": false,
+      "is_statistically_significant": true
+    }
+  },
+  "calibration_analysis": {
+    "raw_uncalibrated": {
+      "brier_score": 0.6223,
+      "log_loss": 1.0353,
+      "overall_ece": 0.2465,
+      "critical_ece": 0.2436
+    },
+    "isotonic_calibrated": {
+      "brier_score": 0.4012,
+      "log_loss": 0.7052,
+      "overall_ece": 0.0594,
+      "critical_ece": 0.0607
+    },
+    "platt_sigmoid_calibrated": {
+      "brier_score": 0.4017,
+      "log_loss": 0.6765,
+      "overall_ece": 0.0647,
+      "critical_ece": 0.06
+    },
+    "prior_shift_corrected": {
+      "brier_score": 0.4209,
+      "log_loss": 0.6879,
+      "overall_ece": 0.0927,
+      "critical_ece": 0.0402
+    }
+  },
+  "anomaly_benchmarks": {
+    "isolation_forest": {
+      "test_flagged_count": 455,
+      "test_flagged_pct": 3.26,
+      "critical_true_positives": 4,
+      "critical_recall": 0.0104,
+      "critical_precision": 0.0088,
+      "critical_precision_wilson_95ci": {
+        "point_estimate": 0.0088,
+        "ci_lower": 0.0034,
+        "ci_upper": 0.0224,
+        "confidence": 0.95
+      },
+      "any_delay_precision": 0.1912,
+      "lift_over_base_rate": 0.32,
+      "below_base_rate": true,
+      "on_time_share_among_flagged": 80.88
+    },
+    "hybrid_tiered_alert": {
+      "tier_description": "High Priority Tier: Calibrated Classifier Alert (P>=0.30) AND Isolation Forest Flag",
+      "flagged_count": 3,
+      "critical_true_positives": 1,
+      "critical_precision": 0.3333,
+      "critical_precision_wilson_95ci": {
+        "point_estimate": 0.3333,
+        "ci_lower": 0.0615,
+        "ci_upper": 0.7923,
+        "confidence": 0.95
+      },
+      "critical_recall": 0.0026,
+      "below_base_rate": false
+    }
+  },
+  "daily_operational_simulation": {
+    "daily_inbound_volume": 735,
+    "test_duration_days": 19,
+    "selected_tau": 0.3,
+    "daily_alerts_generated": 6.6,
+    "daily_delays_caught": 1.1,
+    "daily_false_alarms": 5.5,
+    "estimated_daily_cost_tau_star_usd": 59314.96,
+    "estimated_daily_cost_argmax_usd": 85331.4,
+    "estimated_daily_cost_do_nothing_usd": 60815.61,
+    "daily_savings_vs_do_nothing_usd": 1500.65,
+    "daily_savings_vs_argmax_usd": 26016.44,
+    "top_1pct_queue": {
+      "daily_containers_reviewed": 7.4,
+      "daily_delays_caught": 1.11,
+      "daily_false_alarms": 6.29,
+      "expected_daily_net_saving_usd": 1443.0,
+      "assumptions_caveat": "OPTIMISTIC: assumes dispatcher advance review prevents 100% of alerted critical delays at $3,000 saving with zero additional operational friction."
+    }
+  },
+  "robustness_temporal_cv": {
+    "temporal_folds": [
+      {
+        "fold_name": "Fold 1 (Expanding July)",
+        "train_stays": 20960,
+        "val_stays": 11350,
+        "val_critical_prevalence": 0.1994,
+        "critical_pr_auc": 0.2046,
+        "critical_pr_lift": 1.026,
+        "critical_roc_auc": 0.5188,
+        "critical_recall_argmax": 0.376,
+        "critical_precision_argmax": 0.2065
+      },
+      {
+        "fold_name": "Fold 2 (Late July - Early Aug)",
+        "train_stays": 32310,
+        "val_stays": 16537,
+        "val_critical_prevalence": 0.089,
+        "critical_pr_auc": 0.0959,
+        "critical_pr_lift": 1.078,
+        "critical_roc_auc": 0.5625,
+        "critical_recall_argmax": 0.327,
+        "critical_precision_argmax": 0.1026
+      },
+      {
+        "fold_name": "Fold 3 (Mid-August Clearance)",
+        "train_stays": 48847,
+        "val_stays": 11310,
+        "val_critical_prevalence": 0.0749,
+        "critical_pr_auc": 0.1075,
+        "critical_pr_lift": 1.4349,
+        "critical_roc_auc": 0.6174,
+        "critical_recall_argmax": 0.2668,
+        "critical_precision_argmax": 0.1273
+      }
+    ],
+    "temporal_summary": {
+      "mean_pr_auc": 0.136,
+      "mean_pr_lift": 1.1796,
+      "mean_roc_auc": 0.5662
+    }
+  }
+}
