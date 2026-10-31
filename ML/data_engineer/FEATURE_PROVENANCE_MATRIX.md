@@ -1,25 +1,45 @@
 # Feature Provenance and Temporal Availability Matrix
 ## AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks — DS2
-**Audit & Contract Version:** `1.1.0`
+**Audit & Contract Version:** `1.2.0` (Hardened Multi-Horizon Protocol)
 **Governing Code Module:** [`ML/data_engineer/feature_contracts.py`](file:///Users/abdul/Desktop/DS/ML/data_engineer/feature_contracts.py)
+**Machine-Readable Contract:** [`ML/data_engineer/feature_availability_contract.json`](file:///Users/abdul/Desktop/DS/ML/data_engineer/feature_availability_contract.json)
 **Target Partitions:** `train.parquet`, `val.parquet`, `test.parquet`, `burn_in.parquet`, `repeated_stays.parquet`
 
-This matrix provides an exhaustive line-item audit of all 32 features generated in the production datasets. Every column is evaluated against physical observation timestamps, information availability cutoffs, and scenario eligibility rules.
+This matrix provides an exhaustive line-item audit of all 32 features generated in the production datasets. Every column is evaluated against physical observation timestamps, information availability cutoffs, unit normalization rules, and scenario eligibility contracts.
 
 ---
 
-### Prediction Scenario Definitions
+### Prediction Scenario & Horizon Definitions
 
-1. **Scenario A — Arrival-Time Container Triage ($t_{\text{pred}} = t_{\text{discharge}}$):**
+1. **Horizon A — Arrival-Time Container Triage ($t_{\text{pred}} = t_{\text{discharge}}$):**
    - *Intended Operational Decision:* Predict container dwell bottleneck category at the exact moment the container is lifted off the vessel and placed onto the quay/chassis.
    - *Availability Cutoff:* At or before `DISCHARGE` start timestamp.
-   - *Strict Masking Rule:* Any feature occurring post-discharge (`JOB_DEL_DOCTYPE`, `total_events_in_stay`, `has_behandle_inspection`) is **strictly forbidden and must be masked**.
-2. **Scenario B — In-Yard Dynamic Sequence Modeling (Stage 02 DL):**
-   - *Intended Operational Decision:* Sequentially update dwell time risk as new terminal milestones are recorded in the container's event log.
-   - *Availability Cutoff:* Dynamically rolled forward as events occur.
-   - *Eligibility Rule:* Features become eligible incrementally upon event logging.
-3. **Scenario C — Ground-Truth Targets & Post-Hoc Audit:**
-   - *Scope:* Ground-truth targets ($y$) and full retrospective trajectory analysis. **Must NEVER enter feature matrix $X$**.
+   - *Strict Masking Rule:* Any feature occurring post-discharge (`JOB_DEL_DOCTYPE`, `total_events_in_stay`, `has_behandle_inspection`, in-yard moves) is **strictly forbidden and must be masked**.
+   - *Active Predictors (15):* `carrier_prefix`, `CTR_SIZE`, `CTR_TYPE`, `GROSS` (normalized to tonnes), `YARD_BLOCK`, `YARD_SLOT`, `discharge_hour`, `discharge_day_of_week`, `discharge_month`, `is_weekend`, `trailing_7d_volume`, `trailing_7d_critical`, `trailing_7d_at_risk`, `historical_delay_rate_7d`, `trailing_7d_mean_dwell`.
+
+2. **Horizon B12 — +12 Hours In-Yard Dynamic Triage ($t_{\text{pred}} = t_{\text{discharge}} + 12\text{h}$):**
+   - *Intended Operational Decision:* First morning/shift yard reassessment.
+   - *Eligibility:* All Horizon A features plus in-yard inspection and customs clearance milestones logged $\le t_{\text{discharge}} + 12\text{h}$.
+
+3. **Horizon B24 — +24 Hours In-Yard Dynamic Triage ($t_{\text{pred}} = t_{\text{discharge}} + 24\text{h}$):**
+   - *Intended Operational Decision:* Primary 24-hour dispatch review for non-cleared containers.
+   - *Eligibility:* All Horizon A features plus milestone events occurring $\le t_{\text{discharge}} + 24\text{h}$. Containers departed prior to +24h are excluded from the active prediction queue.
+
+4. **Horizon B48 — +48 Hours In-Yard Dynamic Triage ($t_{\text{pred}} = t_{\text{discharge}} + 48\text{h}$):**
+   - *Intended Operational Decision:* Long-dwell intervention review prior to entering demurrage tier.
+   - *Eligibility:* All Horizon A features plus milestone events occurring $\le t_{\text{discharge}} + 48\text{h}$. Containers departed prior to +48h are excluded from the active prediction queue.
+
+5. **Scenario C — Ground-Truth Targets & Post-Hoc Audit:**
+   - *Scope:* Ground-truth targets ($y$) and full retrospective trajectory analysis (`dwell_hours`, `target_class`, `truck_out_end_ts`). **Must NEVER enter feature matrix $X$**.
+
+---
+
+### Cargo Weight Unit Normalization (`GROSS` $\to$ `gross_tonnes`)
+
+The raw TPS Mendeley dataset contains a known unit discrepancy across recording eras:
+- **Tonne Recording:** 81.1% of stays have $1.0 \le \text{GROSS} \le 100.0$ (standard metric tonnes).
+- **Kilogram Recording:** 18.9% (18,038 stays) have $\text{GROSS} > 100.0$ (e.g., 26,500.0 kg for a 26.5t 40ft container).
+- **Enforced Rule:** Any `GROSS` value $> 100.0$ is automatically converted via $\text{val} / 1000.0$ across data ingestion, Pydantic schema validation ([`ML/integration_engineer/schemas.py`](file:///Users/abdul/Desktop/DS/ML/integration_engineer/schemas.py)), and real-time API inference ([`ML/integration_engineer/api.py`](file:///Users/abdul/Desktop/DS/ML/integration_engineer/api.py)).
 
 ---
 
@@ -33,7 +53,7 @@ This matrix provides an exhaustive line-item audit of all 32 features generated 
 | **04** | `call_date` | Vessel arrival date (`YYYY-MM-DD`) | Mendeley `case_id` | At Arrival ($t_0$) | Derived (`x[-10:]`) | No | **Metadata** | **Metadata** | Safe date key. Used for temporal partitioning and rolling join. |
 | **05** | `CTR_SIZE` | Length in feet (20.0, 40.0, 45.0) | Mendeley `CTR_SIZE` | Pre-Arrival / BAPLIE | Direct from Stowage | No | **Permitted** | **Permitted** | Safe predictor. Known from electronic stowage plan before vessel berthing. |
 | **06** | `CTR_TYPE` | Equipment type (`DRY`, `RFR`, `O/T`...) | Mendeley `CTR_TYPE` | Pre-Arrival / BAPLIE | Direct from Stowage | No | **Permitted** | **Permitted** | Safe predictor. Reefers exhibit significantly shorter dwell ($p_{50}=31.8\text{h}$). |
-| **07** | `GROSS` | Cargo gross weight in metric tons | Mendeley `GROSS` | At Discharge ($t_1$) | Direct from Crane TOS | No | **Permitted** | **Permitted** | Safe numeric predictor. Recorded during vessel discharge lift. |
+| **07** | `GROSS` | Cargo gross weight in metric tons (`gross_tonnes`) | Mendeley `GROSS` | At Discharge ($t_1$) | Direct from Crane TOS | No | **Permitted** | **Permitted** | Safe numeric predictor. Recorded during vessel discharge lift. Values > 100 kg normalized via / 1000. |
 | **08** | `YARD_BLOCK` | Assigned yard block coordinate | Mendeley `YARD_BLOCK` | At Discharge ($t_1$) | Direct from TOS | No | **Permitted** | **Permitted** | Safe categorical predictor. Yard stacking location assigned at discharge. |
 | **09** | `YARD_SLOT` | Assigned bay/slot coordinate | Mendeley `YARD_SLOT` | At Discharge ($t_1$) | Direct from TOS | No | **Permitted** | **Permitted** | Safe categorical predictor. 0.25% missing; impute with `"UNKNOWN"`. |
 | **10** | `JOB_DEL_DOCTYPE` | Customs delivery order type (`SPPB`...)| Mendeley `JOB_DEL_DOCTYPE` | Mid-Stay ($t_1 + 32.2\text{h}$) | Pivoted from `JOB_DEL` | **YES (at $t_1$)** | **FORBIDDEN (MASK)** | **Permitted (Step 4)** | **CRITICAL LEAKAGE AT ARRIVAL.** 99.9% occurs post-discharge. Must mask in $X$. |

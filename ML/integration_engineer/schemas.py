@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ContainerRiskTier(str, Enum):
@@ -78,8 +78,19 @@ class ContainerTelemetryRequest(BaseModel):
         default=21.4,
         ge=0.0,
         le=80.0,
-        description="Container gross weight in metric tonnes from VGM declaration."
+        description="Container gross weight in metric tonnes from VGM declaration (values > 100 kg are automatically converted to tonnes)."
     )
+
+    @field_validator("GROSS", mode="before")
+    @classmethod
+    def normalize_gross_weight(cls, v: Any) -> float:
+        """Converts gross weight in kilograms (> 100) to metric tonnes."""
+        if v is None:
+            return 21.4
+        val = float(v)
+        if val > 100.0:
+            return round(val / 1000.0, 3)
+        return round(val, 3)
     YARD_BLOCK: str = Field(
         default="UNKNOWN",
         description="Provisional yard stack block assignment (e.g. 'B', 'N', 'Q')."

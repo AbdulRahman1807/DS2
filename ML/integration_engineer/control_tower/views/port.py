@@ -1,4 +1,4 @@
-"""Port intelligence: where and when pressure concentrated at the terminal."""
+"""Port intelligence: operational rhythm, vessel calls, yard blocks, and customs patterns."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from ML.integration_engineer.control_tower import data, visuals
-from ML.integration_engineer.control_tower.theme import AMBER, INK, LIME, MUTED, PAPER, PLOTLY_CONFIG, RED, RULE, SOFT, head, plotly_layout
+from ML.integration_engineer.control_tower.theme import AMBER, INK, LIME, PAPER, PLOTLY_CONFIG, RED, head, plotly_layout
 
 
 def constellation(vessels: list) -> go.Figure:
@@ -59,30 +59,28 @@ def portwatch_small(pw: list) -> go.Figure:
 
 def render() -> None:
     p = data.port()
-    st.markdown('<div class="thesis" style="font-size:clamp(1.8rem,3vw,2.8rem)">Where the pressure <i>built</i>, and when it let go</div>'
-                '<div class="lede">Everything on this page comes from one terminal’s 2021 event log. Yard capacity and live occupancy aren’t in the data, so none is shown.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="thesis" style="font-size:clamp(1.8rem,3vw,2.8rem)">Port Operations Intelligence</div>'
+                '<div class="lede">Terminal rhythm, vessel calls, yard dwell distributions, and customs clearance patterns.</div>', unsafe_allow_html=True)
 
     a, b = st.columns([1, 1], gap="large")
     with a:
-        head("Terminal clock", "When do containers actually move? Each ring is a weekday, each slice an hour; brighter means more containers.", "observed")
+        head("Terminal Operational Rhythm", "Hourly activity distribution across weekdays.", "observed")
         side = st.segmented_control("Activity", ["Gate-outs", "Discharges"], default="Gate-outs", label_visibility="collapsed")
         matrix, title = (p["clock_in"], "Discharges") if side == "Discharges" else (p["clock_out"], "Gate-outs")
         visuals.show_svg(visuals.clock_svg(matrix, title), 500)
     with b:
-        head("Calendar of later delay", "Which discharge days produced the most critical stays? Hover for restrictions and holidays.", "observed")
+        head("Discharge Delay Calendar", "Critical dwell prevalence by discharge date.", "observed")
         visuals.show_svg(visuals.calendar_svg(p["calendar"]), 395)
-        st.markdown('<div class="note">Colour shows how arrivals on that day <b>ended up</b>, which nobody could see on the day. Arrivals from about 9 to 21 July fared worst.</div>', unsafe_allow_html=True)
 
-    head("Vessel-call constellation", "Are bad outcomes spread evenly, or do some ships carry them? One dot per call with 30+ containers; size is containers, colour is critical share.", "observed")
+    head("Vessel Call Dwell Distribution", "Container volume and critical delay rate by vessel berthing call.", "observed")
     st.plotly_chart(constellation(p["vessels"]), config=PLOTLY_CONFIG, width="stretch")
-    st.markdown('<div class="note">Vessel names are anonymised in the source; calls are identified by berthing time. Differences between calls explain about 20% of the variation in dwell.</div>', unsafe_allow_html=True)
 
     c, d = st.columns([7, 5], gap="large")
     with c:
-        head("Yard blocks over time", "Which blocks held the stuck containers? Rows are blocks with 400+ stays, sorted by critical share; empty cells have under 15 stays. A schematic, not the yard layout.", "observed")
+        head("Yard Block Dwell Profiles", "Critical dwell concentration across yard storage blocks.", "observed")
         visuals.show_svg(visuals.bay_svg(p["blocks"], p["block_weeks"]), 470)
     with d:
-        head("The customs split", "How much does clearing customs before the ship unloads change a container’s path?", "observed")
+        head("Customs Clearance Impact", "Empirical survival curves by pre-discharge customs status.", "observed")
         st.plotly_chart(survival_figure(p), config=PLOTLY_CONFIG, width="stretch")
-        head("Port-wide imports", "Outside check: did port-wide container imports dip with the terminal’s? AIS estimates, usable only with a 7-day lag.", "lagged")
+        head("Port-Wide Container Flow", "PortWatch external import volume trend (7-day rolling mean).", "lagged")
         st.plotly_chart(portwatch_small(p["portwatch"]), config=PLOTLY_CONFIG, width="stretch")
