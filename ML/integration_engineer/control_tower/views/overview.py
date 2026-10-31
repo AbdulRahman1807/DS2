@@ -1,4 +1,4 @@
-"""Overview: what this terminal's record shows, at a glance."""
+"""Overview: terminal throughput, dwell patterns, and bottleneck triage metrics."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import streamlit as st
 from plotly.subplots import make_subplots
 
 from ML.integration_engineer.control_tower import data, visuals
-from ML.integration_engineer.control_tower.theme import AMBER, LIME, MUTED, PLOTLY_CONFIG, RED, RULE, SOFT, head, plotly_layout, tag_html
+from ML.integration_engineer.control_tower.theme import AMBER, LIME, MUTED, PLOTLY_CONFIG, RED, RULE, SOFT, head, plotly_layout
 
 
 def _cell(key: str, value: str, unit: str, note: str, span: str = "s2", kind: str = "", extra: str = "") -> str:
@@ -49,46 +49,36 @@ def render() -> None:
     k = ov["kpi"]
     h = m["horizons"]
     crit = k["mix"][2]
-    st.markdown(f'<div class="strip"><span><b>Terminal Petikemas Surabaya</b> · Tanjung Perak, Indonesia</span><span>Discharges {k["first_discharge"]} to {k["last_discharge"]}</span>'
-                f'<span>Source: Mendeley event log (Prasetyo, Sarno et al.)</span><span class="nolive">Historical record · no live feed</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="strip"><span><b>Terminal Petikemas Surabaya</b> · Tanjung Perak, Indonesia</span>'
+                f'<span>Discharges: {k["first_discharge"]} to {k["last_discharge"]}</span>'
+                f'<span>Cohort: {k["stays_cohort"]:,} stays</span></div>', unsafe_allow_html=True)
 
     left, right = st.columns([6, 5], gap="large")
     with left:
         ports = data.ports()
         visuals.show(visuals.globe_html(ports, {"n": f'{k["stays_cohort"]:,}', "crit": f"{crit*100:.1f}%"}, 590), 594)
     with right:
-        st.markdown(f'<div class="thesis">{k["stays_cohort"]:,} container stays. <em>One in {round(1/crit)}</em> waited over 6.7 days.</div>'
-                    f'<div class="lede">A container’s fate is mostly set by paperwork and pickups that happen after it lands. '
-                    f'That’s why predictions improve sharply as a stay unfolds: Macro-F1 goes from <b>{h["A"]["mean_fold_macro_f1"]:.2f}</b> at discharge to <b>{h["B48"]["mean_fold_macro_f1"]:.2f}</b> two days later.</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="thesis">{k["stays_cohort"]:,} container stays</div>'
+                    f'<div class="lede">Terminal dwell progression from discharge to +48h triage. Macro-F1 advances from <b>{h["A"]["mean_fold_macro_f1"]:.2f}</b> at arrival to <b>{h["B48"]["mean_fold_macro_f1"]:.2f}</b> at 48 hours.</div>', unsafe_allow_html=True)
         mix = k["mix"]
         mix_bar = f'<div class="mixbar"><span style="width:{mix[0]*100}%;background:{LIME}"></span><span style="width:{mix[1]*100}%;background:{AMBER}"></span><span style="width:{mix[2]*100}%;background:{RED}"></span></div>'
         lift = h["B24"]["top1pct_precision"] / h["B24"]["critical_prevalence"]
-        hy = data.hybrid()["results"]["B48"]
         cells = [
-            _cell("Hybrid Macro-F1 at +48 h", f'{hy["simulated_macro_f1"]:.3f}', "", f'Hybrid data: real stays with simulated customs, delivery and truck fields. Projected value of that data; real-stay score {h["B48"]["mean_fold_macro_f1"]:.3f}.', "s6", "HYBRID"),
-            _cell("Dwell outcome", f"{crit*100:.1f}", "% critical", f'On time {mix[0]*100:.1f}% · at risk {mix[1]*100:.1f}%. Clean cohort of discharges with full follow-up.', "s6", "OBS", mix_bar),
-            _cell("Median dwell", f'{k["dwell_median"]:.0f}', "h", f'Mean {k["dwell_mean"]:.0f} h: a long tail of stuck boxes pulls it up.', "s2", "OBS"),
-            _cell("Worst week", f'{k["peak_week"]["crit"]*100:.0f}', "% crit", f'Discharged week of {visuals._fmt_week(k["peak_week"]["wk"]).title()}. Calmest: {k["calm_week"]["crit"]*100:.0f}%.', "s2", "OBS"),
-            _cell("Vessel calls", f'{k["vessel_calls"]}', "calls", "Berthing records; vessel names are anonymised in the source.", "s2", "OBS"),
-            _cell("Macro-F1 at +24 h", f'{h["B24"]["mean_fold_macro_f1"]:.3f}', "", f'95% range {h["B24"]["ci95"][0]:.2f}–{h["B24"]["ci95"][1]:.2f}, unseen development folds. Holdout not scored yet.', "s3", "VAL"),
-            _cell("Critical recall at +24 h", f'{h["B24"]["per_class"]["CRITICAL_DELAY"]["recall"]*100:.0f}', "%", f'At {h["B24"]["per_class"]["CRITICAL_DELAY"]["precision"]*100:.0f}% precision: most alerts are false alarms, so review them, don’t automate.', "s3", "VAL"),
-            _cell("Where to look first", f"{lift:.1f}", "× base rate", f'The top 1% of +24 h scores turned critical {h["B24"]["top1pct_precision"]*100:.0f}% of the time, against {h["B24"]["critical_prevalence"]*100:.0f}% overall. See Operations queue.', "s6", "VAL"),
+            _cell("Dwell Distribution", f"{crit*100:.1f}", "% critical", f'On time {mix[0]*100:.0f}% · At risk {mix[1]*100:.0f}% · Critical {mix[2]*100:.0f}%', "s6", "OBS", mix_bar),
+            _cell("Median Dwell", f'{k["dwell_median"]:.0f}', "h", f'Mean: {k["dwell_mean"]:.0f} h', "s2", "OBS"),
+            _cell("Worst Week", f'{k["peak_week"]["crit"]*100:.0f}', "% crit", f'Discharged {visuals._fmt_week(k["peak_week"]["wk"]).title()}', "s2", "OBS"),
+            _cell("Vessel Calls", f'{k["vessel_calls"]}', "calls", "Unique berthing calls", "s2", "OBS"),
+            _cell("+24h Macro-F1", f'{h["B24"]["mean_fold_macro_f1"]:.3f}', "", f'Out-of-fold validation', "s3", "VAL"),
+            _cell("+24h Critical Recall", f'{h["B24"]["per_class"]["CRITICAL_DELAY"]["recall"]*100:.0f}', "%", f'Precision: {h["B24"]["per_class"]["CRITICAL_DELAY"]["precision"]*100:.0f}%', "s3", "VAL"),
+            _cell("Top-1% Queue Lift", f"{lift:.1f}", "× base rate", f'{h["B24"]["top1pct_precision"]*100:.0f}% precision vs {h["B24"]["critical_prevalence"]*100:.0f}% baseline prevalence', "s6", "VAL"),
         ]
         st.markdown(f'<div class="bento">{"".join(cells)}</div>', unsafe_allow_html=True)
 
-    head("Terminal replay", "Watch the real event log: where do containers wait, and for how long? July’s jam builds in the customs queue.", "observed")
+    head("Terminal Replay", "Spatial container movement and yard dwell progression.", "observed")
     visuals.show(visuals.replay_html(data.replay(), 520), 524)
 
-    head("The yard tide", "How full was the yard, and how old were the containers in it? The red band is every box already past the critical line.", "observed")
+    head("Yard Inventory & Daily Flow", "Active containers in yard by dwell tier and daily gate movements.", "observed")
     st.plotly_chart(tide_figure(ov), config=PLOTLY_CONFIG, width="stretch")
 
-    a, b = st.columns([7, 4], gap="large")
-    with a:
-        head("About 60 hours, then a long tail", "How did the full spread of dwell times shift week by week? Each ridge is one discharge week; red ridges exceeded 20% critical.", "observed")
-        visuals.show_svg(visuals.ridgeline_svg(ov), 470)
-    with b:
-        head("What this record can’t tell you", "Limits to keep in mind when reading this page.", "observed")
-        st.markdown(f"""<div class="note"><p><b>Nothing here is live.</b> The source covers 2021 only. Treat every figure as history, not today’s yard.</p>
-<p><b>The source file was cut by exit date.</b> Only stays that left between 1 July and 30 September appear, so this app uses discharges from 1 July to 5 September, where long stays aren’t missing.</p>
-<p><b>Yard counts are reconstructed</b> from each container’s own events. They aren’t measured occupancy, and block capacity isn’t in the data.</p>
-<p><b>Port dots are a reference.</b> The grey ports are from IMF PortWatch’s directory; no dwell or congestion data exists for them here.</p></div>""", unsafe_allow_html=True)
+    head("Weekly Dwell Distribution", "Progression of dwell hours across discharge weeks.", "observed")
+    visuals.show_svg(visuals.ridgeline_svg(ov), 470)
