@@ -26,9 +26,9 @@ st.logo(str(REPO_ROOT / "ML/integration_engineer/control_tower/assets/wordmark.s
 theme.inject_css()
 
 pages = [
-    st.Page(overview.render, title="Overview", url_path="overview", default=True),
+    st.Page(triage.render, title="Container triage", url_path="triage", default=True),
+    st.Page(overview.render, title="Overview", url_path="overview"),
     st.Page(port.render, title="Port intelligence", url_path="port"),
-    st.Page(triage.render, title="Container triage", url_path="triage"),
     st.Page(model.render, title="Model intelligence", url_path="model"),
     st.Page(ops_queue.render, title="Operations queue", url_path="queue"),
 ]
