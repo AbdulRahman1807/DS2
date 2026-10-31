@@ -1,0 +1,193 @@
+{
+  "contract_name": "DS2_Multi_Horizon_Feature_Availability_Contract",
+  "version": "2.0.0",
+  "generated_utc": "2026-10-31T09:45:00Z",
+  "authoritative_module": "ML.ml_engineer.reassessment.asof_features",
+  "target_definition": {
+    "target_variable": "dwell_hours",
+    "equation": "(truck_out_end_ts - discharge_start_ts).total_seconds() / 3600.0",
+    "thresholds": {
+      "ON_TIME": "<= 65.1102",
+      "AT_RISK": "> 65.1102 and <= 160.8993",
+      "CRITICAL_DELAY": "> 160.8993"
+    },
+    "forbidden_columns_in_X": [
+      "dwell_hours",
+      "dwell_days",
+      "truck_out_end_ts",
+      "target_class",
+      "target_class_name"
+    ]
+  },
+  "milestone_availability_rules": {
+    "CUSTOMS_DEL": {
+      "recorded_precision": "date_only_midnight",
+      "availability_timestamp": "CUSTOMS_DEL + 24 hours",
+      "justification": "Date-only precision (00:00 marks clearance day); 59% of delivery orders follow within 24h, 0.15% precede it. Conservative 24h buffer guarantees true availability."
+    },
+    "SP_RED_FLAG_PIB": {
+      "recorded_precision": "midnight_if_exact_zero",
+      "availability_timestamp": "SP_RED_FLAG_PIB + 24 hours if at midnight else SP_RED_FLAG_PIB",
+      "justification": "Midnight timestamps are date-only placeholders; exact timestamps indicate immediate EDI notification."
+    },
+    "DISCHARGE": {
+      "recorded_precision": "datetime_minute",
+      "availability_timestamp": "DISCHARGE Start Timestamp",
+      "justification": "Physical crane touchdown milestone."
+    },
+    "BAPLIE": {
+      "recorded_precision": "datetime_minute",
+      "availability_timestamp": "BAPLIE End Timestamp",
+      "justification": "Pre-arrival electronic stowage plan sent ~29 hours before discharge."
+    },
+    "VESSEL_ATB": {
+      "recorded_precision": "datetime_minute",
+      "availability_timestamp": "VESSEL_ATB End Timestamp",
+      "justification": "Vessel all-fast berthing milestone ~2.5 hours before discharge."
+    },
+    "PORTWATCH": {
+      "recorded_precision": "daily",
+      "availability_timestamp": "date + 7 days",
+      "justification": "Official IMF PortWatch trade activity feed publishes with a verified 7-day publication lag."
+    }
+  },
+  "horizons": {
+    "A": {
+      "label": "At Discharge (Arrival Triage)",
+      "query_timestamp": "discharge_start_ts",
+      "eligible_feature_families": [
+        "static_manifest",
+        "arrival_discharge_diurnal",
+        "pre_arrival_context",
+        "asof_yard_inventory",
+        "asof_vessel_manifest"
+      ],
+      "active_features": [
+        "carrier_prefix",
+        "CTR_SIZE",
+        "CTR_TYPE",
+        "GROSS",
+        "discharge_hour",
+        "discharge_day_of_week",
+        "discharge_month",
+        "is_weekend",
+        "doc_type_known",
+        "known_HAS_QUARANTINE_FLAG",
+        "age_HAS_QUARANTINE_FLAG",
+        "known_SP_RED_FLAG_PIB",
+        "age_SP_RED_FLAG_PIB",
+        "known_CUSTOMS_DEL",
+        "age_CUSTOMS_DEL",
+        "customs_rel_discharge_h",
+        "terminal_inventory",
+        "cleared_in_yard",
+        "released_in_yard",
+        "uncleared_in_yard",
+        "unreleased_in_yard",
+        "dep_7d_count",
+        "dep_7d_mean_dwell",
+        "dep_7d_crit_share",
+        "dep_7d_risk_share",
+        "dep_24h_count",
+        "dep_24h_mean_dwell",
+        "dep_24h_crit_share",
+        "call_discharged_count",
+        "call_cleared_count",
+        "call_job_count",
+        "call_departed_count",
+        "call_share_CUSTOMS_DEL",
+        "call_share_HAS_QUARANTINE_FLAG",
+        "call_share_JOB_DEL",
+        "YARD_BLOCK",
+        "yard_zone",
+        "slot_depth_tier",
+        "block_inventory",
+        "block_inventory_share",
+        "call_mean_gross",
+        "call_reefer_share",
+        "call_forty_share",
+        "call_unstacked_count",
+        "call_unstacked_share",
+        "call_carrier_count"
+      ],
+      "forbidden_features": [
+        "JOB_DEL_DOCTYPE",
+        "total_events_in_stay",
+        "has_behandle_inspection",
+        "truck_out_end_ts",
+        "dwell_hours",
+        "manifest_state_whole_call"
+      ]
+    },
+    "B12": {
+      "label": "+12 Hours in Yard",
+      "query_timestamp": "discharge_start_ts + 12 hours",
+      "eligible_feature_families": [
+        "static_manifest",
+        "arrival_discharge_diurnal",
+        "pre_arrival_context",
+        "asof_yard_inventory",
+        "asof_vessel_manifest",
+        "milestones_observable_at_t"
+      ],
+      "active_features_additional": [
+        "known_STACK",
+        "age_STACK",
+        "known_FIRST_STACK_QUARANTINE_BLK",
+        "age_FIRST_STACK_QUARANTINE_BLK"
+      ],
+      "forbidden_features": [
+        "JOB_DEL_DOCTYPE",
+        "total_events_in_stay",
+        "truck_out_end_ts",
+        "dwell_hours"
+      ]
+    },
+    "B24": {
+      "label": "+24 Hours in Yard",
+      "query_timestamp": "discharge_start_ts + 24 hours",
+      "eligible_feature_families": [
+        "all_B12_features",
+        "milestones_observable_at_t_24h"
+      ],
+      "active_features_additional": [
+        "known_QUARANTINE_RELEASE",
+        "age_QUARANTINE_RELEASE",
+        "known_FIRST_JOB_CUSTOMS_BEHANDLE",
+        "age_FIRST_JOB_CUSTOMS_BEHANDLE"
+      ],
+      "forbidden_features": [
+        "total_events_in_stay",
+        "truck_out_end_ts",
+        "dwell_hours"
+      ]
+    },
+    "B48": {
+      "label": "+48 Hours in Yard",
+      "query_timestamp": "discharge_start_ts + 48 hours",
+      "eligible_feature_families": [
+        "all_B24_features",
+        "milestones_observable_at_t_48h",
+        "purged_oof_stage_transitions"
+      ],
+      "active_features_additional": [
+        "known_FIRST_STACK_BEHANDLE",
+        "age_FIRST_STACK_BEHANDLE",
+        "known_LAST_COMPLETE_BEHANDLE",
+        "age_LAST_COMPLETE_BEHANDLE",
+        "pred_delta_cust_log",
+        "pred_delta_job_log",
+        "pred_delta_pickup_log",
+        "pred_delta_exit_log",
+        "implied_rem_dwell_h",
+        "implied_total_dwell_h"
+      ],
+      "forbidden_features": [
+        "total_events_in_stay",
+        "truck_out_end_ts",
+        "dwell_hours",
+        "in_sample_stacked_stage_predictions"
+      ]
+    }
+  }
+}

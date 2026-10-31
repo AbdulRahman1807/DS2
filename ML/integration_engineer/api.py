@@ -142,6 +142,8 @@ class ModelManager:
 
         # 2. Container Gross Weight
         gross = float(data.get("GROSS", 20.0))
+        if gross > 100.0:
+            gross = gross / 1000.0
         if gross >= 26.0:
             factors.append(RiskFactor(
                 name="GROSS",
@@ -228,13 +230,17 @@ class ModelManager:
         t_start = time.perf_counter()
         case_id = request.case_id or f"CTR-{int(time.time()*1000)}-{request.carrier_prefix}"
 
-        # Build feature dictionary
+        # Build feature dictionary with gross weight unit normalization (kg -> tonnes)
+        gross_val = float(request.GROSS)
+        if gross_val > 100.0:
+            gross_val = round(gross_val / 1000.0, 3)
+
         case_dict = {
             "case_id": case_id,
             "carrier_prefix": str(request.carrier_prefix),
             "CTR_SIZE": float(request.CTR_SIZE),
             "CTR_TYPE": str(request.CTR_TYPE),
-            "GROSS": float(request.GROSS),
+            "GROSS": gross_val,
             "YARD_BLOCK": str(request.YARD_BLOCK),
             "YARD_SLOT": str(request.YARD_SLOT),
             "discharge_hour": int(request.discharge_hour),

@@ -540,3 +540,68 @@ def compute_wilson_score_interval(
         "ci_upper": round(float(min(1.0, centre + margin)), 4),
         "confidence": confidence,
     }
+
+
+def compute_paired_vessel_clustered_macro_f1_difference(
+    vessel_call_ids: np.ndarray,
+    y_true: np.ndarray,
+    y_pred_candidate: np.ndarray,
+    y_pred_reference: np.ndarray,
+    n_bootstraps: int = 500,
+    alpha: float = 0.05,
+    random_state: int = 42,
+) -> Dict[str, Any]:
+    """Computes paired vessel-clustered bootstrap confidence interval for Delta Macro-F1.
+    
+    Resamples whole vessel calls with replacement to preserve intra-vessel container correlations.
+    """
+    vessels = np.asarray(vessel_call_ids)
+    y_t = np.asarray(y_true)
+    y_cand = np.asarray(y_pred_candidate)
+    y_ref = np.asarray(y_pred_reference)
+
+    unique_vessels, vessel_indices = np.unique(vessels, return_inverse=True)
+    n_vessels = len(unique_vessels)
+
+    # Point estimates on full sample
+    f1_cand = float(f1_score(y_t, y_cand, average="macro", zero_division=0))
+    f1_ref = float(f1_score(y_t, y_ref, average="macro", zero_division=0))
+    delta_sample = f1_cand - f1_ref
+
+    # Pre-index container indices by vessel for fast sampling
+    vessel_to_samples = [np.where(vessel_indices == i)[0] for i in range(n_vessels)]
+
+    rng = np.random.default_rng(random_state)
+    deltas = np.empty(n_bootstraps)
+
+    for b in range(n_bootstraps):
+        boot_vessel_ids = rng.integers(0, n_vessels, size=n_vessels)
+        sampled_indices = np.concatenate([vessel_to_samples[vid] for vid in boot_vessel_ids])
+
+        y_b = y_t[sampled_indices]
+        if len(np.unique(y_b)) < 3:
+            deltas[b] = delta_sample
+            continue
+
+        f1_c_b = f1_score(y_b, y_cand[sampled_indices], average="macro", zero_division=0)
+        f1_r_b = f1_score(y_b, y_ref[sampled_indices], average="macro", zero_division=0)
+        deltas[b] = f1_c_b - f1_r_b
+
+    low = float(np.percentile(deltas, 100 * (alpha / 2.0)))
+    high = float(np.percentile(deltas, 100 * (1.0 - alpha / 2.0)))
+    ci_includes_zero = bool(low <= 0.0 <= high)
+
+    return {
+        "candidate_macro_f1": round(f1_cand, 4),
+        "reference_macro_f1": round(f1_ref, 4),
+        "macro_f1_delta": round(delta_sample, 4),
+        "ci_lower": round(low, 4),
+        "ci_upper": round(high, 4),
+        "ci_level": 1.0 - alpha,
+        "n_vessel_clusters": int(n_vessels),
+        "n_bootstraps": int(n_bootstraps),
+        "resampling_unit": "vessel_call_id",
+        "ci_includes_zero": ci_includes_zero,
+        "is_statistically_significant": not ci_includes_zero,
+    }
+
