@@ -1,0 +1,364 @@
+port_name_raw,port_name_clean,entity_type,is_regional_average,region,portwatch_id,portwatch_name,unlocode,country,country_iso3,portwatch_join_status,year,month_num,month_name,year_month,month_start_date,month_end_date,trade_direction,container_dwell_hours,container_dwell_days
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,80.0,3.3333333333333335
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,106.0,4.416666666666667
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,96.0,4.0
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,90.0,3.75
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,97.0,4.041666666666667
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,89.0,3.7083333333333335
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,126.0,5.25
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,249.0,10.375
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,105.0,4.375
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,177.0,7.375
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,97.3,4.054166666666666
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,202.6,8.441666666666666
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,148.7,6.195833333333333
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,116.9,4.870833333333334
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,125.0,5.208333333333333
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,96.0,4.0
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,166.0,6.916666666666667
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,90.0,3.75
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,134.3,5.595833333333334
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,84.2,3.5083333333333333
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,101.1,4.2124999999999995
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,68.0,2.8333333333333335
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,144.0,6.0
+HALDIA,Haldia,individual_port,False,Eastern,port442,Haldia,INHAL,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,85.1,3.545833333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,76.0,3.1666666666666665
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,30.0,1.25
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,69.0,2.875
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,30.0,1.25
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,89.0,3.7083333333333335
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,35.0,1.4583333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,116.0,4.833333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,48.0,2.0
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,110.0,4.583333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,144.0,6.0
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,126.4,5.266666666666667
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,74.9,3.1208333333333336
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,146.6,6.108333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,31.4,1.3083333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,138.0,5.75
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,34.0,1.4166666666666667
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,145.0,6.041666666666667
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,34.0,1.4166666666666667
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,144.3,6.0125
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,30.1,1.2541666666666667
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,174.7,7.279166666666666
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,35.9,1.4958333333333333
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,123.6,5.1499999999999995
+KOLKATA,Kolkata (Syama Prasad),individual_port,False,Eastern,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,29.4,1.2249999999999999
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,80.0,3.3333333333333335
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,45.0,1.875
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,64.0,2.6666666666666665
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,70.0,2.9166666666666665
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,67.0,2.7916666666666665
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,43.0,1.7916666666666667
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,74.0,3.0833333333333335
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,108.0,4.5
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,104.0,4.333333333333333
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,68.0,2.8333333333333335
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,104.9,4.370833333333334
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,61.2,2.5500000000000003
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,81.5,3.3958333333333335
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,53.2,2.216666666666667
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,118.0,4.916666666666667
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,39.0,1.625
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,124.0,5.166666666666667
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,49.0,2.0416666666666665
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,131.3,5.470833333333334
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,41.6,1.7333333333333334
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,119.1,4.9624999999999995
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,56.2,2.341666666666667
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,138.6,5.7749999999999995
+VIZAG,Visakhapatnam,individual_port,False,Eastern,port1367,Visakhapatnam,INVTZ,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,43.7,1.8208333333333335
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,78.0,3.25
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,36.0,1.5
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,79.0,3.2916666666666665
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,36.0,1.5
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,80.0,3.3333333333333335
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,32.0,1.3333333333333333
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,83.0,3.4583333333333335
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,61.0,2.5416666666666665
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,72.0,3.0
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,77.0,3.2083333333333335
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,96.0,4.0
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,46.0,1.9166666666666667
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,94.8,3.9499999999999997
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,48.7,2.029166666666667
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,101.0,4.208333333333333
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,44.0,1.8333333333333333
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,99.0,4.125
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,43.0,1.7916666666666667
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,102.8,4.283333333333333
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,43.6,1.8166666666666667
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,103.8,4.325
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,47.0,1.9583333333333333
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,120.3,5.0125
+CHENNAI,Chennai (Madras),individual_port,False,Southern,port235,Chennai (Madras),INMAA,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,67.4,2.8083333333333336
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,68.0,2.8333333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,63.0,2.625
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,69.0,2.875
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,38.0,1.5833333333333333
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,80.0,3.3333333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,51.0,2.125
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,86.0,3.5833333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,197.0,8.208333333333334
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,83.0,3.4583333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,134.0,5.583333333333333
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,91.0,3.7916666666666665
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,36.0,1.5
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,88.4,3.6833333333333336
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,38.1,1.5875000000000001
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,132.0,5.5
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,47.0,1.9583333333333333
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,111.0,4.625
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,50.0,2.0833333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,89.0,3.7083333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,44.0,1.8333333333333333
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,112.1,4.670833333333333
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,45.2,1.8833333333333335
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,141.0,5.875
+COCHIN,Cochin (Kochi),individual_port,False,Southern,port583,Cochin (Kochi),INCOK,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,63.3,2.6374999999999997
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,46.0,1.9166666666666667
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,87.0,3.625
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,49.0,2.0416666666666665
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,98.0,4.083333333333333
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,53.0,2.2083333333333335
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,187.0,7.791666666666667
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,195.0,8.125
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,84.0,3.5
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,193.0,8.041666666666666
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,108.0,4.5
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,70.0,2.9166666666666665
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,101.7,4.2375
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,66.5,2.7708333333333335
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,109.0,4.541666666666667
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,53.0,2.2083333333333335
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,108.0,4.5
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,53.0,2.2083333333333335
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,99.5,4.145833333333333
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,54.9,2.2875
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,99.6,4.1499999999999995
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,66.0,2.75
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,135.0,5.625
+KATTUPALLI,Kattupalli,individual_port,False,Southern,port2038,Kattupalli,INKAT,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,92.5,3.8541666666666665
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,66.0,2.75
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,117.0,4.875
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,60.0,2.5
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,75.0,3.125
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,72.0,3.0
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,86.0,3.5833333333333335
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,96.0,4.0
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,261.0,10.875
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,66.0,2.75
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,260.0,10.833333333333334
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,62.6,2.6083333333333334
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,89.2,3.716666666666667
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,75.6,3.15
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,74.9,3.1208333333333336
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,84.0,3.5
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,86.0,3.5833333333333335
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,77.0,3.2083333333333335
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,72.0,3.0
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,76.9,3.204166666666667
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,109.6,4.566666666666666
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,72.7,3.029166666666667
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,88.9,3.704166666666667
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,83.0,3.4583333333333335
+KRISHNAPATNAM,Krishnapatnam,individual_port,False,Southern,port599,Krishnapatnam Port,INKRI,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,61.3,2.5541666666666667
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,85.0,3.5416666666666665
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,26.0,1.0833333333333333
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,67.0,2.7916666666666665
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,19.0,0.7916666666666666
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,57.0,2.375
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,20.0,0.8333333333333334
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,47.0,1.9583333333333333
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,42.0,1.75
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,64.0,2.6666666666666665
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,30.0,1.25
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,65.0,2.7083333333333335
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,20.0,0.8333333333333334
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,74.7,3.1125000000000003
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,22.1,0.9208333333333334
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,87.0,3.625
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,20.0,0.8333333333333334
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,89.0,3.7083333333333335
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,19.0,0.7916666666666666
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,78.6,3.275
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,17.5,0.7291666666666666
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,111.5,4.645833333333333
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,18.1,0.7541666666666668
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,90.1,3.7541666666666664
+TUTICORIN,Tuticorin (V.O.C.),individual_port,False,Southern,port1331,Tuticorin,INTUT,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,17.3,0.7208333333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,117.0,4.875
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,20.0,0.8333333333333334
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,109.0,4.541666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,21.0,0.875
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,121.0,5.041666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,26.0,1.0833333333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,130.0,5.416666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,51.0,2.125
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,104.0,4.333333333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,31.0,1.2916666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,115.43,4.809583333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,25.2,1.05
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,122.1,5.0874999999999995
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,37.3,1.5541666666666665
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,128.0,5.333333333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,36.0,1.5
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,113.0,4.708333333333333
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,59.0,2.4583333333333335
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,132.8,5.533333333333334
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,25.9,1.0791666666666666
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,129.4,5.391666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,24.1,1.0041666666666667
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,121.8,5.075
+APSEZ,Mundra (APSEZ),individual_port,False,Western,port777,Mundra,INMUN,India,IND,COMPLEX_PROXY_MUNDRA,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,32.1,1.3375000000000001
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,107.0,4.458333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,36.0,1.5
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,104.0,4.333333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,35.0,1.4583333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,116.0,4.833333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,33.0,1.375
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,105.0,4.375
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,133.0,5.541666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,109.0,4.541666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,100.0,4.166666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,118.0,4.916666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,95.0,3.9583333333333335
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,123.0,5.125
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,46.0,1.9166666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,128.0,5.333333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,43.0,1.7916666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,117.0,4.875
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,50.0,2.0833333333333335
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,126.0,5.25
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,41.0,1.7083333333333333
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,136.0,5.666666666666667
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,33.0,1.375
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,126.0,5.25
+HAZIRA,Hazira,individual_port,False,Western,port2039,Hazira,INHZA,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,26.0,1.0833333333333333
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,67.0,2.7916666666666665
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,18.0,0.75
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,65.0,2.7083333333333335
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,18.0,0.75
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,66.0,2.75
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,20.0,0.8333333333333334
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,69.0,2.875
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,50.0,2.0833333333333335
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,60.0,2.5
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,65.0,2.7083333333333335
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,69.0,2.875
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,38.0,1.5833333333333333
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,75.0,3.125
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,22.0,0.9166666666666666
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,75.0,3.125
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,26.0,1.0833333333333333
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,78.0,3.25
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,21.0,0.875
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,78.0,3.25
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,19.0,0.7916666666666666
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,75.0,3.125
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,21.0,0.875
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,77.0,3.2083333333333335
+JNPT,Jawaharlal Nehru Port (Nhava Sheva),individual_port,False,Western,port776,Mumbai,INNSA,India,IND,COMPLEX_PROXY_MUMBAI,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,21.0,0.875
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,68.0,2.8333333333333335
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,47.0,1.9583333333333333
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,60.0,2.5
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,109.0,4.541666666666667
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,75.0,3.125
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,65.2,2.716666666666667
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,41.4,1.7249999999999999
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,31.0,1.2916666666666667
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,46.0,1.9166666666666667
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,30.9,1.2874999999999999
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,40.6,1.6916666666666667
+KANDLA,Kandla (Deendayal),individual_port,False,Western,port540,Kandla,INIXY,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,45.3,1.8875
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,124.0,5.166666666666667
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,117.0,4.875
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,126.0,5.25
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,104.0,4.333333333333333
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,116.0,4.833333333333333
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,101.0,4.208333333333333
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,242.0,10.083333333333334
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,308.0,12.833333333333334
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,166.0,6.916666666666667
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,105.0,4.375
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,164.0,6.833333333333333
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,119.0,4.958333333333333
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,120.0,5.0
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,73.0,3.0416666666666665
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,87.0,3.625
+NMPT,New Mangalore,individual_port,False,Western,port811,New Mangalore,INNML,India,IND,DIRECT_MATCH,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,66.0,2.75
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,78.0,3.25
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,41.0,1.7083333333333333
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,69.0,2.875
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,46.0,1.9166666666666667
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,80.0,3.3333333333333335
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,44.0,1.8333333333333333
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,95.0,3.9583333333333335
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,78.0,3.25
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,108.0,4.5
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,130.0,5.416666666666667
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,113.0,4.708333333333333
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,76.6,3.1916666666666664
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,112.4,4.683333333333334
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,46.7,1.9458333333333335
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,128.0,5.333333333333333
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,39.0,1.625
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,138.0,5.75
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,44.0,1.8333333333333333
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,137.9,5.745833333333334
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,37.1,1.5458333333333334
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,142.5,5.9375
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,49.3,2.0541666666666667
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,132.3,5.5125
+EASTERN REGION AVG.,Eastern Region Average,regional_average,True,Eastern,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,37.4,1.5583333333333333
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,78.0,3.25
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,42.0,1.75
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,74.0,3.0833333333333335
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,36.0,1.5
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,80.0,3.3333333333333335
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,39.0,1.625
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,100.0,4.166666666666667
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,74.0,3.0833333333333335
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,72.0,3.0
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,85.0,3.5416666666666665
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,87.2,3.6333333333333333
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,46.8,1.95
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,87.3,3.6374999999999997
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,44.5,1.8541666666666667
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,102.0,4.25
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,41.0,1.7083333333333333
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,57.0,2.375
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,34.0,1.4166666666666667
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,93.0,3.875
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,50.0,2.0833333333333335
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,103.2,4.3
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,56.5,2.3541666666666665
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,115.2,4.8
+SOUTHERN REGION AVG.,Southern Region Average,regional_average,True,Southern,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,57.5,2.3958333333333335
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Export,84.0,3.5
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,1,JANUARY,2020-01,2020-01-01,2020-01-31,Import,19.0,0.7916666666666666
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Export,82.0,3.4166666666666665
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,2,FEBRUARY,2020-02,2020-02-01,2020-02-29,Import,20.0,0.8333333333333334
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Export,88.0,3.6666666666666665
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,3,MARCH,2020-03,2020-03-01,2020-03-31,Import,22.0,0.9166666666666666
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Export,96.0,4.0
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,4,APRIL,2020-04,2020-04-01,2020-04-30,Import,53.0,2.2083333333333335
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Export,83.0,3.4583333333333335
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,5,MAY,2020-05,2020-05-01,2020-05-31,Import,50.0,2.0833333333333335
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Export,93.0,3.875
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,6,JUNE,2020-06,2020-06-01,2020-06-30,Import,37.0,1.5416666666666667
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Export,99.0,4.125
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,7,JULY,2020-07,2020-07-01,2020-07-31,Import,31.0,1.2916666666666667
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Export,103.0,4.291666666666667
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,8,AUGUST,2020-08,2020-08-01,2020-08-31,Import,30.0,1.25
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Export,96.0,4.0
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,9,SEPTEMBER,2020-09,2020-09-01,2020-09-30,Import,35.0,1.4583333333333333
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Export,106.0,4.416666666666667
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,10,OCTOBER,2020-10,2020-10-01,2020-10-31,Import,22.0,0.9166666666666666
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Export,104.7,4.3625
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,11,NOVEMBER,2020-11,2020-11-01,2020-11-30,Import,23.5,0.9791666666666666
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Export,100.5,4.1875
+WESTERN REGION AVG.,Western Region Average,regional_average,True,Western,,,,India,IND,REGIONAL_AGGREGATE,2020,12,DECEMBER,2020-12,2020-12-01,2020-12-31,Import,26.6,1.1083333333333334

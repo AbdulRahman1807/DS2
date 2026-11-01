@@ -1,0 +1,36 @@
+source_dataset,source_entity_name,entity_type,country_name,country_iso3,portwatch_id,portwatch_name,unlocode,zenodo_dwell_port_name,join_confidence,mapping_status,mapping_notes
+ADB_AIS_PORT_TRAFFIC,Antwerp,individual_port,Belgium,BEL,port57,Antwerp,BEANR,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Antwerp.
+ADB_AIS_PORT_TRAFFIC,Busan,individual_port,South Korea,KOR,port1065,Busan,KRPUS,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Busan.
+ADB_AIS_PORT_TRAFFIC,Dubai,port_complex,United Arab Emirates,ARE,port744,Jebel Ali,AEJEA,,HIGH_PROXY,COMPLEX_PROXY_JEBEL_ALI,ADB records Dubai container traffic; container operations shifted to Jebel Ali (port744 / AEJEA) in 2018.
+ADB_AIS_PORT_TRAFFIC,Guangzhou,port_complex,China,CHN,port425,Guangzhou (Nansha),CNNSA,,HIGH_PROXY,COMPLEX_PROXY_NANSHA,Container traffic concentrates at Nansha deepwater terminal (port425); PortWatch also has Huangpu (port2401).
+ADB_AIS_PORT_TRAFFIC,Hamburg,individual_port,Germany,DEU,port446,Hamburg,DEHAM,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Hamburg.
+ADB_AIS_PORT_TRAFFIC,Hong Kong,individual_port,Hong Kong SAR,HKG,port474,Hong Kong,HKHKG,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Hong Kong.
+ADB_AIS_PORT_TRAFFIC,Kaohsiung,individual_port,Taiwan,TWN,port541,Kaohsiung,TWKHH,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Kaohsiung.
+ADB_AIS_PORT_TRAFFIC,LALB,port_complex,United States,USA,port664,Los Angeles-Long Beach,USLAX;USLGB,LA_Long_Beach,HIGH_PROXY,COMPLEX_MATCH_SAN_PEDRO_BAY,San Pedro Bay twin-port complex. Matches PortWatch port664 and Zenodo LA_Long_Beach exactly.
+ADB_AIS_PORT_TRAFFIC,NYNJ,port_complex,United States,USA,port815,New York-New Jersey,USNYC;USNWK,NY_NJ,HIGH_PROXY,COMPLEX_MATCH_PANYNJ,Port Authority of NY & NJ multi-terminal complex. Matches PortWatch port815 and Zenodo NY_NJ exactly.
+ADB_AIS_PORT_TRAFFIC,Ningbo,individual_port,China,CHN,port824,Ningbo,CNNBO,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Ningbo-Zhoushan complex.
+ADB_AIS_PORT_TRAFFIC,Port Klang,individual_port,Malaysia,MYS,port960,Port Klang,MYPKG,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Port Klang (Northport/Westports).
+ADB_AIS_PORT_TRAFFIC,Qingdao,individual_port,China,CHN,port1069,Qingdao Port,CNTAO,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Qingdao Port.
+ADB_AIS_PORT_TRAFFIC,Rotterdam,individual_port,Netherlands,NLD,port1114,Rotterdam,NLRTM,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Rotterdam.
+ADB_AIS_PORT_TRAFFIC,Shanghai,port_complex,China,CHN,port1188,Shanghai,CNSGH,,HIGH_PROXY,COMPLEX_MATCH_SHANGHAI_PORT_CLUSTER,Includes Yangshan Deepwater (port2027) and Waigaoqiao river terminals. PortWatch port1188 represents Shanghai.
+ADB_AIS_PORT_TRAFFIC,Shenzhen,port_complex,China,CHN,port1189,Shekou (Shenzhen),CNSZX,,HIGH_PROXY,COMPLEX_MATCH_SHENZHEN_PORT_CLUSTER,"Shenzhen multi-terminal complex (Shekou port1189, Yantian, Chiwan). UN/LOCODE CNSZX encompasses all terminals."
+ADB_AIS_PORT_TRAFFIC,Singapore,individual_port,Singapore,SGP,port1201,Singapore,SGSIN,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Singapore mega-hub.
+ADB_AIS_PORT_TRAFFIC,Tanjung Pelepas,individual_port,Malaysia,MYS,port1269,Tanjung Pelepas,MYTPP,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Tanjung Pelepas (PTP).
+ADB_AIS_PORT_TRAFFIC,Tianjin,individual_port,China,CHN,port1297,Tianjin Xin Gang,CNTSN,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Tianjin Xin Gang.
+ADB_AIS_PORT_TRAFFIC,Xiamen,individual_port,China,CHN,port1404,Xiamen,CNXAM,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Xiamen.
+INDIAN_DGQI_PORT_DWELL,HALDIA,individual_port,India,IND,port442,Haldia,INHAL,,EXACT,DIRECT_MATCH,Haldia Dock Complex (port442 / INHAL).
+INDIAN_DGQI_PORT_DWELL,KOLKATA,individual_port,India,IND,port207,Kolkata (Syama Prasad Mookerje Port),INCCU,,EXACT,DIRECT_MATCH,Syama Prasad Mookerjee Port at Kolkata / Netaji Subhash Dock (port207 / INCCU).
+INDIAN_DGQI_PORT_DWELL,VIZAG,individual_port,India,IND,port1367,Visakhapatnam,INVTZ,,EXACT,DIRECT_MATCH,Visakhapatnam Port Trust container terminal (port1367 / INVTZ).
+INDIAN_DGQI_PORT_DWELL,CHENNAI,individual_port,India,IND,port235,Chennai (Madras),INMAA,,EXACT,DIRECT_MATCH,Chennai Port Trust container terminals (port235 / INMAA).
+INDIAN_DGQI_PORT_DWELL,COCHIN,individual_port,India,IND,port583,Cochin (Kochi),INCOK,,EXACT,DIRECT_MATCH,Cochin / Vallarpadam International Container Transshipment Terminal (port583 / INCOK).
+INDIAN_DGQI_PORT_DWELL,KATTUPALLI,individual_port,India,IND,port2038,Kattupalli,INKAT,,EXACT,DIRECT_MATCH,Adani Kattupalli Port north of Chennai (port2038 / INKAT).
+INDIAN_DGQI_PORT_DWELL,KRISHNAPATNAM,individual_port,India,IND,port599,Krishnapatnam Port,INKRI,,EXACT,DIRECT_MATCH,Krishnapatnam Port container terminal (port599 / INKRI).
+INDIAN_DGQI_PORT_DWELL,TUTICORIN,individual_port,India,IND,port1331,Tuticorin,INTUT,,EXACT,DIRECT_MATCH,V.O. Chidambaranar Port at Tuticorin (port1331 / INTUT).
+INDIAN_DGQI_PORT_DWELL,APSEZ,individual_port,India,IND,port777,Mundra,INMUN,,HIGH_PROXY,COMPLEX_PROXY_MUNDRA,Adani Ports and SEZ flagship container hub at Mundra Port (port777 / INMUN).
+INDIAN_DGQI_PORT_DWELL,HAZIRA,individual_port,India,IND,port2039,Hazira,INHZA,,EXACT,DIRECT_MATCH,Direct identity match with PortWatch Hazira Port (port2039 / INHZA).
+INDIAN_DGQI_PORT_DWELL,JNPT,individual_port,India,IND,port776,Mumbai,INNSA,,HIGH_PROXY,COMPLEX_PROXY_MUMBAI,Jawaharlal Nehru Port Trust / Nhava Sheva (INNSA). PortWatch maps under Mumbai complex (port776).
+INDIAN_DGQI_PORT_DWELL,KANDLA,individual_port,India,IND,port540,Kandla,INIXY,,EXACT,DIRECT_MATCH,Deendayal Port Trust at Kandla (port540 / INIXY).
+INDIAN_DGQI_PORT_DWELL,NMPT,individual_port,India,IND,port811,New Mangalore,INNML,,EXACT,DIRECT_MATCH,New Mangalore Port Trust (port811 / INNML).
+INDIAN_DGQI_PORT_DWELL,EASTERN REGION AVG.,regional_average,India,IND,,,,,NOT_APPLICABLE,REGIONAL_AGGREGATE,Regional benchmark aggregate for Eastern Indian major container ports.
+INDIAN_DGQI_PORT_DWELL,SOUTHERN REGION AVG.,regional_average,India,IND,,,,,NOT_APPLICABLE,REGIONAL_AGGREGATE,Regional benchmark aggregate for Southern Indian major container ports.
+INDIAN_DGQI_PORT_DWELL,WESTERN REGION AVG.,regional_average,India,IND,,,,,NOT_APPLICABLE,REGIONAL_AGGREGATE,Regional benchmark aggregate for Western Indian major container ports.

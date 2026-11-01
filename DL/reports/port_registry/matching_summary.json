@@ -1,0 +1,36 @@
+{
+  "status": "CANDIDATES_GENERATED_PENDING_REVIEW",
+  "portwatch_port_count": 2065,
+  "unlocode_location_count": 116039,
+  "unlocode_port_function_count": 17521,
+  "upply_record_count": 14269,
+  "upply_exact_unlocode_identifier_matches": 12254,
+  "upply_identifier_country_disagreements": 5,
+  "portwatch_unlocode_candidate_status": {
+    "EXACT_NORMALIZED_NAME_COUNTRY": 1208,
+    "FUZZY_REVIEW": 960,
+    "NO_CANDIDATE_ABOVE_THRESHOLD": 642,
+    "HIGH_SIMILARITY_REVIEW": 12,
+    "NO_REFERENCE_IN_COUNTRY": 2
+  },
+  "portwatch_upply_candidate_status": {
+    "NO_CANDIDATE_ABOVE_THRESHOLD": 926,
+    "EXACT_NORMALIZED_NAME_COUNTRY": 910,
+    "FUZZY_REVIEW": 599,
+    "HIGH_SIMILARITY_REVIEW": 9,
+    "NO_REFERENCE_IN_COUNTRY": 6
+  },
+  "matching_policy": {
+    "country_restricted": true,
+    "top_k": 5,
+    "fuzzy_review_threshold": 75,
+    "high_similarity_threshold": 95,
+    "automatic_fuzzy_merges": false,
+    "unmatched_records_preserved": true
+  },
+  "outputs": [
+    "upply_unlocode_identifier_matches.csv",
+    "portwatch_unlocode_candidates.csv",
+    "portwatch_upply_candidates.csv"
+  ]
+}

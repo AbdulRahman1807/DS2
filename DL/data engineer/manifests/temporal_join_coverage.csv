@@ -1,0 +1,6 @@
+dataset_source,join_key,covered_entities,total_possible_entities,coverage_entity_pct,covered_rows,total_rows,row_coverage_pct,temporal_range,coverage_indicator_col
+PortWatch Daily (Base),"portwatch_id, date_utc",2065,2065,100.0,5280205,5280205,100.0,2019-01-01 to 2025-12-31,has_portwatch_coverage
+ERA5 Daily Environmental v2,"portwatch_id, date_utc",5,2065,0.242,12785,5280205,0.242,2019-01-01 to 2025-12-31,has_era5_coverage
+NOAA Storm Events Shocks,"portwatch_id, date_utc",56,2065,2.712,143192,5280205,2.712,2019-01-01 to 2025-12-31,has_noaa_coverage
+EM-DAT Macro Disaster Shocks,"country_iso3, date_utc",150,180,83.333,5134456,5280205,97.24,2019-01-01 to 2025-12-31,has_emdat_coverage
+BTS Port Capacity Features,"portwatch_id, year",39,2065,1.889,92052,5280205,1.743,2019 to 2025 (2024-2025 baseline carry-forward),has_bts_coverage

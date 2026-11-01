@@ -1,0 +1,16 @@
+{
+  "audit_name": "Questionable Port Geography Investigation",
+  "generated_at_utc": "2026-11-01T01:22:55.782355+00:00",
+  "total_ports_investigated": 9,
+  "key_findings": [
+    "Bay City (port130) and Gary (port377) suffered catastrophic cross-state name collisions in Upply/UNLOCODE, importing rural inland coordinates from Wisconsin and Texas rather than commercial Great Lakes ports in Michigan and Indiana.",
+    "Monroe (port2270) suffered a similar collision, importing Monroe, NH coordinates rather than Port of Monroe, MI on Lake Erie.",
+    "Delfzijl (port285) contains a 1-degree typographical error in the primary UN/LOCODE / Upply source (52\u00b031'N vs 53\u00b019'N), placing the reference point 90 km inland.",
+    "Quebec, Rosario, Nanjing, Munguba, and Varkaus have valid physical coordinates, but are inland river, delta, or lake ports where ERA5 WAM does not compute waves, causing nearest-vertex searches to traverse land barriers (e.g. Quebec crossing Maine into the Atlantic).",
+    "No coordinates have been modified, in strict adherence to immutability rules."
+  ],
+  "classification_breakdown": {
+    "GEOGRAPHICALLY_UNREPRESENTATIVE": 5,
+    "IDENTITY_OR_COORDINATE_UNCERTAIN": 4
+  }
+}

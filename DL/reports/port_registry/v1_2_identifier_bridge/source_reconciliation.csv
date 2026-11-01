@@ -1,0 +1,17 @@
+metric,value,interpretation
+PortWatch,2065,Primary registry spine
+UN/LOCODE,116185,All source records preserved
+UN/LOCODE unique identifiers,116039,Identifier cardinality
+UN/LOCODE duplicate rows,285,"Preserved, not deduplicated"
+UN/LOCODE duplicate identifier groups,139,Requires provenance review
+Upply,14269,All source records preserved
+Upply unique identifiers,14269,Identifier cardinality
+Upply-UN/LOCODE exact identifier intersection,12254,Exact code overlap
+Upply unmatched identifiers,2015,Not automatically invalid
+Upply-UN/LOCODE country disagreements,5,Explicit conflicts
+PortWatch unique accepted UN/LOCODE,1202,Conservative associations
+PortWatch unique accepted Upply,949,Conservative associations
+PortWatch ambiguous,122,Manual review
+PortWatch fuzzy-only,156,Manual review
+PortWatch unmatched,618,No candidate
+PortWatch country conflicts,1,Manual review

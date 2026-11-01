@@ -1,0 +1,48 @@
+{
+  "dataset": "Global PortWatch-spined canonical port registry",
+  "version": "1.1",
+  "status": "COUNTRY_CONFLICT_CORRECTED_PENDING_REVIEW",
+  "primary_source": "IMF PortWatch",
+  "portwatch_records": 2065,
+  "unlocode_source_records": 116185,
+  "unlocode_unique_identifiers": 116039,
+  "upply_source_records": 14269,
+  "upply_unique_identifiers": 14269,
+  "candidate_rows": 2873,
+  "unresolved_port_records": 897,
+  "fuzzy_matches_automatically_accepted": false,
+  "duplicate_unlocode_records_preserved": true,
+  "unmatched_source_records_discarded": false,
+  "country_disagreement_codes": [
+    "BQBON",
+    "BQEUX",
+    "BQKRA",
+    "BQRIN",
+    "BQSAB"
+  ],
+  "matching_policy": {
+    "primary_spine": "PortWatch port IDs",
+    "exact_name_country": "Accepted only if one distinct identifier",
+    "exact_identifier_bridge": "Upply code equals UN/LOCODE",
+    "fuzzy_threshold": 75,
+    "fuzzy_top_k": 5,
+    "fuzzy_auto_merge": false,
+    "ambiguous_candidates_preserved": true
+  },
+  "limitations": [
+    "PortWatch port universe is limited to its 2,065 records.",
+    "A PortWatch port is not necessarily a single terminal or berth.",
+    "Name and country matching does not prove identical geographic boundaries.",
+    "Upply coordinates are reference points, not terminal or berth coordinates.",
+    "UN/LOCODE duplicate identifiers and name collisions are preserved.",
+    "Fuzzy matches require manual review.",
+    "This registry does not establish maritime route connectivity."
+  ],
+  "outputs": [
+    "canonical_port_registry.csv",
+    "port_identity_candidates.csv",
+    "unresolved_port_matches.csv",
+    "source_reconciliation.csv",
+    "registry_metadata.json"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "milestone": "Phase 2 Final Spatial Governance Semantics Audit and Remediation",
+  "generated_at_utc": "2026-11-01T03:04:41.556992+00:00",
+  "total_portwatch_ports": 2065,
+  "candidate_table": {
+    "total_candidate_rows": 2876,
+    "authoritative_identity_candidates_accepted": 2099,
+    "authoritative_coordinate_candidates_accepted": 1863,
+    "deprecated_legacy_candidate_is_accepted_count": 2099,
+    "identity_accepted_coordinate_rejected_count": 236
+  },
+  "identity_resolution_counts": {
+    "CONFIRMED_IDENTIFIER": 978,
+    "CONFIRMED_IDENTIFIER_COUNTRY_DISCREPANCY": 1,
+    "SOURCE_CONFLICT_REQUIRES_MANUAL_REVIEW": 1,
+    "UNRESOLVED": 1085
+  },
+  "coordinate_validation_counts": {
+    "VALID": 975,
+    "VALID_COUNTRY_CONFLICT": 1,
+    "MISSING_IN_PRIMARY_SOURCE": 2,
+    "INVALID_PRIMARY_SOURCE_TYPO": 1,
+    "SOURCE_CONFLICT_REQUIRES_MANUAL_REVIEW": 1,
+    "UNMAPPED": 1085
+  },
+  "surface_governance": {
+    "extraction_eligible_ports": 976,
+    "extraction_ineligible_ports": 1089,
+    "unique_0_25_deg_grid_vertices": 936,
+    "modeling_eligibility_status": {
+      "ELIGIBLE_PRIMARY": 976,
+      "INELIGIBLE": 1089
+    },
+    "modeling_primary_eligible_bool_count": 976
+  },
+  "wave_governance": {
+    "extractable_ports_total": 961,
+    "extraction_bypassed_ports": 1104,
+    "unique_0_50_deg_ocean_cells_total": 774,
+    "unique_ocean_cells_model_population": 763,
+    "unique_ocean_cells_transit_population": 16,
+    "overlapping_ocean_cells_count": 5,
+    "operational_screening_tiers": {
+      "DIRECT_OCEAN_VERTEX": 509,
+      "PROXIMITY_TIER_UNDER_40KM": 205,
+      "REGIONAL_FORCING_TIER_40_TO_100KM": 226,
+      "DISCONNECTED_OVER_100KM": 21,
+      "BLOCKED_INLAND_NO_CELL": 15,
+      "UNCERTAIN_COORDINATE": 4,
+      "UNMAPPED": 1085
+    },
+    "modeling_eligibility_status": {
+      "ELIGIBLE_PRIMARY": 714,
+      "ELIGIBLE_CONDITIONAL": 226,
+      "INELIGIBLE": 1125
+    },
+    "modeling_primary_eligible_bool_count": 714,
+    "modeling_conditional_eligible_bool_count": 226,
+    "offshore_proxy_flag_true_count": 226
+  },
+  "structural_reconciliation_status": "100% RECONCILED (All 14 structural invariants verified from output rows)",
+  "output_directory": "/Users/abdul/Desktop/DS/DL/reports/port_identity_resolution/v1_3_final_semantics"
+}

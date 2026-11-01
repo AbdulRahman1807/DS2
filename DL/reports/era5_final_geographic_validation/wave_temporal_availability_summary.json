@@ -1,0 +1,20 @@
+{
+  "audit_name": "Targeted 2019-2025 Wave Temporal Availability Audit",
+  "generated_at_utc": "2026-11-01T01:25:23.186936+00:00",
+  "period_start": "2019-01-15T12:00:00",
+  "period_end": "2025-12-15T12:00:00",
+  "total_monthly_timestamps": 84,
+  "unique_cells_audited": 776,
+  "classification_breakdown": {
+    "PERSISTENTLY_AVAILABLE": 740,
+    "SEASONAL_MISSINGNESS_PLAUSIBLE_SEA_ICE_UNCONFIRMED_IN_STORE": 36,
+    "INTERMITTENT_MISSINGNESS": 0,
+    "PERSISTENTLY_MISSING": 0
+  },
+  "scientific_findings": [
+    "740/776 cells (95.4%) have 100% complete data across all 84 audited months in 2019-2025.",
+    "36/776 cells (4.6%) exhibit seasonal missingness strictly restricted to winter/spring months.",
+    "Neither the ARCO wave store (cadl-arco-geo-003) nor the surface store (cadl-arco-geo-002) exposes a sea-ice concentration variable (siconc/ci). Therefore, while the timing and high-latitude locations (Baltic, Gulf of St. Lawrence, Sea of Okhotsk) are fully consistent with sea ice, the physical mechanism cannot be confirmed from primary store metadata and is labeled as UNCONFIRMED.",
+    "Zero selected cells are PERSISTENTLY_MISSING (0/84). All 776 selected cells are confirmed active marine observation cells."
+  ]
+}

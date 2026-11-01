@@ -1,0 +1,12 @@
+# Git LFS tracking for Phase 2 Model-Ready Datasets
+DL/data/staging/supplementary_acquisition/processed/**/*.parquet filter=lfs diff=lfs merge=lfs -text
+"DL/data engineer/registry/*.parquet" filter=lfs diff=lfs merge=lfs -text
+DL/reports/**/*.parquet filter=lfs diff=lfs merge=lfs -text
+
+# Line endings and attributes
+*.py text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+*.parquet binary
+

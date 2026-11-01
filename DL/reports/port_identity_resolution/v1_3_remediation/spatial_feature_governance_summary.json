@@ -1,0 +1,51 @@
+{
+  "audit_name": "Spatial Feature Governance v1.3 Remediation and Reconciliation",
+  "generated_at_utc": "2026-11-01T02:53:58.709581+00:00",
+  "total_ports": 2065,
+  "candidate_table_summary": {
+    "total_candidate_rows": 2876,
+    "identity_candidate_accepted_count": 2099,
+    "coordinate_candidate_accepted_count": 1863,
+    "identity_accepted_coords_rejected_count": 236
+  },
+  "identity_resolution_counts": {
+    "UNRESOLVED_NO_COORDINATES": 1085,
+    "CONFIRMED_AUTHORITATIVE_COORDINATES": 975,
+    "SOURCE_CONFLICT_REQUIRES_MANUAL_REVIEW": 2,
+    "IDENTITY_CONFIRMED_COORDINATE_UNAVAILABLE": 2,
+    "CONFIRMED_COORDINATES_COUNTRY_CONFLICT": 1
+  },
+  "surface_governance": {
+    "extraction_eligible_ports": 976,
+    "extraction_ineligible_ports": 1089,
+    "unique_grid_cells_0_25_deg": 936,
+    "modeling_eligibility_status": {
+      "ELIGIBLE_PRIMARY": 976,
+      "INELIGIBLE": 1089
+    }
+  },
+  "wave_governance": {
+    "extractable_ports_total": 961,
+    "extraction_bypassed_ports": 1104,
+    "unique_ocean_cells_total": 774,
+    "unique_ocean_cells_model_eligible": 763,
+    "unique_ocean_cells_transit_only": 16,
+    "proxy_classification_counts": {
+      "DIRECT_OCEAN_CELL": 509,
+      "NEARBY_COASTAL_PROXY": 205,
+      "REGIONAL_MARINE_FORCING_ONLY": 226,
+      "GEOGRAPHICALLY_UNREPRESENTATIVE": 21,
+      "BLOCKED_INLAND": 15,
+      "IDENTITY_OR_COORDINATE_UNCERTAIN": 4,
+      "UNMAPPED": 1085
+    },
+    "modeling_eligibility_status": {
+      "ELIGIBLE_PRIMARY": 714,
+      "ELIGIBLE_CONDITIONAL": 226,
+      "INELIGIBLE": 1125
+    },
+    "offshore_proxy_flag_true_count": 226
+  },
+  "reconciliation_status": "100% RECONCILED (All 15 assertions passed cleanly)",
+  "output_directory": "/Users/abdul/Desktop/DS/DL/reports/port_identity_resolution/v1_3_remediation"
+}

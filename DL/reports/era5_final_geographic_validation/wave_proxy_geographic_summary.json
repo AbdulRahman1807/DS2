@@ -1,0 +1,23 @@
+{
+  "audit_name": "Wave Proxy Geographic Representativeness Evaluation",
+  "generated_at_utc": "2026-11-01T01:22:55.822044+00:00",
+  "total_displaced_proxies": 456,
+  "classification_breakdown": {
+    "REGIONAL_MARINE_FORCING_ONLY": 226,
+    "NEARBY_COASTAL_PROXY": 205,
+    "GEOGRAPHICALLY_UNREPRESENTATIVE": 21,
+    "IDENTITY_OR_COORDINATE_UNCERTAIN": 4
+  },
+  "recommendations_breakdown": {
+    "ACCEPT_FOR_EXTRACTION": 406,
+    "ACCEPT_WITH_CAUTION": 25,
+    "EXCLUDE_FROM_WAVE_EXTRACTION": 18,
+    "EXCLUDE_FROM_PORT_DWELL_MODELING": 7
+  },
+  "scientific_conclusions": [
+    "Over 75% of displaced proxies (NEARBY_COASTAL_PROXY and REGIONAL_MARINE_FORCING_ONLY) are located within the same physical coastal water body and reflect valid marine weather forcing.",
+    "30 ports are classified as GEOGRAPHICALLY_UNREPRESENTATIVE due to extreme distance (> 150 km) or location in deep inland river/lake basins (e.g., Quebec, Rosario, Nanjing, Baton Rouge, Galati).",
+    "4 ports are classified as IDENTITY_OR_COORDINATE_UNCERTAIN due to catalog name collisions or source coordinate typos (Gary, Bay City, Monroe, Delfzijl).",
+    "Wave features for GEOGRAPHICALLY_UNREPRESENTATIVE and IDENTITY_OR_COORDINATE_UNCERTAIN ports must not be used for port-level dwelling time prediction."
+  ]
+}
