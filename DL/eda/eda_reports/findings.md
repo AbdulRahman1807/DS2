@@ -56,7 +56,7 @@ Descriptive statistics computed directly across all 5.28M records:
 | `portcalls_container` | 5,280,205 | 0.62 | 2.49 | 0.0 | 0.0 | 0.0 | 1.0 | 76.0 | **+9.11** |
 | `portcalls_tanker` | 5,280,205 | 0.76 | 2.87 | 0.0 | 1.0 | 0.0 | 2.0 | 117.0 | **+13.49** |
 | `portcalls_dry_bulk` | 5,280,205 | 0.38 | 1.40 | 0.0 | 0.0 | 0.0 | 1.0 | 88.0 | **+14.36** |
-| `total_cargo_tonnage` | 5,280,205 | 22305.08 | 100073.32 | 0.0 | 4045.0 | 0.0 | 46650.0 | 4140242.0 | **+10.59** |
+| `total_cargo_tonnage` | 5,280,205 | 22305.07 | 100073.32 | 0.0 | 4045.0 | 0.0 | 46650.0 | 4140242.0 | **+10.59** |
 | `pw_calls_rolling_7d_mean` | 5,280,205 | 2.42 | 6.38 | 0.7 | 2.1 | 0.0 | 5.6 | 169.7 | **+9.53** |
 | `pw_calls_rolling_14d_mean` | 5,280,205 | 2.42 | 6.36 | 0.7 | 2.1 | 0.0 | 5.5 | 158.4 | **+9.54** |
 | `pw_calls_rolling_30d_mean` | 5,280,205 | 2.42 | 6.35 | 0.7 | 2.1 | 0.0 | 5.5 | 156.4 | **+9.55** |
@@ -65,7 +65,7 @@ Descriptive statistics computed directly across all 5.28M records:
 | `target_portcalls_lead_7d` | 5,265,750 | 2.42 | 6.58 | 1.0 | 2.0 | 0.0 | 6.0 | 224.0 | **+9.34** |
 | `target_portcalls_7d_future_sum` | 5,265,750 | 16.95 | 44.66 | 5.0 | 15.0 | 0.0 | 39.0 | 1188.0 | **+9.53** |
 | `target_container_calls_7d_future_sum` | 5,265,750 | 4.34 | 16.76 | 0.0 | 2.0 | 0.0 | 10.0 | 356.0 | **+9.26** |
-| `target_cargo_tonnage_7d_future_sum` | 5,265,750 | 156149.39 | 653125.31 | 6187.0 | 65989.0 | 0.0 | 309678.0 | 19608542.0 | **+10.34** |
+| `target_cargo_tonnage_7d_future_sum` | 5,265,750 | 156149.39 | 653125.44 | 6187.0 | 65989.0 | 0.0 | 309678.0 | 19608542.0 | **+10.34** |
 
 ### Target Skewness & Mathematical Transformation Guidance:
 - Primary target `target_portcalls_7d_future_sum` exhibits heavy right skewness (**+9.53**) and kurtosis (**+137.68**).
@@ -101,7 +101,7 @@ Aggregated annual global vessel arrivals across all 2,065 ports:
 - **Node Inventory (251,646 nodes):** 250,204 freight rail junctions, 1,401 intermodal ramp terminals, and 41 deepwater port complexes.
 - **Edge Inventory (303,016 edges):** 302,774 physical rail track segments and 242 port-to-intermodal drayage connectors within 50 km.
 - **Class I Railroad Operators:** Canadian National (CN: 42,479 lines), Union Pacific (UP: 42,446 lines), BNSF (35,108 lines), CPKC (29,287 lines), CSX (28,458 lines), and Norfolk Southern (NS: 27,841 lines).
-- **Distance Metrics:** Mean rail segment length is 1.41 km (median: 0.38 km, P95: 5.56 km).
+- **Distance Metrics:** Mean rail segment length is 1.41 km (median: 0.38 km, P95: 6.82 km).
 
 ### 5.2 Caribbean Regional Maritime Graph (`caribbean_graph_*.parquet`)
 - **Node Inventory (528 nodes):** 528 commercial seaports across 38 territories, anchored by 18 canonical PortWatch gateways.
@@ -112,10 +112,15 @@ Aggregated annual global vessel arrivals across all 2,065 ports:
 
 ## 6. Native-Resolution Empirical Benchmarks
 
-| Benchmark Dataset | Native Resolution | Entities | Total Records | Key Observed Metrics | Operational Finding |
-| :--- | :---: | :---: | :---: | :--- | :--- |
-| **ADB Weekly Port Traffic** | Weekly | 19 ports | 3,990 | Turnaround: 43.9h (std: 28.0h), Waiting: 12.7h, Service: 31.2h | Anchorage waiting time accounts for **28.9%** of total port turnaround time. |
-| **Indian Major Ports Dwell** | Monthly | 16 ports | 363 | Cargo Dwell: 3.35 days (80.3h, max: 12.83 days) | Landside/customs dwell exhibits substantial regional variation across port complexes. |
+| Benchmark Dataset | Native Resolution | Entities | Total Records | Temporal Coverage | Key Observed Metrics | Operational Finding |
+| :--- | :---: | :---: | :---: | :---: | :--- | :--- |
+| **ADB Weekly Port Traffic** | Weekly | 19 ports | 3,990 | 2019 - 2022 | Turnaround: 43.9h (std: 28.0h), Waiting: 12.7h, Service: 31.2h | Anchorage waiting time accounts for **28.9%** of total port turnaround time. |
+| **Indian Major Ports Dwell (Pooled)** | Monthly | 13 ports | 291 | 2020 | Cargo Dwell: 3.44 days (82.5h, max: 12.83 days) | Landside/customs dwell across 13 major commercial ports in calendar year 2020. |
+| **Indian Major Ports Dwell (Import)** | Monthly | 13 ports | 156 | 2020 | Import Dwell: 2.75 days (66.1h, max: 12.83 days) | Rapid evacuation under Direct Port Delivery (DPD) protocols. |
+| **Indian Major Ports Dwell (Export)** | Monthly | 12 ports | 135 | 2020 | Export Dwell: 4.23 days (101.4h, max: 10.08 days) | Substantially longer dwell (+35.3h / 1.53x) due to export buffer staging. |
+
+> [!NOTE]
+> **DGQI Data Governance & Integrity:** All 363 observations in the source dataset belong strictly to calendar year **2020**. Regional summary rows (72 observations across 3 regions) were excluded from port-level aggregate calculations to prevent double-counting. Export container dwell exhibits a **1.53x** ratio relative to import dwell, reflecting operational buffer times before vessel loading.
 
 ---
 
@@ -130,7 +135,7 @@ Sequence sliding windows from `sequence_metadata.parquet` enforce leak-free chro
 | **TEST** | 741,335 | 14.31% | 2024-12-31 to 2025-12-24 | Ends 2025-12-31 | 17.02 | **0.0008** |
 
 > [!NOTE]
-> **Strict Leakage Quarantine:** Exactly **24,780 candidate boundary-crossing sequences** were pruned by Data Engineering. Target distribution stability is confirmed by near-zero PSI values ($	ext{PSI}_{	ext{Val}} = 0.0028$, $	ext{PSI}_{	ext{Test}} = 0.0016$), verifying that the holdout test partition reflects production operational conditions without artificial domain shift.
+> **Strict Leakage Quarantine:** Exactly **24,780 candidate boundary-crossing sequences** were pruned by Data Engineering. Target distribution stability is confirmed by near-zero PSI values ($\text{PSI}_{\text{Val}} = 0.0008$, $\text{PSI}_{\text{Test}} = 0.0008$), verifying that the holdout test partition reflects production operational conditions without artificial domain shift.
 
 ---
 

@@ -47,7 +47,9 @@ Caribbean Network:      528 nodes | 9,969 directed shipping lanes
 5. NATIVE-RESOLUTION MACRO BENCHMARKS
 --------------------------------------------------------------------------------
 ADB Weekly Turnaround:  Mean: 43.9h | Waiting: 12.7h | Service: 31.2h
-Indian Monthly Dwell:   Mean: 3.35 days (80.3h) | Median: 3.19 days
+Indian Monthly Dwell:   Pooled (13 ports, 2020): Mean: 3.44 days (82.5h) | Median: 3.20 days
+                        Import (13 ports): Mean: 2.75 days (66.1h)
+                        Export (12 ports): Mean: 4.23 days (101.4h)
 Ground-Truth Reality:   Continuous daily port-level dwell is unsupported by public datasets.
                         Models must forecast daily throughput targets; benchmarks serve macro calibration.
 

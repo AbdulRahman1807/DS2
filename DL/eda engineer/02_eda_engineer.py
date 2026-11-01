@@ -314,28 +314,126 @@ def step4_native_resolution_benchmarks():
         "mean_weekly_vessel_calls": round(df_adb['numofcall'].mean(), 1)
     }
     
-    # 2. Indian Major Ports Monthly Dwell
+    # 2. Indian Major Ports Monthly Dwell (DGQI 2020)
     df_ind = pq.read_table(INDIAN_BENCH_PATH, columns=[
-        'port_name_clean', 'region', 'container_dwell_hours', 'container_dwell_days'
+        'port_name_clean', 'region', 'is_regional_average', 'trade_direction', 'year',
+        'container_dwell_hours', 'container_dwell_days'
     ]).to_pandas()
     
-    ind_summary = {
-        "benchmark_source": "Indian Major Ports DGQI Logistics Dwell",
+    # Derive temporal coverage dynamically from source data
+    year_min = int(df_ind['year'].min())
+    year_max = int(df_ind['year'].max())
+    ind_temporal_span = f"{year_min}" if year_min == year_max else f"{year_min} - {year_max}"
+    
+    # Separate commercial ports from regional summary rows
+    df_ind_ports = df_ind[df_ind['is_regional_average'] == False].copy()
+    df_ind_regions = df_ind[df_ind['is_regional_average'] == True].copy()
+    
+    # Separate trade directions for commercial ports
+    df_ind_import = df_ind_ports[df_ind_ports['trade_direction'] == 'Import']
+    df_ind_export = df_ind_ports[df_ind_ports['trade_direction'] == 'Export']
+    
+    ind_pooled_summary = {
+        "benchmark_source": "Indian Major Ports DGQI Logistics Dwell (Pooled Ports)",
         "native_temporal_resolution": "Monthly",
-        "entity_count": df_ind['port_name_clean'].nunique(),
-        "total_records": len(df_ind),
-        "temporal_span": "2021 - 2023",
-        "mean_container_dwell_days": round(df_ind['container_dwell_days'].mean(), 2),
-        "median_container_dwell_days": round(df_ind['container_dwell_days'].median(), 2),
-        "std_container_dwell_days": round(df_ind['container_dwell_days'].std(), 2),
-        "max_container_dwell_days": round(df_ind['container_dwell_days'].max(), 2),
-        "mean_container_dwell_hours": round(df_ind['container_dwell_hours'].mean(), 2),
-        "median_container_dwell_hours": round(df_ind['container_dwell_hours'].median(), 2),
-        "std_container_dwell_hours": round(df_ind['container_dwell_hours'].std(), 2),
-        "max_container_dwell_hours": round(df_ind['container_dwell_hours'].max(), 2)
+        "entity_count": df_ind_ports['port_name_clean'].nunique(),
+        "total_records": len(df_ind_ports),
+        "temporal_span": ind_temporal_span,
+        "mean_turnaround_time_hours": np.nan,
+        "median_turnaround_time_hours": np.nan,
+        "std_turnaround_time_hours": np.nan,
+        "p90_turnaround_time_hours": np.nan,
+        "max_turnaround_time_hours": np.nan,
+        "mean_waiting_time_hours": np.nan,
+        "mean_service_time_hours": np.nan,
+        "waiting_to_service_ratio": np.nan,
+        "mean_weekly_vessel_calls": np.nan,
+        "mean_container_dwell_days": round(df_ind_ports['container_dwell_days'].mean(), 2),
+        "median_container_dwell_days": round(df_ind_ports['container_dwell_days'].median(), 2),
+        "std_container_dwell_days": round(df_ind_ports['container_dwell_days'].std(), 2),
+        "max_container_dwell_days": round(df_ind_ports['container_dwell_days'].max(), 2),
+        "mean_container_dwell_hours": round(df_ind_ports['container_dwell_hours'].mean(), 2),
+        "median_container_dwell_hours": round(df_ind_ports['container_dwell_hours'].median(), 2),
+        "std_container_dwell_hours": round(df_ind_ports['container_dwell_hours'].std(), 2),
+        "max_container_dwell_hours": round(df_ind_ports['container_dwell_hours'].max(), 2)
     }
     
-    df_bench_combined = pd.DataFrame([adb_summary, ind_summary])
+    ind_import_summary = {
+        "benchmark_source": "Indian Major Ports DGQI Logistics Dwell (Import)",
+        "native_temporal_resolution": "Monthly",
+        "entity_count": df_ind_import['port_name_clean'].nunique(),
+        "total_records": len(df_ind_import),
+        "temporal_span": ind_temporal_span,
+        "mean_turnaround_time_hours": np.nan,
+        "median_turnaround_time_hours": np.nan,
+        "std_turnaround_time_hours": np.nan,
+        "p90_turnaround_time_hours": np.nan,
+        "max_turnaround_time_hours": np.nan,
+        "mean_waiting_time_hours": np.nan,
+        "mean_service_time_hours": np.nan,
+        "waiting_to_service_ratio": np.nan,
+        "mean_weekly_vessel_calls": np.nan,
+        "mean_container_dwell_days": round(df_ind_import['container_dwell_days'].mean(), 2),
+        "median_container_dwell_days": round(df_ind_import['container_dwell_days'].median(), 2),
+        "std_container_dwell_days": round(df_ind_import['container_dwell_days'].std(), 2),
+        "max_container_dwell_days": round(df_ind_import['container_dwell_days'].max(), 2),
+        "mean_container_dwell_hours": round(df_ind_import['container_dwell_hours'].mean(), 2),
+        "median_container_dwell_hours": round(df_ind_import['container_dwell_hours'].median(), 2),
+        "std_container_dwell_hours": round(df_ind_import['container_dwell_hours'].std(), 2),
+        "max_container_dwell_hours": round(df_ind_import['container_dwell_hours'].max(), 2)
+    }
+    
+    ind_export_summary = {
+        "benchmark_source": "Indian Major Ports DGQI Logistics Dwell (Export)",
+        "native_temporal_resolution": "Monthly",
+        "entity_count": df_ind_export['port_name_clean'].nunique(),
+        "total_records": len(df_ind_export),
+        "temporal_span": ind_temporal_span,
+        "mean_turnaround_time_hours": np.nan,
+        "median_turnaround_time_hours": np.nan,
+        "std_turnaround_time_hours": np.nan,
+        "p90_turnaround_time_hours": np.nan,
+        "max_turnaround_time_hours": np.nan,
+        "mean_waiting_time_hours": np.nan,
+        "mean_service_time_hours": np.nan,
+        "waiting_to_service_ratio": np.nan,
+        "mean_weekly_vessel_calls": np.nan,
+        "mean_container_dwell_days": round(df_ind_export['container_dwell_days'].mean(), 2),
+        "median_container_dwell_days": round(df_ind_export['container_dwell_days'].median(), 2),
+        "std_container_dwell_days": round(df_ind_export['container_dwell_days'].std(), 2),
+        "max_container_dwell_days": round(df_ind_export['container_dwell_days'].max(), 2),
+        "mean_container_dwell_hours": round(df_ind_export['container_dwell_hours'].mean(), 2),
+        "median_container_dwell_hours": round(df_ind_export['container_dwell_hours'].median(), 2),
+        "std_container_dwell_hours": round(df_ind_export['container_dwell_hours'].std(), 2),
+        "max_container_dwell_hours": round(df_ind_export['container_dwell_hours'].max(), 2)
+    }
+    
+    ind_regional_summary = {
+        "benchmark_source": "Indian Major Ports DGQI Logistics Dwell (Regional Averages)",
+        "native_temporal_resolution": "Monthly",
+        "entity_count": df_ind_regions['port_name_clean'].nunique(),
+        "total_records": len(df_ind_regions),
+        "temporal_span": ind_temporal_span,
+        "mean_turnaround_time_hours": np.nan,
+        "median_turnaround_time_hours": np.nan,
+        "std_turnaround_time_hours": np.nan,
+        "p90_turnaround_time_hours": np.nan,
+        "max_turnaround_time_hours": np.nan,
+        "mean_waiting_time_hours": np.nan,
+        "mean_service_time_hours": np.nan,
+        "waiting_to_service_ratio": np.nan,
+        "mean_weekly_vessel_calls": np.nan,
+        "mean_container_dwell_days": round(df_ind_regions['container_dwell_days'].mean(), 2),
+        "median_container_dwell_days": round(df_ind_regions['container_dwell_days'].median(), 2),
+        "std_container_dwell_days": round(df_ind_regions['container_dwell_days'].std(), 2),
+        "max_container_dwell_days": round(df_ind_regions['container_dwell_days'].max(), 2),
+        "mean_container_dwell_hours": round(df_ind_regions['container_dwell_hours'].mean(), 2),
+        "median_container_dwell_hours": round(df_ind_regions['container_dwell_hours'].median(), 2),
+        "std_container_dwell_hours": round(df_ind_regions['container_dwell_hours'].std(), 2),
+        "max_container_dwell_hours": round(df_ind_regions['container_dwell_hours'].max(), 2)
+    }
+    
+    df_bench_combined = pd.DataFrame([adb_summary, ind_pooled_summary, ind_import_summary, ind_export_summary, ind_regional_summary])
     df_bench_combined.to_csv(TABLES_DIR / "07_native_resolution_benchmarks.csv", index=False)
     print("✅ Saved tables/07_native_resolution_benchmarks.csv")
     
@@ -569,14 +667,23 @@ def step7_generate_visualizations(df_panel, monthly_trend, dow, monthly, df_na_e
     ax1.grid(True, linestyle="--", alpha=0.5)
     ax1.legend()
     
-    ax2.hist(df_ind['container_dwell_days'], bins=25, color="#ff7f0e", edgecolor="black", alpha=0.7)
-    ax2.axvline(df_ind['container_dwell_days'].mean(), color="red", linestyle="--", label=f"Mean: {df_ind['container_dwell_days'].mean():.2f}d ({df_ind['container_dwell_hours'].mean():.1f}h)")
-    ax2.axvline(df_ind['container_dwell_days'].median(), color="green", linestyle="-", label=f"Median: {df_ind['container_dwell_days'].median():.2f}d")
-    ax2.set_title("Indian Major Ports Monthly Container Dwell\n(363 Port-Months, DGQI Benchmark)", fontsize=11, fontweight="bold")
+    # Commercial ports only (excluding regional summary rows) segmented by trade direction
+    df_ind_ports = df_ind[df_ind['is_regional_average'] == False]
+    df_ind_import = df_ind_ports[df_ind_ports['trade_direction'] == 'Import']
+    df_ind_export = df_ind_ports[df_ind_ports['trade_direction'] == 'Export']
+    
+    bins_ind = np.linspace(0, 14, 29)
+    ax2.hist(df_ind_import['container_dwell_days'], bins=bins_ind, alpha=0.6, color="#2ca02c", edgecolor="black",
+             label=f"Import ({len(df_ind_import)} mos, Mean: {df_ind_import['container_dwell_days'].mean():.2f}d / {df_ind_import['container_dwell_hours'].mean():.1f}h)")
+    ax2.hist(df_ind_export['container_dwell_days'], bins=bins_ind, alpha=0.6, color="#ff7f0e", edgecolor="black",
+             label=f"Export ({len(df_ind_export)} mos, Mean: {df_ind_export['container_dwell_days'].mean():.2f}d / {df_ind_export['container_dwell_hours'].mean():.1f}h)")
+    ax2.axvline(df_ind_ports['container_dwell_days'].mean(), color="black", linestyle="--", linewidth=1.5,
+                label=f"Pooled Mean: {df_ind_ports['container_dwell_days'].mean():.2f}d ({df_ind_ports['container_dwell_hours'].mean():.1f}h)")
+    ax2.set_title(f"Indian Major Ports Monthly Container Dwell (2020)\n({len(df_ind_ports)} Port-Months across {df_ind_ports['port_name_clean'].nunique()} Ports, DGQI Benchmark)", fontsize=11, fontweight="bold")
     ax2.set_xlabel("Container Dwell Time (Days)", fontsize=10)
     ax2.set_ylabel("Frequency", fontsize=10)
     ax2.grid(True, linestyle="--", alpha=0.5)
-    ax2.legend()
+    ax2.legend(fontsize=9)
     
     plt.suptitle("Figure 06: Empirical Cross-Resolution Macro Dwell & Turnaround Benchmarks", fontsize=13, fontweight="bold", y=0.98)
     plt.tight_layout()
@@ -676,9 +783,13 @@ def write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_re
         f.write("5. NATIVE-RESOLUTION MACRO BENCHMARKS\n")
         f.write("--------------------------------------------------------------------------------\n")
         adb_r = df_bench[df_bench['benchmark_source'].str.contains("ADB")].iloc[0]
-        ind_r = df_bench[df_bench['benchmark_source'].str.contains("Indian")].iloc[0]
+        ind_pool = df_bench[df_bench['benchmark_source'].str.contains("Pooled")].iloc[0]
+        ind_imp = df_bench[df_bench['benchmark_source'].str.contains("Import")].iloc[0]
+        ind_exp = df_bench[df_bench['benchmark_source'].str.contains("Export")].iloc[0]
         f.write(f"ADB Weekly Turnaround:  Mean: {adb_r['mean_turnaround_time_hours']:.1f}h | Waiting: {adb_r['mean_waiting_time_hours']:.1f}h | Service: {adb_r['mean_service_time_hours']:.1f}h\n")
-        f.write(f"Indian Monthly Dwell:   Mean: {ind_r['mean_container_dwell_days']:.2f} days ({ind_r['mean_container_dwell_hours']:.1f}h) | Median: {ind_r['median_container_dwell_days']:.2f} days\n")
+        f.write(f"Indian Monthly Dwell:   Pooled ({ind_pool['entity_count']} ports, {ind_pool['temporal_span']}): Mean: {ind_pool['mean_container_dwell_days']:.2f} days ({ind_pool['mean_container_dwell_hours']:.1f}h) | Median: {ind_pool['median_container_dwell_days']:.2f} days\n")
+        f.write(f"                        Import ({ind_imp['entity_count']} ports): Mean: {ind_imp['mean_container_dwell_days']:.2f} days ({ind_imp['mean_container_dwell_hours']:.1f}h)\n")
+        f.write(f"                        Export ({ind_exp['entity_count']} ports): Mean: {ind_exp['mean_container_dwell_days']:.2f} days ({ind_exp['mean_container_dwell_hours']:.1f}h)\n")
         f.write("Ground-Truth Reality:   Continuous daily port-level dwell is unsupported by public datasets.\n")
         f.write("                        Models must forecast daily throughput targets; benchmarks serve macro calibration.\n\n")
         
@@ -771,7 +882,7 @@ def write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_re
         f.write(f"- **Node Inventory (251,646 nodes):** {na_r['rail_junction_nodes']:,} freight rail junctions, {na_r['intermodal_facility_nodes']:,} intermodal ramp terminals, and {na_r['deepwater_port_gateways']:,} deepwater port complexes.\n")
         f.write(f"- **Edge Inventory (303,016 edges):** {na_r['physical_rail_lines']:,} physical rail track segments and {na_r['intermodal_drayage_connectors']:,} port-to-intermodal drayage connectors within 50 km.\n")
         f.write(f"- **Class I Railroad Operators:** Canadian National (CN: 42,479 lines), Union Pacific (UP: 42,446 lines), BNSF (35,108 lines), CPKC (29,287 lines), CSX (28,458 lines), and Norfolk Southern (NS: 27,841 lines).\n")
-        f.write(f"- **Distance Metrics:** Mean rail segment length is 1.41 km (median: 0.38 km, P95: 5.56 km).\n\n")
+        f.write(f"- **Distance Metrics:** Mean rail segment length is {na_r['mean_edge_distance_km']:.2f} km (median: {na_r['median_edge_distance_km']:.2f} km, P95: {na_r['p95_edge_distance_km']:.2f} km).\n\n")
         
         f.write("### 5.2 Caribbean Regional Maritime Graph (`caribbean_graph_*.parquet`)\n")
         f.write(f"- **Node Inventory (528 nodes):** 528 commercial seaports across 38 territories, anchored by 18 canonical PortWatch gateways.\n")
@@ -780,10 +891,14 @@ def write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_re
         
         f.write("---\n\n")
         f.write("## 6. Native-Resolution Empirical Benchmarks\n\n")
-        f.write("| Benchmark Dataset | Native Resolution | Entities | Total Records | Key Observed Metrics | Operational Finding |\n")
-        f.write("| :--- | :---: | :---: | :---: | :--- | :--- |\n")
-        f.write(f"| **ADB Weekly Port Traffic** | Weekly | {adb_r['entity_count']} ports | {adb_r['total_records']:,} | Turnaround: {adb_r['mean_turnaround_time_hours']:.1f}h (std: {adb_r['std_turnaround_time_hours']:.1f}h), Waiting: {adb_r['mean_waiting_time_hours']:.1f}h, Service: {adb_r['mean_service_time_hours']:.1f}h | Anchorage waiting time accounts for **28.9%** of total port turnaround time. |\n")
-        f.write(f"| **Indian Major Ports Dwell** | Monthly | {ind_r['entity_count']} ports | {ind_r['total_records']:,} | Cargo Dwell: {ind_r['mean_container_dwell_days']:.2f} days ({ind_r['mean_container_dwell_hours']:.1f}h, max: {ind_r['max_container_dwell_days']:.2f} days) | Landside/customs dwell exhibits substantial regional variation across port complexes. |\n\n")
+        f.write("| Benchmark Dataset | Native Resolution | Entities | Total Records | Temporal Coverage | Key Observed Metrics | Operational Finding |\n")
+        f.write("| :--- | :---: | :---: | :---: | :---: | :--- | :--- |\n")
+        f.write(f"| **ADB Weekly Port Traffic** | Weekly | {adb_r['entity_count']} ports | {adb_r['total_records']:,} | {adb_r['temporal_span']} | Turnaround: {adb_r['mean_turnaround_time_hours']:.1f}h (std: {adb_r['std_turnaround_time_hours']:.1f}h), Waiting: {adb_r['mean_waiting_time_hours']:.1f}h, Service: {adb_r['mean_service_time_hours']:.1f}h | Anchorage waiting time accounts for **{adb_r['mean_waiting_time_hours']/adb_r['mean_turnaround_time_hours']*100:.1f}%** of total port turnaround time. |\n")
+        f.write(f"| **Indian Major Ports Dwell (Pooled)** | Monthly | {ind_pool['entity_count']} ports | {ind_pool['total_records']:,} | {ind_pool['temporal_span']} | Cargo Dwell: {ind_pool['mean_container_dwell_days']:.2f} days ({ind_pool['mean_container_dwell_hours']:.1f}h, max: {ind_pool['max_container_dwell_days']:.2f} days) | Landside/customs dwell across 13 major commercial ports in calendar year 2020. |\n")
+        f.write(f"| **Indian Major Ports Dwell (Import)** | Monthly | {ind_imp['entity_count']} ports | {ind_imp['total_records']:,} | {ind_imp['temporal_span']} | Import Dwell: {ind_imp['mean_container_dwell_days']:.2f} days ({ind_imp['mean_container_dwell_hours']:.1f}h, max: {ind_imp['max_container_dwell_days']:.2f} days) | Rapid evacuation under Direct Port Delivery (DPD) protocols. |\n")
+        f.write(f"| **Indian Major Ports Dwell (Export)** | Monthly | {ind_exp['entity_count']} ports | {ind_exp['total_records']:,} | {ind_exp['temporal_span']} | Export Dwell: {ind_exp['mean_container_dwell_days']:.2f} days ({ind_exp['mean_container_dwell_hours']:.1f}h, max: {ind_exp['max_container_dwell_days']:.2f} days) | Substantially longer dwell (+{ind_exp['mean_container_dwell_hours'] - ind_imp['mean_container_dwell_hours']:.1f}h / {ind_exp['mean_container_dwell_hours']/ind_imp['mean_container_dwell_hours']:.2f}x) due to export buffer staging. |\n\n")
+        f.write("> [!NOTE]\n")
+        f.write(f"> **DGQI Data Governance & Integrity:** All 363 observations in the source dataset belong strictly to calendar year **{ind_pool['temporal_span']}**. Regional summary rows (72 observations across 3 regions) were excluded from port-level aggregate calculations to prevent double-counting. Export container dwell exhibits a **{ind_exp['mean_container_dwell_hours']/ind_imp['mean_container_dwell_hours']:.2f}x** ratio relative to import dwell, reflecting operational buffer times before vessel loading.\n\n")
         
         f.write("---\n\n")
         f.write("## 7. Sequence Partitioning & Chronological Stability ($L=30, H=7$)\n\n")
@@ -793,8 +908,10 @@ def write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_re
         for _, r in df_split.iterrows():
             f.write(f"| **{r['split_partition']}** | {r['sequence_count']:,} | {r['share_pct']:.2f}% | {r['reference_date_start']} to {r['reference_date_end']} | Ends {r['target_window_end']} | {r['target_mean']:.2f} | **{r['psi_vs_train']:.4f}** |\n")
         f.write("\n")
+        val_psi = df_split[df_split['split_partition'] == 'VAL']['psi_vs_train'].iloc[0]
+        test_psi = df_split[df_split['split_partition'] == 'TEST']['psi_vs_train'].iloc[0]
         f.write("> [!NOTE]\n")
-        f.write("> **Strict Leakage Quarantine:** Exactly **24,780 candidate boundary-crossing sequences** were pruned by Data Engineering. Target distribution stability is confirmed by near-zero PSI values ($\text{PSI}_{\text{Val}} = 0.0028$, $\text{PSI}_{\text{Test}} = 0.0016$), verifying that the holdout test partition reflects production operational conditions without artificial domain shift.\n\n")
+        f.write(f"> **Strict Leakage Quarantine:** Exactly **24,780 candidate boundary-crossing sequences** were pruned by Data Engineering. Target distribution stability is confirmed by near-zero PSI values ($\\text{{PSI}}_{{\\text{{Val}}}} = {val_psi:.4f}$, $\\text{{PSI}}_{{\\text{{Test}}}} = {test_psi:.4f}$), verifying that the holdout test partition reflects production operational conditions without artificial domain shift.\n\n")
         
         f.write("---\n\n")
         f.write("## 8. Concrete Handoff Guidelines for Deep Learning & GNN Engineers\n\n")
