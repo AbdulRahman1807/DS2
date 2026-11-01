@@ -1,0 +1,3 @@
+benchmark_source,native_temporal_resolution,entity_count,total_records,temporal_span,mean_turnaround_time_hours,median_turnaround_time_hours,std_turnaround_time_hours,p90_turnaround_time_hours,max_turnaround_time_hours,mean_waiting_time_hours,mean_service_time_hours,waiting_to_service_ratio,mean_weekly_vessel_calls,mean_container_dwell_days,median_container_dwell_days,std_container_dwell_days,max_container_dwell_days,mean_container_dwell_hours,median_container_dwell_hours,std_container_dwell_hours,max_container_dwell_hours
+ADB Weekly AIS Port Operations,Weekly,19,3990,2019 - 2022,43.94,38.0,28.01,67.0,306.0,12.69,31.25,0.406,179.0,,,,,,,,
+Indian Major Ports DGQI Logistics Dwell,Monthly,16,363,2021 - 2023,,,,,,,,,,3.35,3.19,1.84,12.83,80.34,76.6,44.13,308.0

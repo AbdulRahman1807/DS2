@@ -1,0 +1,2 @@
+total_nodes,rail_junction_nodes,intermodal_facility_nodes,deepwater_port_gateways,total_edges,physical_rail_lines,intermodal_drayage_connectors,mean_edge_distance_km,median_edge_distance_km,p95_edge_distance_km,max_edge_distance_km,top_class1_operators
+251646,250204,1401,41,303016,302774,242,1.41,0.38,6.82,1554.1,"CN: 42,479; UP: 42,446; BNSF: 35,108; CPKC: 29,287; CSXT: 28,458"
