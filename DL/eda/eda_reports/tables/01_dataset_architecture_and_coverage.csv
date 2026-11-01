@@ -1,0 +1,2 @@
+dataset_name,total_records,total_columns,commercial_seaports,sovereign_countries,temporal_start_date,temporal_end_date,panel_balance,era5_spatial_coverage_pct,noaa_spatial_coverage_pct,bts_capacity_coverage_pct,emdat_disaster_coverage_pct
+Primary Unified Daily Panel (port_daily_unified.parquet),5280205,91,2065,180,2019-01-01,2025-12-31,"100% Balanced (Exactly 2,557 days per port)",0.24,2.71,1.74,97.24

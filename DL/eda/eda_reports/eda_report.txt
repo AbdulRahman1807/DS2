@@ -1,0 +1,64 @@
+================================================================================
+STAGE 02 DEEP LEARNING EXPLORATORY DATA ANALYSIS (EDA) REPORT
+Project: AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks
+================================================================================
+
+1. PRIMARY DATASET ARCHITECTURE & COVERAGE
+--------------------------------------------------------------------------------
+Primary Table:         DL/data/.../unified_temporal/port_daily_unified.parquet
+Total Records:         5,280,205 rows across 91 columns
+Entity Coverage:       2,065 commercial seaports across 180 countries
+Temporal Extent:       2019-01-01 to 2025-12-31 (7 contiguous calendar years)
+Panel Balance:         100% Balanced (Exactly 2,557 days per port)
+Exogenous Coverage:    ERA5: 0.24% | NOAA: 2.71% | BTS: 1.74% | EM-DAT: 97.24%
+
+2. SUPERVISED FORECASTING TARGET METRICS (L=30, H=7)
+--------------------------------------------------------------------------------
+Primary Target:        target_portcalls_7d_future_sum (Cumulative 7-day vessel calls)
+Target Observations:   5,265,750 valid (14,455 terminal boundary nulls)
+Mean: 16.95 | Std: 44.66 | Median: 5.00 | IQR: 15.00
+Min: 0.0 | P90: 39.0 | P95: 70.0 | Max: 1188.0
+Skewness:              +9.53 (Heavy right-skewed tail)
+Kurtosis:              +137.68
+Zero-Inflation:        18.74%
+
+3. 7-YEAR TEMPORAL TRENDS, COVID SHOCK & BOTTLENECK CRISIS
+--------------------------------------------------------------------------------
+Year    Global Calls    Container Calls    Tonnage (Short Tons)    YoY Calls %
+---------------------------------------------------------------------------
+2019    1,786,836       463,206            16.09                  B BASELINE
+2020    1,746,560       451,403            15.97                  B -2.25%
+2021    1,798,765       441,129            16.76                  B +2.99%
+2022    1,858,163       453,261            16.85                  B +3.30%
+2023    1,886,743       494,631            17.03                  B +1.54%
+2024    1,878,439       486,302            17.56                  B -0.44%
+2025    1,828,397       483,439            17.50                  B -2.66%
+Key Finding: Global vessel traffic dropped -2.25% in 2020 during the COVID-19 pandemic shock,
+followed by sharp volume surges during the 2021-2022 supply chain bottleneck crisis (+2.98% in 2021).
+
+4. SPATIAL GRAPH NETWORKS (HINTERLAND & CARIBBEAN)
+--------------------------------------------------------------------------------
+North American Network: 251,646 nodes | 303,016 edges
+  • Rail Junctions: 250,204 | Intermodals: 1,401 | Seaports: 41
+  • Rail Lines: 302,774 | Drayage Connectors: 242
+Caribbean Network:      528 nodes | 9,969 directed shipping lanes
+  • Canonical Gateways: 528 | Total Observed Voyages: 298,804
+
+5. NATIVE-RESOLUTION MACRO BENCHMARKS
+--------------------------------------------------------------------------------
+ADB Weekly Turnaround:  Mean: 43.9h | Waiting: 12.7h | Service: 31.2h
+Indian Monthly Dwell:   Pooled (13 ports, 2020): Mean: 3.44 days (82.5h) | Median: 3.20 days
+                        Import (13 ports): Mean: 2.75 days (66.1h)
+                        Export (12 ports): Mean: 4.23 days (101.4h)
+Ground-Truth Reality:   Continuous daily port-level dwell is unsupported by public datasets.
+                        Models must forecast daily throughput targets; benchmarks serve macro calibration.
+
+6. SEQUENCE PARTITIONS & CHRONOLOGICAL QUARANTINE (L=30, H=7)
+--------------------------------------------------------------------------------
+Partition    Sequences      Share %    Reference Dates             Target Mean    PSI vs Train
+-------------------------------------------------------------------------------------
+TRAIN        3,696,350      71.34      2019-01-30 to 2023-12-24   16.87          0.0000
+VAL          743,400        14.35      2023-12-31 to 2024-12-24   17.43          0.0008
+TEST         741,335        14.31      2024-12-31 to 2025-12-24   17.02          0.0008
+Boundary Quarantine: Exactly 24,780 boundary-crossing sequences pruned to ensure strict temporal quarantine.
+================================================================================

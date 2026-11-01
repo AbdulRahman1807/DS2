@@ -1,0 +1,21 @@
+portwatch_id,portwatch_name,country_name,portcalls,portcalls_container,total_cargo_tonnage
+port1201,Singapore,Singapore,310936,97384,3.4148137e+09
+port1188,Shanghai,China,288452,84686,3.4889526e+09
+port1114,Rotterdam,The Netherlands,228035,49262,1.2217344e+09
+port57,Antwerp,Belgium,159468,32175,1.273133e+09
+port1065,Busan,Korea,142735,84675,9.599637e+08
+port824,Ningbo,China,129570,72464,3.5417766e+09
+port786,Nagoya,Japan,114380,25956,3.8737446e+08
+port474,Hong Kong,Hong Kong SAR,114108,91510,1.4098493e+09
+port1417,Yokohama,Japan,101144,33748,2.9433994e+08
+port752,Mizushima,Japan,96567,4538,2.0534267e+08
+port239,Chiba,Japan,94931,1181,1.164722e+08
+port541,Kaohsiung,Taiwan Province of China,91466,52293,1.1444737e+09
+port1338,Ulsan,Korea,82704,7997,1.0607042e+08
+port1297,Tianjin Xin Gang,China,81842,26220,3.133147e+09
+port1069,Qingdao Port,China,79933,50857,2.7992448e+09
+port960,Port Klang,Malaysia,78965,49972,5.658783e+08
+port581,Kobe,Japan,75360,28835,2.561865e+08
+port1128,Sakai-Semboku,Japan,70051,697,2.533554e+07
+port425,Guangzhou (Nansha),China,67720,38692,4.6394733e+08
+port432,Gwangyang (Kwangyang),Korea,67280,14289,4.9200054e+08
