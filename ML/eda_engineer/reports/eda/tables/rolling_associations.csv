@@ -1,0 +1,5 @@
+prior_departure_metric,daily_dwell_metric,n_call_dates,spearman_rho,p_value_descriptive
+trailing_7d_volume,dwell_p50_h,65,-0.4718,7.261792239634962e-05
+trailing_7d_volume,dwell_p85_h,65,-0.3826,0.0016593863877852491
+trailing_7d_delay_rate,dwell_p50_h,65,0.3784,0.0018829822857349967
+trailing_7d_delay_rate,dwell_p85_h,65,0.3346,0.00644868128898002

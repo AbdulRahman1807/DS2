@@ -1,0 +1,7 @@
+node_id,node_type,total_records,start_time,end_time,duplicates,gaps_count,hourly_regular,missing_values
+DC_US_MW_JOLIET,Distribution Center,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0
+PORT_CN_SHA,Origin Seaport,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0
+PORT_US_LAX,Gateway Seaport,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0
+PORT_US_LGB,Gateway Seaport,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0
+PORT_US_OAK,Gateway Seaport,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0
+RAIL_US_CHI_BNSF,Intermodal Rail Hub,3635,2024-01-01 00:00:00,2024-05-31 10:00:00,0,0,True,0

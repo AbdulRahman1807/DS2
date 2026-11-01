@@ -1,0 +1,21 @@
+feature,kind,constant_in_train,psi_val,ks_val,psi_test,ks_test,max_psi,association,note,availability,recommendation
+trailing_7d_mean_dwell,numeric,False,5.4532,0.6473,5.1901,0.6835,5.4532,0.0445,Spearman rho vs dwell,at arrival,KEEP with care: unstable (PSI>0.25)
+trailing_7d_at_risk,numeric,False,5.1842,0.4675,4.2445,0.4675,5.1842,0.0075,Spearman rho vs dwell,at arrival,KEEP with care: unstable (PSI>0.25)
+trailing_7d_volume,numeric,False,4.8255,0.6798,3.664,0.3491,4.8255,-0.1567,Spearman rho vs dwell,at arrival,KEEP with care: unstable (PSI>0.25)
+historical_delay_rate_7d,numeric,False,4.6975,0.5919,3.5136,0.4733,4.6975,0.0823,Spearman rho vs dwell,at arrival,KEEP with care: unstable (PSI>0.25)
+trailing_7d_critical,numeric,False,3.8605,0.3647,4.6556,0.4669,4.6556,-0.1543,Spearman rho vs dwell,at arrival,KEEP with care: unstable (PSI>0.25)
+YARD_BLOCK,categorical,False,0.1796,,0.2565,,0.2565,0.0494,Kruskal epsilon^2 vs dwell,at discharge (TOS sign-off pending),HOLD: confirm availability at t_discharge with TOS owner
+discharge_day_of_week,numeric,False,0.1238,0.1403,0.1221,0.1618,0.1238,0.0902,Spearman rho vs dwell,at arrival,KEEP
+is_weekend,numeric,False,0.0871,0.1403,0.0225,0.0698,0.0871,0.1533,Spearman rho vs dwell,at arrival,KEEP
+JOB_DEL_DOCTYPE,categorical,False,0.0281,,0.0247,,0.0281,0.0082,Kruskal epsilon^2 vs dwell,post-arrival,MASK for arrival-time model
+discharge_hour,numeric,False,0.0231,0.0417,0.0184,0.0511,0.0231,0.0061,Spearman rho vs dwell,at arrival,KEEP
+carrier_prefix,categorical,False,0.0195,,0.0119,,0.0195,0.0465,Kruskal epsilon^2 vs dwell,at arrival,KEEP
+GROSS,numeric,False,0.0179,0.0473,0.018,0.048,0.018,-0.0276,Spearman rho vs dwell,at discharge (TOS sign-off pending),HOLD: confirm availability at t_discharge with TOS owner
+CTR_TYPE,categorical,False,0.013,,0.0008,,0.013,0.0499,Kruskal epsilon^2 vs dwell,at arrival,KEEP
+has_red_flag_pib,numeric,False,0.0002,0.0031,0.0093,0.0203,0.0093,0.1414,Spearman rho vs dwell,conditional,HOLD: use timestamped as-of-discharge value only
+CTR_SIZE,numeric,False,0.009,0.0473,0.0015,0.0193,0.009,-0.1639,Spearman rho vs dwell,at arrival,KEEP
+total_events_in_stay,numeric,False,0.0072,0.0217,0.0047,0.0347,0.0072,0.1378,Spearman rho vs dwell,post-arrival,MASK for arrival-time model
+has_behandle_inspection,numeric,False,0.0,0.0013,0.0052,0.0136,0.0052,0.1527,Spearman rho vs dwell,post-arrival,MASK for arrival-time model
+has_quarantine_flag,numeric,False,0.0001,0.0047,0.0009,0.0138,0.0009,0.0796,Spearman rho vs dwell,conditional,HOLD: use timestamped as-of-discharge value only
+weather_severity_index,numeric,True,0.0,0.0,0.0,0.0,0.0,,Spearman rho vs dwell,excluded (unverified weather feed),EXCLUDE: external weather/disruption signal is unverified
+has_active_disruption,numeric,True,0.0,0.0,0.0,0.0,0.0,,Spearman rho vs dwell,excluded (unverified weather feed),EXCLUDE: external weather/disruption signal is unverified

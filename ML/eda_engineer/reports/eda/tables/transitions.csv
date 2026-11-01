@@ -1,0 +1,6 @@
+transition,paired_cases,nonnegative_pair_cases,complete_ordered_trajectories,complete_trajectory_share_pct,median_hours,p85_hours,p95_hours,cumulative_median_hours,cumulative_p85_hours
+BAPLIE -> DISCHARGE,95644,95644,55645,58.18,28.06,43.38,55.59,28.06,43.38
+DISCHARGE -> STACK,95624,94756,55645,58.18,1.24,1.62,2.03,29.15,44.54
+STACK -> CUSTOMS_DEL,95618,56541,55645,58.18,36.72,112.13,213.69,71.55,145.51
+CUSTOMS_DEL -> UNSTACK_TO_TRUCK,95530,95089,55645,58.18,33.69,74.88,116.27,113.91,210.57
+UNSTACK_TO_TRUCK -> TRUCK_OUT,95536,95536,55645,58.18,1.49,1.58,1.63,115.35,211.97

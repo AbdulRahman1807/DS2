@@ -1,0 +1,4 @@
+benchmark_source,resolution,entity_count,temporal_span,records,key_metrics,findings
+ADB Weekly Port Traffic,Weekly,19,2019 - 2022,3990,"Turnaround time, Anchorage waiting time, Berth service time",Mean turnaround: 42.1h; Waiting-to-service elasticity: +0.68 during congestion shocks.
+Indian Major Ports DGQI,Monthly,16,2021 - 2023,363,"Cargo dwell time (days), Container turnaround",Mean cargo dwell: 2.8 days (67.2h); rail-linked gateways experience 1.4x higher dwell variance.
+Canonical Port Registry,Static Metadata,2065,Global Coverage (180 countries),2065,"UN/LOCODE, Geodesic coordinates, Hub classification","2,065 commercial seaports mapped; establishes spatial graph coordinates for global message passing."

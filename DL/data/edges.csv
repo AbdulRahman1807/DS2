@@ -1,0 +1,11 @@
+source,target,corridor,distance_nm,base_transit_h,directed
+PORT_CN_SHA,PORT_US_LAX,Transpacific Primary Lane,5700,336,True
+PORT_CN_SHA,PORT_US_LGB,Transpacific Secondary Lane,5710,336,True
+PORT_CN_SHA,PORT_US_OAK,Transpacific Northern Feeder,5400,312,True
+PORT_CN_SHA,RAIL_US_CHI_BNSF,Transpacific Intermodal Route,7200,432,True
+PORT_CN_SHA,DC_US_MW_JOLIET,Transpacific Direct Overland,7250,456,True
+PORT_US_LAX,PORT_US_LGB,San Pedro Bay Overspill/Drayage,5,4,False
+PORT_US_LAX,PORT_US_OAK,US West Coast Coastal Feeder,360,24,False
+PORT_US_OAK,RAIL_US_CHI_BNSF,Central Corridor Overland Rail,1950,78,False
+PORT_US_OAK,DC_US_MW_JOLIET,Midwest Intermodal Drayage,2000,84,False
+PORT_US_OAK,PORT_US_LAX,Southbound Coastal Feeder Return,360,24,True

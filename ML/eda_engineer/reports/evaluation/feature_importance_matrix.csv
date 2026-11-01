@@ -1,0 +1,16 @@
+feature_name,permutation_importance_mean,permutation_importance_std
+GROSS,0.025321,0.00093
+CTR_SIZE,0.015899,0.00094
+trailing_7d_mean_dwell,0.011342,0.000398
+discharge_hour,0.009408,0.000469
+CTR_TYPE,0.005021,0.000386
+discharge_day_of_week,0.004529,0.000461
+trailing_7d_volume,0.004221,0.000244
+carrier_prefix,0.001835,0.00016
+trailing_7d_critical,0.001365,0.000262
+is_weekend,0.001049,0.000165
+YARD_BLOCK,0.0,0.0
+trailing_7d_at_risk,-0.000311,0.000151
+YARD_SLOT,-0.000664,0.000207
+discharge_month,-0.001059,0.000146
+historical_delay_rate_7d,-0.003617,0.000286

@@ -1,0 +1,4 @@
+scope,n,p50_h,p85_h,note
+train (as built),60698,65.11,160.9,label cutoffs in use: p50=65.11h p85=160.90h
+"clean band, all splits",77364,57.97,146.79,label cutoffs in use: p50=65.11h p85=160.90h
+"clean band, train only",56276,64.42,159.12,label cutoffs in use: p50=65.11h p85=160.90h

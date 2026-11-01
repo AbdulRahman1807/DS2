@@ -1,0 +1,13 @@
+metric,count
+total_events,952069
+distinct_cases_events,95648
+distinct_activities,20
+distinct_containers_events,95567
+distinct_carriers_events,390
+total_reconstructed_cases,95647
+distinct_containers_cases,95566
+cases_train,60698
+cases_val,20879
+cases_test,13959
+cases_repeated_eval,73
+cases_burn_in,38

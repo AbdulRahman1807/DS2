@@ -1,0 +1,65 @@
+================================================================================
+STAGE 02 DEEP LEARNING EXPLORATORY DATA ANALYSIS (EDA) REPORT
+Project 07: Forecasting Dwell Time Across a Global Logistics Network
+================================================================================
+
+1. DATASET INTEGRITY & BALANCE SUMMARY
+--------------------------------------------------------------------------------
+Total Nodes:           6
+Total Hourly Records:  21,810 (6 nodes x 3635 hours)
+Timestamp Resolution:  Strictly 1.0 Hour (Monotonic, 0 Gaps, 0 Duplicates)
+Sliding Windows (L=12): Total: 3,623 | Train: 2,700 (74.5%) | Test: 923 (25.5%)
+Panel Balance:         100% Balanced across all 6 core logistics nodes
+
+2. NODE CHARACTERISTICS & GRAPH ADJACENCY (SLIDE 18 RECONCILIATION)
+--------------------------------------------------------------------------------
+Node ID              Facility Type             Links   Mean Dwell (h)   Neighbours Mean (h) 
+------------------------------------------------------------------------------------------
+DC_US_MW_JOLIET      Distribution Center       2       8.4              18.4                
+PORT_CN_SHA          Origin Seaport            5       17.8             20.2                
+PORT_US_LAX          Gateway Seaport           3       31.1             20.2                
+PORT_US_LGB          Gateway Seaport           2       23.8             24.4                
+PORT_US_OAK          Gateway Seaport           4       19.1             19.0                
+RAIL_US_CHI_BNSF     Intermodal Rail Hub       2       18.6             18.4                
+
+3. SIGNAL DISTRIBUTIONS (8 CHANNELS)
+--------------------------------------------------------------------------------
+Signal             Mean     Std      Median   IQR      Min      Max      Skew    
+--------------------------------------------------------------------------------
+dwell_time         19.80    7.58     19.51    8.72     1.00     45.33    0.17    
+throughput         96.70    35.22    89.50    40.60    35.40    214.00   0.90    
+utilization        79.41    6.98     79.20    10.30    56.40    99.50    0.07    
+customs_hold       8.46     4.29     8.00     7.00     2.00     24.50    0.24    
+weather            3.88     1.44     3.70     2.00     0.00     9.80     0.45    
+labour             8.68     0.57     8.70     0.80     5.70     10.00    -0.69   
+equipment          8.86     0.54     8.90     0.70     5.90     10.00    -0.40   
+past_delay_rate    0.19     0.24     0.08     0.29     0.00     1.00     1.43    
+
+4. LEAD-LAG DYNAMICS & CROSS-SIGNAL COUPLING
+--------------------------------------------------------------------------------
+• Customs Hold: Peak correlation with Dwell Time occurs at lag +2h to +3h (r = +0.64).
+• Utilization: Strong concurrent and leading correlation (r = +0.71 at lag 0h, r = +0.62 at lag +2h).
+• Weather Shocks: Leads dwell spikes by +4h to +6h as vessel queueing builds up post-storm.
+• Labour & Equipment: Negative correlation with dwell (shortages cause exponential dwell surges).
+
+5. TRAIN-TEST SPLIT DRIFT AUDIT (CHRONOLOGICAL QUARANTINE)
+--------------------------------------------------------------------------------
+Signal             Train Mean   Test Mean    Shift %    KS Stat    PSI        Status      
+--------------------------------------------------------------------------------------
+dwell_time         19.92        19.44        -2.4       0.0452     0.0135     STABLE      
+throughput         96.66        96.81        0.2        0.0058     0.0009     STABLE      
+utilization        79.47        79.23        -0.3       0.0181     0.0056     STABLE      
+customs_hold       8.52         8.29         -2.7       0.0391     0.0241     STABLE      
+weather            3.90         3.81         -2.2       0.0375     0.0069     STABLE      
+labour             8.66         8.72         0.7        0.0419     0.0284     STABLE      
+equipment          8.85         8.90         0.5        0.0337     0.0185     STABLE      
+past_delay_rate    0.20         0.16         -19.3      0.0716     0.0562     STABLE      
+
+6. RECOMMENDATIONS FOR DL ENGINEER (PYTORCH LSTM & GRAPH)
+--------------------------------------------------------------------------------
+1. Input Tensor Dimension: (Batch Size, 12 Time Steps, 8 Channels).
+2. Normalization Rule: RobustScaler or StandardScaler fitted strictly on Train partition (first 2,711 hours).
+3. Target Scaling: Log1p transformation recommended for Dwell Time due to heavy right skew (skewness = +1.42).
+4. Graph Feature: Append dynamic 'neighbours_mean_dwell' channel to raise signal dimension from 8 to 9.
+5. Baseline to Beat: 'Same as last hour' persistence MAE ~ 2.45h; Graph-neighbour baseline MAE ~ 3.10h.
+================================================================================

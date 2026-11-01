@@ -1,0 +1,7 @@
+split,scope,n,ON_TIME,AT_RISK,CRITICAL_DELAY
+test,all stays,13959,0.724,0.2484,0.0276
+train,all stays,60698,0.5,0.35,0.15
+val,all stays,20879,0.6654,0.261,0.0737
+test,clean band,179,0.7039,0.1676,0.1285
+train,clean band,56276,0.5047,0.3487,0.1466
+val,clean band,20879,0.6654,0.261,0.0737

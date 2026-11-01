@@ -1,0 +1,8 @@
+weekday,days,mean_stays,median_stays,zero_call_days
+Monday,16,830.7,797.0,1
+Tuesday,16,928.0,899.0,2
+Wednesday,16,1038.8,1234.5,1
+Thursday,17,467.2,177.0,3
+Friday,16,907.8,906.5,2
+Saturday,16,1203.4,1463.5,0
+Sunday,16,570.5,497.0,0

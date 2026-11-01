@@ -1,0 +1,7 @@
+column,overall,burn_in,repeated_eval,test,train,val
+CTR_SIZE,0.0,0.0,0.0,0.0,0.0,0.0
+CTR_TYPE,0.0,0.0,0.0,0.0,0.0,0.0
+GROSS,0.0,0.0,0.0,0.0,0.0,0.0
+YARD_BLOCK,0.025,0.0,0.0,0.057,0.015,0.034
+YARD_SLOT,0.253,0.0,0.0,0.186,0.259,0.283
+JOB_DEL_DOCTYPE,0.523,0.0,1.37,0.387,0.649,0.244

@@ -1,0 +1,8 @@
+discharge_weekday,stays,median_h,p85_h,pct_critical
+Monday,9280,61.7,148.7,13.8
+Tuesday,11352,50.6,160.9,15.0
+Wednesday,14020,48.2,155.4,14.2
+Thursday,6764,37.6,127.6,8.9
+Friday,10490,67.9,138.6,10.0
+Saturday,16350,71.7,146.9,12.0
+Sunday,9078,63.5,143.1,13.5
