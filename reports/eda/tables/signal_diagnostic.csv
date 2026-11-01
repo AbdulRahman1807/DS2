@@ -1,4 +1,10 @@
 feature,kind,association,n,note,eligibility_tier,arrival_eligible
 has_behandle_inspection,numeric,0.1527,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+has_red_flag_pib,numeric,0.1414,56276,Spearman rho vs dwell,CONDITIONAL_PRE_ARRIVAL,False
 total_events_in_stay,numeric,0.1378,56276,Spearman rho vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
-JOB_DEL_DOCTYPE,categorical,0.008,55894,Kruskal epsilon^2 vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+has_quarantine_flag,numeric,0.0796,56276,Spearman rho vs dwell,CONDITIONAL_PRE_ARRIVAL,False
+YARD_BLOCK,categorical,0.0494,56267,Kruskal epsilon^2 vs dwell,CONDITIONAL_AT_DISCHARGE,False
+GROSS,numeric,-0.0276,56276,Spearman rho vs dwell,CONDITIONAL_AT_DISCHARGE,False
+JOB_DEL_DOCTYPE,categorical,0.0082,55909,Kruskal epsilon^2 vs dwell,POST_DISCHARGE_DIAGNOSTIC,False
+weather_severity_index,numeric,,56276,Spearman rho vs dwell,EXCLUDED_UNVERIFIED_WEATHER,False
+has_active_disruption,numeric,,56276,Spearman rho vs dwell,EXCLUDED_UNVERIFIED_WEATHER,False

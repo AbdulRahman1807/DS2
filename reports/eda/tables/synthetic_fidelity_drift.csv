@@ -1,0 +1,4 @@
+feature,kind,psi_synthetic_vs_real,ks_stat,ks_p_value,fidelity_verdict
+gross_t,numeric,0.0028,0.0125,0.0028664230378546394,HIGH_FIDELITY
+CTR_SIZE,numeric,0.0051,0.0357,1.1200177403575345e-23,HIGH_FIDELITY
+dwell_hours,numeric,0.2224,0.1993,0.0,MODERATE_FIDELITY

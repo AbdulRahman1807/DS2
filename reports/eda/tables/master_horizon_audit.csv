@@ -1,0 +1,56 @@
+column,status_at_t_discharge,category,dtype,null_count,audit_note
+case_id,METADATA_ID,IDENTIFIER,object,0,Primary join key or entity identifier; exclude from model training.
+container_id,METADATA_ID,IDENTIFIER,object,0,Primary join key or entity identifier; exclude from model training.
+carrier_prefix,PASS_PRE_ARRIVAL,EQUIPMENT_MANIFEST,object,0,Manifest/BAPLIE attributes known prior to discharge.
+call_date,METADATA_ID,IDENTIFIER,object,0,Primary join key or entity identifier; exclude from model training.
+CTR_SIZE,PASS_PRE_ARRIVAL,EQUIPMENT_MANIFEST,float64,0,Manifest/BAPLIE attributes known prior to discharge.
+CTR_TYPE,PASS_PRE_ARRIVAL,EQUIPMENT_MANIFEST,object,0,Manifest/BAPLIE attributes known prior to discharge.
+GROSS,CONDITIONAL,EQUIPMENT_RAW,float64,0,Raw weight with mixed unit scales (kg vs tonnes); prefer gross_t.
+YARD_BLOCK,CONDITIONAL,YARD_LOCATION,object,24,Discrete yard location; initial vs final slot cannot be authoritatively separated.
+YARD_SLOT,CONDITIONAL,YARD_LOCATION,float64,242,Discrete yard location; initial vs final slot cannot be authoritatively separated.
+JOB_DEL_DOCTYPE,EXCLUDE_AT_DISCHARGE,ADMINISTRATIVE_MILESTONE,object,500,Delivery order issued mid-stay (+32.2h post-discharge); forbidden at discharge.
+discharge_start_ts,METADATA_ANCHOR,ANCHOR_TIMESTAMP,datetime64[ns],0,Primary prediction anchor (t_pred = t_discharge); used to calculate as-of offsets.
+truck_out_end_ts,TARGET_ONLY,MILESTONE_EXIT,datetime64[ns],0,Realized gate-out timestamp; forbidden in X.
+dwell_hours,TARGET_ONLY,TARGET,float64,0,Ground truth operational dwell outcome realized at gate-out; strictly forbidden in X.
+target_class,TARGET_ONLY,TARGET,int64,0,Ground truth operational dwell outcome realized at gate-out; strictly forbidden in X.
+vessel_call_id,METADATA_ID,IDENTIFIER,object,0,Primary join key or entity identifier; exclude from model training.
+avail_BAPLIE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],0,Defines exact observation timestamp for milestone BAPLIE; safe for as-of evaluation at t >= avail_BAPLIE.
+avail_VESSEL_ATB,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],0,Defines exact observation timestamp for milestone VESSEL_ATB; safe for as-of evaluation at t >= avail_VESSEL_ATB.
+avail_DISCHARGE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],0,Defines exact observation timestamp for milestone DISCHARGE; safe for as-of evaluation at t >= avail_DISCHARGE.
+avail_STACK,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],24,Defines exact observation timestamp for milestone STACK; safe for as-of evaluation at t >= avail_STACK.
+avail_HAS_QUARANTINE_FLAG,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],68707,Defines exact observation timestamp for milestone HAS_QUARANTINE_FLAG; safe for as-of evaluation at t >= avail_HAS_QUARANTINE_FLAG.
+avail_SP_RED_FLAG_PIB,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],90494,Defines exact observation timestamp for milestone SP_RED_FLAG_PIB; safe for as-of evaluation at t >= avail_SP_RED_FLAG_PIB.
+avail_FIRST_STACK_QUARANTINE_BLK,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],82008,Defines exact observation timestamp for milestone FIRST_STACK_QUARANTINE_BLK; safe for as-of evaluation at t >= avail_FIRST_STACK_QUARANTINE_BLK.
+avail_CUSTOMS_DEL,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],6,Defines exact observation timestamp for milestone CUSTOMS_DEL; safe for as-of evaluation at t >= avail_CUSTOMS_DEL.
+avail_QUARANTINE_RELEASE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],68707,Defines exact observation timestamp for milestone QUARANTINE_RELEASE; safe for as-of evaluation at t >= avail_QUARANTINE_RELEASE.
+avail_FIRST_JOB_CUSTOMS_BEHANDLE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],91724,Defines exact observation timestamp for milestone FIRST_JOB_CUSTOMS_BEHANDLE; safe for as-of evaluation at t >= avail_FIRST_JOB_CUSTOMS_BEHANDLE.
+avail_FIRST_STACK_BEHANDLE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],91616,Defines exact observation timestamp for milestone FIRST_STACK_BEHANDLE; safe for as-of evaluation at t >= avail_FIRST_STACK_BEHANDLE.
+avail_LAST_COMPLETE_BEHANDLE,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],91724,Defines exact observation timestamp for milestone LAST_COMPLETE_BEHANDLE; safe for as-of evaluation at t >= avail_LAST_COMPLETE_BEHANDLE.
+avail_STACK_MAIN_YARD,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],91804,Defines exact observation timestamp for milestone STACK_MAIN_YARD; safe for as-of evaluation at t >= avail_STACK_MAIN_YARD.
+avail_STACK_TRK_BF_MAIN_YARD,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],92697,Defines exact observation timestamp for milestone STACK_TRK_BF_MAIN_YARD; safe for as-of evaluation at t >= avail_STACK_TRK_BF_MAIN_YARD.
+avail_JOB_PLP,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],95142,Defines exact observation timestamp for milestone JOB_PLP; safe for as-of evaluation at t >= avail_JOB_PLP.
+avail_JOB_DEL,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],500,Defines exact observation timestamp for milestone JOB_DEL; safe for as-of evaluation at t >= avail_JOB_DEL.
+avail_TRUCK_IN,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],0,Defines exact observation timestamp for milestone TRUCK_IN; safe for as-of evaluation at t >= avail_TRUCK_IN.
+avail_UNSTACK_TO_TRUCK,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],107,Defines exact observation timestamp for milestone UNSTACK_TO_TRUCK; safe for as-of evaluation at t >= avail_UNSTACK_TO_TRUCK.
+avail_TRUCK_OUT,AVAILABLE_AT_AS_OF_TIMESTAMP,AS_OF_AVAILABILITY_TIMESTAMP,datetime64[ns],0,Defines exact observation timestamp for milestone TRUCK_OUT; safe for as-of evaluation at t >= avail_TRUCK_OUT.
+in_cohort,METADATA_PARTITION,COHORT_PARTITION,bool,0,"Defines selection-aware cohort (discharges July 1 - Sept 5, 2021) and holdout evaluation."
+source,METADATA_ID,IDENTIFIER,object,0,Primary join key or entity identifier; exclude from model training.
+is_synthetic,METADATA_PARTITION,COHORT_PARTITION,bool,0,"Defines selection-aware cohort (discharges July 1 - Sept 5, 2021) and holdout evaluation."
+gross_t,PASS_AT_DISCHARGE,EQUIPMENT_STANDARDIZED,float64,0,Corrected weight normalized to metric tonnes (values > 100 divided by 1000).
+gross_recorded_in_kg,PASS_AT_DISCHARGE,DATA_QUALITY_INDICATOR,bool,0,Indicator that original GROSS was recorded in kilograms (18.9% of stays).
+is_holdout_window,METADATA_PARTITION,COHORT_PARTITION,bool,0,"Defines selection-aware cohort (discharges July 1 - Sept 5, 2021) and holdout evaluation."
+synth_template_case_id,METADATA_SYNTHETIC,SYNTHETIC_PROVENANCE,object,95647,Tracks donor case IDs and latest donor discharge timestamp for causality filtering.
+synth_donor_case_ids,METADATA_SYNTHETIC,SYNTHETIC_PROVENANCE,object,95647,Tracks donor case IDs and latest donor discharge timestamp for causality filtering.
+synth_donor_max_discharge,METADATA_SYNTHETIC,SYNTHETIC_PROVENANCE,datetime64[ns],95647,Tracks donor case IDs and latest donor discharge timestamp for causality filtering.
+ctx_discharge_ppkm_level,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,17,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_is_holiday_today,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,int64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_working_days_next_1d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,int64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_working_days_next_2d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,int64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_working_days_next_3d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,int64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_days_since_ppkm_change,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,int64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_portcalls_container_7d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_portcalls_container_7d_vs_28d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,95647,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_import_container_7d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_import_container_7d_vs_28d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,95647,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_portcalls_7d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,0,Observed strictly on or before discharge date with publication lags enforced.
+ctx_discharge_pw_portcalls_7d_vs_28d,PASS_AT_DISCHARGE,DISCHARGE_TIME_EXTERNAL_CONTEXT,float64,95647,Observed strictly on or before discharge date with publication lags enforced.

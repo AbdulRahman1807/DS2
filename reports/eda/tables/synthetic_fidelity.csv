@@ -1,0 +1,4 @@
+dimension,real_count,real_share_pct,synth_count,synth_share_pct,real_dwell_p50,synth_dwell_p50,real_dwell_p85,synth_dwell_p85
+Class 0: ON_TIME (<=65.1h),37013,53.29,11159,37.2,32.0,34.0,53.9,54.0
+Class 1: AT_RISK (65.1-160.9h),23195,33.4,9754,32.51,98.6,106.9,135.0,142.8
+Class 2: CRITICAL_DELAY (>160.9h),9245,13.31,9087,30.29,222.6,238.1,336.6,371.8

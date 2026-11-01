@@ -1,0 +1,13 @@
+context_feature,dtype,non_null_count,null_count,mean_or_mode,median,min,max
+ctx_discharge_ppkm_level,float64,95630,17,3.223,4.0,1.0,4.0
+ctx_discharge_is_holiday_today,int64,95647,0,0.026,0.0,0.0,1.0
+ctx_discharge_working_days_next_1d,int64,95647,0,0.638,1.0,0.0,1.0
+ctx_discharge_working_days_next_2d,int64,95647,0,1.363,1.0,0.0,2.0
+ctx_discharge_working_days_next_3d,int64,95647,0,2.035,2.0,0.0,3.0
+ctx_discharge_days_since_ppkm_change,int64,95647,0,19.049,15.0,0.0,51.0
+ctx_discharge_pw_portcalls_container_7d,float64,95647,0,0.0,0.0,0.0,0.0
+ctx_discharge_pw_portcalls_container_7d_vs_28d,float64,0,95647,,,,
+ctx_discharge_pw_import_container_7d,float64,95647,0,0.0,0.0,0.0,0.0
+ctx_discharge_pw_import_container_7d_vs_28d,float64,0,95647,,,,
+ctx_discharge_pw_portcalls_7d,float64,95647,0,0.0,0.0,0.0,0.0
+ctx_discharge_pw_portcalls_7d_vs_28d,float64,0,95647,,,,

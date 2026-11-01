@@ -1,20 +1,21 @@
-activity,n,pct_before_discharge,p10_h,median_h,p90_h,timestamp_precision,pct_calendar_prior,pct_calendar_same_day,timing_note
-BAPLIE,95648,100.0,-51.2,-29.3,-13.1,datetime,92.4,7.6,Continuous datetime precision
-HAS_QUARANTINE_FLAG,26940,67.4,-43.2,-15.7,95.6,datetime,57.2,16.0,Continuous datetime precision
-VESSEL_ATB,95648,100.0,-16.1,-5.5,-1.7,datetime,29.4,70.6,Continuous datetime precision
-SP_RED_FLAG_PIB,5155,54.4,-44.2,-3.9,97.7,datetime,53.4,13.0,Continuous datetime precision
-STACK,95624,0.9,0.3,1.1,1.7,datetime,0.0,94.8,Continuous datetime precision
-FIRST_STACK_QUARANTINE_BLK,13639,7.1,0.2,1.3,93.8,datetime,4.9,57.2,Continuous datetime precision
-CUSTOMS_DEL,95642,40.3,-35.5,8.8,105.7,datetime,38.7,22.5,Continuous datetime precision
-BEHANDLE_QUARANTINE_JOB,18,0.0,7.8,11.9,44.2,datetime,0.0,22.2,Continuous datetime precision
-FIRST_JOB_CUSTOMS_BEHANDLE,3924,0.0,3.0,29.4,138.4,datetime,0.0,27.2,Continuous datetime precision
-QUARANTINE_RELEASE,26940,0.6,9.1,31.8,170.8,datetime,0.1,17.2,Continuous datetime precision
-JOB_DEL,95147,0.1,4.4,32.2,135.2,datetime,0.0,23.7,Continuous datetime precision
-FIRST_STACK_BEHANDLE,4032,0.4,4.8,41.1,152.5,datetime,0.0,12.6,Continuous datetime precision
-TRUCK_IN,95647,0.0,12.6,52.8,170.9,datetime,0.0,12.3,Continuous datetime precision
-TRUCK_OUT,95647,2.2,11.4,52.9,171.2,datetime,1.7,11.8,Continuous datetime precision
-UNSTACK_TO_TRUCK,95540,0.0,13.2,53.5,171.6,datetime,0.0,11.9,Continuous datetime precision
-LAST_COMPLETE_BEHANDLE,3924,0.0,16.6,72.1,190.0,datetime,0.0,5.7,Continuous datetime precision
-STACK_MAIN_YARD,3844,0.0,16.9,75.1,192.0,datetime,0.0,6.4,Continuous datetime precision
-STACK_TRK_BF_MAIN_YARD,2951,0.0,35.4,91.8,218.0,datetime,0.0,0.6,Continuous datetime precision
-JOB_PLP,505,0.0,84.5,99.4,117.8,datetime,0.0,0.0,Continuous datetime precision
+activity,n,median_h,p10_h,p90_h,pct_before_discharge,timestamp_precision,pct_calendar_prior,pct_calendar_same_day,pct_calendar_later,timing_note
+BAPLIE,95648,-29.3,-51.19,-13.09,100.0,millisecond,,,,Continuous timestamps.
+HAS_QUARANTINE_FLAG,26940,-15.67,-43.25,95.61,67.39,millisecond,,,,Continuous timestamps.
+VESSEL_ATB,95648,-5.54,-16.06,-1.67,100.0,millisecond,,,,Continuous timestamps.
+SP_RED_FLAG_PIB,5155,-3.94,-44.24,97.66,54.37,date_only,53.37,13.02,33.62,Date-only midnight timestamp (00:00:00); sub-day precision unrecorded.
+DISCHARGE,95648,0.0,0.0,0.0,100.0,millisecond,,,,Continuous timestamps.
+STACK,95624,1.15,0.31,1.72,0.91,millisecond,,,,Continuous timestamps.
+FIRST_STACK_QUARANTINE_BLK,13639,1.29,0.24,93.83,7.12,millisecond,,,,Continuous timestamps.
+CUSTOMS_DEL,95642,8.82,-35.52,105.72,40.27,date_only,38.68,22.5,38.82,Date-only midnight timestamp (00:00:00); sub-day precision unrecorded.
+BEHANDLE_QUARANTINE_JOB,18,11.91,7.83,44.17,0.0,millisecond,,,,Continuous timestamps.
+FIRST_JOB_CUSTOMS_BEHANDLE,3924,29.4,3.04,138.37,0.0,millisecond,,,,Continuous timestamps.
+QUARANTINE_RELEASE,26940,31.83,9.06,170.82,0.58,millisecond,,,,Continuous timestamps.
+JOB_DEL,95147,32.21,4.44,135.24,0.07,millisecond,,,,Continuous timestamps.
+FIRST_STACK_BEHANDLE,4032,41.1,4.8,152.48,0.37,millisecond,,,,Continuous timestamps.
+TRUCK_IN,95647,52.83,12.63,170.94,0.01,millisecond,,,,Continuous timestamps.
+TRUCK_OUT,95647,52.85,11.38,171.23,2.15,millisecond,,,,Continuous timestamps.
+UNSTACK_TO_TRUCK,95540,53.53,13.25,171.64,0.0,millisecond,,,,Continuous timestamps.
+LAST_COMPLETE_BEHANDLE,3924,72.14,16.62,190.05,0.0,millisecond,,,,Continuous timestamps.
+STACK_MAIN_YARD,3844,75.08,16.93,192.03,0.03,millisecond,,,,Continuous timestamps.
+STACK_TRK_BF_MAIN_YARD,2951,91.78,35.4,217.96,0.0,millisecond,,,,Continuous timestamps.
+JOB_PLP,505,99.36,84.54,117.81,0.0,millisecond,,,,Continuous timestamps.

@@ -1,0 +1,3 @@
+cutoff,hours,within_10h_count,within_10h_share_pct
+train p50,65.11,12200,12.76
+train p85,160.9,2696,2.82

@@ -1,0 +1,4 @@
+stratum,count,share_pct,raw_gross_min,raw_gross_median,raw_gross_p95,raw_gross_max,gross_t_median,gross_t_max
+All Stays,95647,100.0,2.0,28.1,29254.0,33691.0,27.0,39.5
+Values Recorded in Tonnes (<= 100),77609,81.14,2.0,27.0,32.1,39.5,27.0,39.5
+Values Recorded in Kilograms (> 100),18038,18.86,2501.0,27144.0,30472.0,33691.0,27.14,33.69
