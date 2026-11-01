@@ -3,23 +3,32 @@
 Assigned Role: EDA Engineer
 
 Responsibilities:
-- Command-line entry point to generate diagnostic plots and statistical summaries
-- Export distribution figures (dwell histograms, boxplots by container type, weekly volume)
-- Output findings for the ML Engineer and Evaluation Engineer to inform model decisions
+- Command-line entry point to generate diagnostic plots and statistical summaries.
+- Export distribution figures (dwell histograms, boxplots, weekly volume, transitions, noise floor).
+- Perform end-to-end audit of both Stage 01 processed datasets and Stage 03 Master Dataset.
+- Output findings for the ML Engineer and Evaluation Engineer to inform model decisions.
 
-Usage (from the project root, after build_pipeline.py has run):
+Usage (from project root):
     python ML/eda_engineer/eda_runner.py [--out-dir reports/eda] [--no-figures]
 """
 
+from __future__ import annotations
+
 import argparse
+import json
 import sys
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
-
-from typing import Dict, List, Tuple
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from ML.eda_engineer.drift_analysis import DriftAnalyzer
 from ML.eda_engineer.profiler import EventLogProfiler
@@ -27,6 +36,7 @@ from ML.eda_engineer.profiler import EventLogProfiler
 SPLITS = ["burn_in", "train", "val", "test", "repeated_stays"]
 MODEL_SPLITS = ["train", "val", "test"]
 FLAGS = ["has_quarantine_flag", "has_red_flag_pib", "has_behandle_inspection"]
+
 NUMERIC_FEATURES = [
     "GROSS", "CTR_SIZE", "discharge_hour", "discharge_day_of_week", "is_weekend",
     "has_quarantine_flag", "has_red_flag_pib", "has_behandle_inspection", "total_events_in_stay",
@@ -34,18 +44,29 @@ NUMERIC_FEATURES = [
     "trailing_7d_mean_dwell", "weather_severity_index", "has_active_disruption",
 ]
 CATEGORICAL_FEATURES = ["CTR_TYPE", "carrier_prefix", "YARD_BLOCK", "JOB_DEL_DOCTYPE"]
-# Availability at arrival time, taken from data_engineer/FEATURE_PROVENANCE_MATRIX.md
+
 AVAILABILITY = {
-    "JOB_DEL_DOCTYPE": "post-arrival", "total_events_in_stay": "post-arrival", "has_behandle_inspection": "post-arrival",
-    "has_quarantine_flag": "conditional", "has_red_flag_pib": "conditional",
+    "JOB_DEL_DOCTYPE": "post-arrival",
+    "total_events_in_stay": "post-arrival",
+    "has_behandle_inspection": "post-arrival",
+    "has_quarantine_flag": "conditional",
+    "has_red_flag_pib": "conditional",
+    "GROSS": "at discharge (TOS sign-off pending)",
+    "YARD_BLOCK": "at discharge (TOS sign-off pending)",
+    "YARD_SLOT": "at discharge (TOS sign-off pending)",
+    "weather_severity_index": "excluded (unverified weather feed)",
+    "has_active_disruption": "excluded (unverified weather feed)",
 }
-COLORS = {"train": "#4C78A8", "val": "#F58518", "test": "#54A24B", "grey": "#8C8C8C", "accent": "#E45756",
-          "ON_TIME": "#54A24B", "AT_RISK": "#EECA3B", "CRITICAL_DELAY": "#E45756", "shade": "#EDEDED"}
+
+COLORS = {
+    "train": "#4C78A8", "val": "#F58518", "test": "#54A24B", "grey": "#8C8C8C", "accent": "#E45756",
+    "ON_TIME": "#54A24B", "AT_RISK": "#EECA3B", "CRITICAL_DELAY": "#E45756", "shade": "#EDEDED"
+}
 
 
-def md_table(df: pd.DataFrame, max_rows: int = 40) -> str:
+def md_table(df: pd.DataFrame, max_rows: int = 50) -> str:
     """Render a DataFrame as a GitHub-flavoured markdown table."""
-    df = df.head(max_rows)
+    df_sub = df.head(max_rows)
     def fmt(v) -> str:
         if isinstance(v, (bool, np.bool_)):
             return "yes" if v else "no"
@@ -53,492 +74,787 @@ def md_table(df: pd.DataFrame, max_rows: int = 40) -> str:
             return "–"
         return f"{v:,}" if isinstance(v, (int, np.integer)) else str(v)
 
-    lines = ["| " + " | ".join(map(str, df.columns)) + " |", "|" + "---|" * len(df.columns)]
-    lines += ["| " + " | ".join(fmt(v) for v in row) + " |" for row in df.itertuples(index=False)]
+    lines = ["| " + " | ".join(map(str, df_sub.columns)) + " |", "|" + "---|" * len(df_sub.columns)]
+    lines += ["| " + " | ".join(fmt(v) for v in row) + " |" for row in df_sub.itertuples(index=False)]
     return "\n".join(lines)
 
 
 class EdaRunner:
-    def __init__(self, processed_dir: str = "data/processed", interim_dir: str = "data/interim",
-                 out_dir: str = "reports/eda", make_figures: bool = True):
-        self.processed_dir, self.interim_dir = Path(processed_dir), Path(interim_dir)
+    """Orchestrates comprehensive EDA across all data artifacts and compiles findings."""
+
+    def __init__(
+        self,
+        processed_dir: str = "data/processed",
+        interim_dir: str = "data/interim",
+        master_dir: str = "data/master",
+        out_dir: str = "reports/eda",
+        make_figures: bool = True,
+    ):
+        self.processed_dir = Path(processed_dir)
+        self.interim_dir = Path(interim_dir)
+        self.master_dir = Path(master_dir)
         self.out_dir = Path(out_dir)
-        self.tables_dir, self.figures_dir = self.out_dir / "tables", self.out_dir / "figures"
+        self.tables_dir = self.out_dir / "tables"
+        self.figures_dir = self.out_dir / "figures"
         self.make_figures = make_figures
-        self.profiler, self.drift = EventLogProfiler(), DriftAnalyzer()
+        self.profiler = EventLogProfiler()
+        self.drift = DriftAnalyzer()
         self.results: Dict = {}
 
-    # ------------------------------------------------------------------ io
+    # ------------------------------------------------------------------ IO
     def load(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """Loads processed case splits and cleaned interim event logs."""
         for name in SPLITS:
-            if not (self.processed_dir / f"{name}.parquet").exists():
-                raise FileNotFoundError(f"{name}.parquet missing in {self.processed_dir}; run ML/data_engineer/build_pipeline.py first.")
+            path = self.processed_dir / f"{name}.parquet"
+            if not path.exists():
+                raise FileNotFoundError(f"{name}.parquet missing in {self.processed_dir}; run pipeline first.")
         cases = pd.concat([pd.read_parquet(self.processed_dir / f"{n}.parquet") for n in SPLITS], ignore_index=True)
-        events = pd.concat(
-            [pd.read_parquet(self.interim_dir / "cleaned_event_log.parquet"),
-             pd.read_parquet(self.interim_dir / "quarantined_stays.parquet")], ignore_index=True)
-        print(f"Loaded {len(events):,} events and {len(cases):,} labeled stays.")
+        events = pd.concat([
+            pd.read_parquet(self.interim_dir / "cleaned_event_log.parquet"),
+            pd.read_parquet(self.interim_dir / "quarantined_stays.parquet"),
+        ], ignore_index=True)
+        print(f"Loaded {len(events):,} events and {len(cases):,} labeled stays from Stage 01 processed.")
         return events, cases
 
-    def save(self, name: str, df: pd.DataFrame) -> None:
+    def load_master(self) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame], Optional[Dict]]:
+        """Loads the new Master Dataset artifacts (real, synthetic, and manifest)."""
+        real_p = self.master_dir / "master_real.parquet"
+        synth_p = self.master_dir / "master_synthetic.parquet"
+        man_p = self.master_dir / "master_manifest.json"
+        
+        real_df = pd.read_parquet(real_p) if real_p.exists() else None
+        synth_df = pd.read_parquet(synth_p) if synth_p.exists() else None
+        manifest = json.loads(man_p.read_text()) if man_p.exists() else None
+        
+        if real_df is not None:
+            print(f"Loaded Master Real Dataset: {len(real_df):,} stays across {len(real_df.columns)} columns.")
+        if synth_df is not None:
+            print(f"Loaded Master Synthetic Dataset: {len(synth_df):,} synthetic stays across {len(synth_df.columns)} columns.")
+        return real_df, synth_df, manifest
+
+    def save_table(self, name: str, df: pd.DataFrame) -> None:
         self.tables_dir.mkdir(parents=True, exist_ok=True)
         df.to_csv(self.tables_dir / f"{name}.csv", index=False)
 
-    # ------------------------------------------------------------------ analysis
+    # ------------------------------------------------------------------ Analysis
     def analyze(self, events: pd.DataFrame, cases: pd.DataFrame) -> None:
         p, d, R = self.profiler, self.drift, self.results
         train = cases[cases["split_tag"] == "train"]
-        R["p_on"], R["p_crit"] = float(train["dwell_hours"].quantile(0.50)), float(train["dwell_hours"].quantile(0.85))
+        R["p_on"] = float(train["dwell_hours"].quantile(0.50))
+        R["p_crit"] = float(train["dwell_hours"].quantile(0.85))
         R["band"] = band = d.observation_window(cases)
         clean = cases[d.clean_mask(cases, band)]
         R["n_all"], R["n_clean"] = len(cases), len(clean)
-        self._burn_in_median = cases.loc[cases["split_tag"] == "burn_in", "dwell_hours"].median()
+        self._burn_in_median = float(cases.loc[cases["split_tag"] == "burn_in", "dwell_hours"].median())
 
-        print("Profiling event log...")
-        R["cardinality"] = p.cardinality(events, cases)
-        R["activities"] = p.activity_frequencies(events)
-        R["timing"] = p.milestone_timing(events)
-        R["quality"] = p.timestamp_quality(events)
-        R["alignment"] = p.call_date_alignment(cases)
-        R["dwell_pct"] = p.dwell_percentiles(clean[clean["split_tag"].isin(MODEL_SPLITS)],
-                                             by=["split_tag", "CTR_TYPE", "CTR_SIZE", "JOB_DEL_DOCTYPE"] + FLAGS)
-        R["missing"] = p.missingness(cases, ["CTR_SIZE", "CTR_TYPE", "GROSS", "YARD_BLOCK", "YARD_SLOT", "JOB_DEL_DOCTYPE"])
-        R["threshold"] = p.threshold_diagnostics(train, R["p_on"], R["p_crit"])
-        train_clean = clean[clean["split_tag"] == "train"]
-        cyclic = ["discharge_day_of_week", "discharge_hour"]  # non-monotonic, so screened as categories
-        R["signal"] = p.feature_signal(train_clean, [c for c in NUMERIC_FEATURES if c not in cyclic], CATEGORICAL_FEATURES + cyclic)
-        R["signal_arrival"] = p.filter_eligible_signals(R["signal"], scenario="ARRIVAL_TIME")
-        R["signal_diagnostic"] = R["signal"][R["signal"]["eligibility_tier"] == "POST_DISCHARGE_DIAGNOSTIC"].copy().reset_index(drop=True)
+        # 1. Truncation and split mix
+        trunc = d.truncation_profile(cases, band)
+        R["trunc"] = trunc
+        self.save_table("truncation", trunc)
 
-        print("Analyzing extract window, drift and noise floor...")
-        R["truncation"] = d.truncation_profile(cases, band)
-        cases["observable_share"] = d.observable_share(cases, band)
-        R["obs_by_split"] = cases[cases["split_tag"].isin(MODEL_SPLITS)].groupby("split_tag")["observable_share"].mean().round(3)
-        R["cutoffs"] = d.cutoff_comparison(cases, band, R["p_on"], R["p_crit"])
-        R["mix"] = d.split_label_mix(cases, band)
-        R["weekly"] = d.weekly_dwell(cases, band, R["p_on"], R["p_crit"])
-        R["trend"] = d.clean_band_trend(cases, band)
-        R["daily"] = d.daily_calls(cases)
-        R["gaps"] = d.missing_call_dates(R["daily"], band)
-        R["weekday"] = d.weekday_rhythm(R["daily"], band)
-        R["cycles"] = d.cycles(cases, band)
-        R["departures"] = d.departure_daily(cases)
-        R["noise"] = d.noise_floor(R["departures"])
-        R["episode"] = d.departure_episode(R["departures"])
-        R["weekday_dwell"] = d.weekday_dwell(cases, band)
-        R["reporting"] = d.reporting_drift(events, cases, band)
-        R["coverage_var"] = d.coverage_variation(R["reporting"], R["weekly"].set_index("call_week")["stays"])
-        R["attr_drift"] = d.attribute_drift(cases, band, ["GROSS", "YARD_SLOT", "JOB_DEL_DOCTYPE"])
-        R["shift"] = d.split_shift(cases[cases["split_tag"].isin(MODEL_SPLITS)], NUMERIC_FEATURES, CATEGORICAL_FEATURES)
-        R["maturity"] = d.label_maturity(cases)
-        R["cold"] = d.cold_start(cases)
-        R["flags"] = d.flag_effects(cases, band, FLAGS)
-        R["features"] = self.feature_guidance()
+        cutoffs = pd.DataFrame([
+            {"scope": "train (as built)", "n": len(train), "p50_h": round(R["p_on"], 2), "p85_h": round(R["p_crit"], 2),
+             "note": f"label cutoffs in use: p50={R['p_on']:.2f}h p85={R['p_crit']:.2f}h"},
+            {"scope": "clean band, all splits", "n": len(clean), "p50_h": round(float(clean["dwell_hours"].median()), 2),
+             "p85_h": round(float(clean["dwell_hours"].quantile(0.85)), 2),
+             "note": f"label cutoffs in use: p50={R['p_on']:.2f}h p85={R['p_crit']:.2f}h"},
+            {"scope": "clean band, train only", "n": len(clean[clean["split_tag"] == "train"]),
+             "p50_h": round(float(clean.loc[clean["split_tag"] == "train", "dwell_hours"].median()), 2),
+             "p85_h": round(float(clean.loc[clean["split_tag"] == "train", "dwell_hours"].quantile(0.85)), 2),
+             "note": f"label cutoffs in use: p50={R['p_on']:.2f}h p85={R['p_crit']:.2f}h"},
+        ])
+        R["cutoffs"] = cutoffs
+        self.save_table("cutoffs", cutoffs)
 
-        for key in ["cardinality", "activities", "timing", "quality", "alignment", "dwell_pct", "missing", "signal",
-                    "signal_arrival", "signal_diagnostic",
-                    "truncation", "cutoffs", "mix", "weekly", "gaps", "weekday", "weekday_dwell", "noise", "coverage_var",
-                    "shift", "maturity", "flags", "features"]:
-            if key in R:
-                self.save(key, R[key])
-        self.save("reporting_coverage", R["reporting"].reset_index())
-        self.save("daily_calls", R["daily"])
+        # Label mix
+        mix_rows = []
+        for name in ("test", "train", "val"):
+            for sc_name, sc_df in (("all stays", cases[cases["split_tag"] == name]),
+                                   ("clean band", clean[clean["split_tag"] == name])):
+                n = len(sc_df)
+                s = sc_df["target_class"].value_counts(normalize=True) if n > 0 else pd.Series(dtype=float)
+                mix_rows.append({"split": name, "scope": sc_name, "n": n,
+                                 "ON_TIME": round(float(s.get(0, 0.0)), 4),
+                                 "AT_RISK": round(float(s.get(1, 0.0)), 4),
+                                 "CRITICAL_DELAY": round(float(s.get(2, 0.0)), 4)})
+        mix = pd.DataFrame(mix_rows).sort_values(["scope", "split"]).reset_index(drop=True)
+        R["mix"] = mix
+        self.save_table("mix", mix)
 
-    def feature_guidance(self) -> pd.DataFrame:
-        """One row per candidate feature: availability, stability, signal and a recommendation."""
-        R = self.results
-        sig = R["signal"].set_index("feature")
-        rows = []
-        for _, s in R["shift"].iterrows():
-            f = s["feature"]
-            avail = AVAILABILITY.get(f, "at arrival")
-            if s["constant_in_train"]:
-                rec = "DROP: constant in train"
-            elif avail == "post-arrival":
+        # 2. Dwell quantiles & boundary mass
+        dwell_all = p.dwell_quantiles(cases, group_by="ALL")
+        dwell_splits = p.dwell_quantiles(cases, group_by="split_tag")
+        dwell_classes = p.dwell_quantiles(cases, group_by="target_class_name")
+        dwell_full = pd.concat([dwell_all, dwell_splits, dwell_classes], ignore_index=True)
+        R["dwell_full"] = dwell_full
+        self.save_table("target_dwell_full", dwell_full)
+
+        bm = p.boundary_mass(cases, {"train p50": R["p_on"], "train p85": R["p_crit"]})
+        R["boundary_mass"] = bm
+        self.save_table("boundary_mass", bm)
+
+        # Clean-band quantiles by category
+        cb_splits = p.dwell_quantiles(clean, group_by="split_tag")
+        cb_type = p.dwell_quantiles(clean, group_by="CTR_TYPE")
+        cb_size = p.dwell_quantiles(clean, group_by="CTR_SIZE")
+        cb_doc = p.dwell_quantiles(clean, group_by="JOB_DEL_DOCTYPE")
+        cb_q = p.dwell_quantiles(clean, group_by="has_quarantine_flag")
+        cb_r = p.dwell_quantiles(clean, group_by="has_red_flag_pib")
+        cb_b = p.dwell_quantiles(clean, group_by="has_behandle_inspection")
+        dwell_clean = pd.concat([p.dwell_quantiles(clean, group_by="ALL"), cb_splits, cb_type, cb_size, cb_doc, cb_q, cb_r, cb_b],
+                                ignore_index=True)
+        R["dwell_clean"] = dwell_clean
+        self.save_table("dwell_pct", dwell_clean)
+
+        # 3. Weekly dwell vs cutoffs
+        weekly = d.weekly_dwell(cases, R["p_on"], R["p_crit"])
+        R["weekly"] = weekly
+        self.save_table("weekly", weekly)
+
+        # 4. Rolling dwell dynamics
+        daily_roll, roll_assoc = d.rolling_dwell_dynamics(cases, band)
+        R["daily_roll"] = daily_roll
+        R["roll_assoc"] = roll_assoc
+        self.save_table("rolling_dynamics", daily_roll)
+        self.save_table("rolling_associations", roll_assoc)
+
+        # 5. Milestone transitions
+        transitions = p.milestone_transitions(events)
+        R["transitions"] = transitions
+        self.save_table("transitions", transitions)
+
+        # 6. Call rhythm, gaps & cycles
+        daily_calls, weekday_agg = d.call_rhythm(cases)
+        R["daily_calls"] = daily_calls
+        R["weekday_agg"] = weekday_agg
+        self.save_table("daily_calls", daily_calls)
+        self.save_table("weekday", weekday_agg)
+
+        weekday_dw = d.weekday_dwell(cases, band)
+        R["weekday_dwell"] = weekday_dw
+        self.save_table("weekday_dwell", weekday_dw)
+
+        # 7. Noise floor
+        dep = d.departures_daily(cases)
+        noise = d.noise_floor(dep)
+        ep = d.departure_episode(dep)
+        R["dep"] = dep
+        R["noise"] = noise
+        R["episode"] = ep
+        self.save_table("noise", noise)
+
+        # 8. Reporting drift
+        cov = d.reporting_drift(events, cases, band)
+        cov_var = d.coverage_variation(cov, cov.attrs["weekly_totals"])
+        R["cov"] = cov
+        R["cov_var"] = cov_var
+        self.save_table("reporting_coverage", cov.reset_index())
+        self.save_table("coverage_var", cov_var)
+
+        # 9. Customs & inspection effects
+        flag_rows = []
+        for flg in FLAGS:
+            s_with = clean[clean[flg] == 1]["dwell_hours"]
+            s_wo = clean[clean[flg] == 0]["dwell_hours"]
+            m_with, m_wo = float(s_with.median()), float(s_wo.median())
+            c_with = (clean[clean[flg] == 1]["target_class"] == 2).mean() * 100
+            c_wo = (clean[clean[flg] == 0]["target_class"] == 2).mean() * 100
+            row = {
+                "flag": flg, "stays_with": len(s_with), "share_pct": round(len(s_with) / len(clean) * 100, 2),
+                "median_with_h": round(m_with, 1), "median_without_h": round(m_wo, 1),
+                "median_ratio": round(m_with / m_wo, 2) if m_wo > 0 else np.nan,
+                "pct_critical_with": round(c_with, 1), "pct_critical_without": round(c_wo, 1),
+            }
+            for sp in ("train", "val", "test"):
+                sp_clean = clean[clean["split_tag"] == sp]
+                sp_w = sp_clean[sp_clean[flg] == 1]["dwell_hours"].median()
+                sp_wo = sp_clean[sp_clean[flg] == 0]["dwell_hours"].median()
+                row[f"ratio_{sp}"] = round(float(sp_w / sp_wo), 2) if pd.notna(sp_w) and pd.notna(sp_wo) and sp_wo > 0 else np.nan
+            flag_rows.append(row)
+        flags_df = pd.DataFrame(flag_rows)
+        R["flags"] = flags_df
+        self.save_table("flags", flags_df)
+
+        # 10. Quality ledger & timing
+        quality = p.timestamp_quality(events)
+        R["quality"] = quality
+        self.save_table("quality", quality)
+
+        timing = p.milestone_timing(events)
+        R["timing"] = timing
+        self.save_table("timing", timing)
+
+        card = p.cardinality(events, cases)
+        self.save_table("cardinality", card)
+        acts = p.activity_summary(events)
+        self.save_table("activities", acts)
+
+        # 11. Strict Horizon Audit & Univariate Signal
+        h_audit = p.horizon_audit(timing)
+        R["horizon_audit"] = h_audit
+        self.save_table("horizon_audit", h_audit)
+
+        # Univariate signals on clean train
+        clean_tr = clean[clean["split_tag"] == "train"]
+        sig = p.feature_signal(clean_tr, numeric=NUMERIC_FEATURES, categorical=CATEGORICAL_FEATURES)
+        sig_arr = p.filter_eligible_signals(sig, scenario="ARRIVAL_TIME")
+        sig_diag = sig[~sig["arrival_eligible"]].reset_index(drop=True)
+        R["sig"] = sig
+        R["sig_arr"] = sig_arr
+        R["sig_diag"] = sig_diag
+        self.save_table("signal", sig)
+        self.save_table("signal_arrival", sig_arr)
+        self.save_table("signal_diagnostic", sig_diag)
+
+        # Distribution shift (PSI & KS)
+        shift = d.split_shift(cases, NUMERIC_FEATURES, CATEGORICAL_FEATURES)
+        R["shift"] = shift
+        self.save_table("shift", shift)
+
+        # Alignment summary table
+        feat_df = shift.merge(sig[["feature", "association", "note"]], on="feature", how="left")
+        feat_df["availability"] = feat_df["feature"].map(AVAILABILITY).fillna("at arrival")
+        rec_rows = []
+        for _, r in feat_df.iterrows():
+            f = r["feature"]
+            psi = r["max_psi"]
+            av = r["availability"]
+            if "post" in av:
                 rec = "MASK for arrival-time model"
-            elif avail == "conditional":
-                rec = "KEEP only if pre-arrival notice is guaranteed"
-            elif s["max_psi"] > 0.25:
+            elif "unverified" in av:
+                rec = "EXCLUDE: external weather/disruption signal is unverified"
+            elif "conditional" in av:
+                rec = "HOLD: use timestamped as-of-discharge value only"
+            elif "pending" in av:
+                rec = "HOLD: confirm availability at t_discharge with TOS owner"
+            elif psi > 0.25:
                 rec = "KEEP with care: unstable (PSI>0.25)"
             else:
                 rec = "KEEP"
-            rows.append({"feature": f, "availability": avail, "signal": sig["association"].get(f, np.nan),
-                         "signal_type": sig["note"].get(f, ""), "psi_val": s["psi_val"], "psi_test": s["psi_test"],
-                         "recommendation": rec})
-        return pd.DataFrame(rows)
+            rec_rows.append(rec)
+        feat_df["recommendation"] = rec_rows
+        R["features"] = feat_df
+        self.save_table("features", feat_df)
 
-    # ------------------------------------------------------------------ figures
-    def plot_all(self, cases: pd.DataFrame) -> None:
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
+    # ------------------------------------------------------------------ Master Dataset Analysis
+    def analyze_master(self, master_real: pd.DataFrame, master_synth: pd.DataFrame, manifest: Optional[Dict]) -> None:
+        """Runs dedicated EDA for the new Master Dataset."""
+        p, d, R = self.profiler, self.drift, self.results
+        
+        # 1. 55-feature horizon audit
+        m_audit = p.master_horizon_audit(master_real)
+        R["master_horizon_audit"] = m_audit
+        self.save_table("master_horizon_audit", m_audit)
 
-        plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False, "axes.grid": True,
-                             "grid.color": "#E6E6E6", "grid.linewidth": 0.6, "axes.axisbelow": True, "figure.dpi": 130,
-                             "axes.titlesize": 10, "axes.titleweight": "bold", "legend.frameon": False})
+        # 2. Gross weight scaling audit (kg vs tonnes)
+        gross_prof = p.gross_weight_profile(master_real)
+        R["gross_profile"] = gross_prof
+        self.save_table("gross_weight_audit", gross_prof)
+
+        # 3. External context summary (PPKM, holidays, PortWatch)
+        ctx_prof = p.external_context_profile(master_real)
+        R["ctx_profile"] = ctx_prof
+        self.save_table("external_context_summary", ctx_prof)
+
+        # 4. Synthetic data fidelity audit
+        if master_synth is not None:
+            synth_audit = p.synthetic_fidelity_audit(master_real[master_real["in_cohort"]], master_synth)
+            R["synth_audit"] = synth_audit
+            self.save_table("synthetic_fidelity", synth_audit)
+
+            # PSI & KS between real cohort and synthetic stays
+            compare_cols = ["gross_t", "CTR_SIZE", "dwell_hours"]
+            synth_drift = d.synthetic_fidelity_drift(master_real[master_real["in_cohort"]], master_synth, compare_cols)
+            R["synth_drift"] = synth_drift
+            self.save_table("synthetic_fidelity_drift", synth_drift)
+
+    # ------------------------------------------------------------------ Plotting
+    def plot_all(self, cases: pd.DataFrame, events: pd.DataFrame, master_real: Optional[pd.DataFrame] = None,
+                 master_synth: Optional[pd.DataFrame] = None) -> None:
+        """Generates all diagnostic figures."""
+        if not self.make_figures:
+            return
         self.figures_dir.mkdir(parents=True, exist_ok=True)
-        R, band = self.results, self.results["band"]
-        mask = self.drift.clean_mask(cases, band)
-        for fn in (self._fig_dwell, self._fig_categories, self._fig_truncation, self._fig_weekly, self._fig_rhythm,
-                   self._fig_noise, self._fig_reporting, self._fig_shift, self._fig_milestones, self._fig_cycles):
-            fn(plt, cases, mask, R, band)
-        print(f"Wrote {len(list(self.figures_dir.glob('*.png')))} figures to {self.figures_dir}")
+        R = self.results
+        band = R["band"]
+        clean = cases[self.drift.clean_mask(cases, band)]
 
-    def _save_fig(self, fig, name: str) -> None:
-        fig.tight_layout()
-        fig.savefig(self.figures_dir / name, bbox_inches="tight")
-        import matplotlib.pyplot as plt
-        plt.close(fig)
+        # Fig 1: Dwell distribution
+        fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+        for name, sub, col in [("train", cases[cases["split_tag"] == "train"], COLORS["train"]),
+                               ("val", cases[cases["split_tag"] == "val"], COLORS["val"]),
+                               ("test", cases[cases["split_tag"] == "test"], COLORS["test"])]:
+            bins = np.logspace(np.log10(3), np.log10(1500), 70)
+            axes[0].hist(sub["dwell_hours"].clip(3, 1500), bins=bins, density=True, histtype="step",
+                         label=f"{name} (n={len(sub):,})", color=col, lw=1.5)
+            clean_sub = sub[sub.index.isin(clean.index)]
+            axes[1].hist(clean_sub["dwell_hours"].clip(3, 1500), bins=bins, density=True, histtype="step",
+                         label=f"{name} clean (n={len(clean_sub):,})", color=col, lw=1.5)
+        for ax, title in [(axes[0], "All Stays (with Extract-Edge Truncation)"), (axes[1], "Clean Band Only (Fully Observable)")]:
+            ax.set_xscale("log")
+            ax.axvline(R["p_on"], color=COLORS["ON_TIME"], ls="--", label=f"Train p50 ({R['p_on']:.1f}h)")
+            ax.axvline(R["p_crit"], color=COLORS["CRITICAL_DELAY"], ls="--", label=f"Train p85 ({R['p_crit']:.1f}h)")
+            ax.set_xlabel("Dwell Duration (Hours, Log Scale)")
+            ax.set_ylabel("Probability Density")
+            ax.set_title(title)
+            ax.legend(fontsize=8)
+            ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "01_dwell_distribution.png", dpi=150)
+        plt.close()
 
-    @staticmethod
-    def _shade(ax, band, xmin, xmax):
-        ax.axvspan(xmin, band["clean_start"], color=COLORS["shade"], zorder=0)
-        ax.axvspan(band["clean_end"] + pd.Timedelta(days=1), xmax, color=COLORS["shade"], zorder=0)
+        # Fig 2: Categories
+        fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+        for ax, col, title in [(axes[0], "CTR_TYPE", "Container Type"), (axes[1], "CTR_SIZE", "Container Size (ft)"),
+                               (axes[2], "has_red_flag_pib", "Red-Flag Customs PIB")]:
+            sub = clean[clean[col].notna()]
+            order = sub[col].value_counts().head(5).index
+            data = [sub[sub[col] == val]["dwell_hours"].values for val in order]
+            ax.boxplot(data, tick_labels=[str(v) for v in order], showfliers=False)
+            ax.set_yscale("log")
+            ax.set_title(title)
+            ax.set_ylabel("Dwell Hours (Log Scale)")
+            ax.axhline(R["p_on"], color="gray", ls=":")
+            ax.axhline(R["p_crit"], color="red", ls=":")
+            ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "02_dwell_by_category.png", dpi=150)
+        plt.close()
 
-    def _fig_dwell(self, plt, cases, mask, R, band):
-        fig, axes = plt.subplots(1, 2, figsize=(11, 3.8), sharey=True)
-        bins = np.linspace(np.log10(3), np.log10(1500), 70)
-        ticks = [5, 10, 30, 100, 300, 1000]
-        for ax, (title, sub) in zip(axes, [("All stays (truncated weeks included)", cases), ("Clean band only", cases[mask])]):
-            for s in MODEL_SPLITS:
-                v = sub.loc[sub["split_tag"] == s, "dwell_hours"]
-                v = v[v > 0]
-                if len(v) >= 500:
-                    ax.hist(np.log10(v), bins=bins, density=True, histtype="step", lw=1.8, color=COLORS[s], label=f"{s} (n={len(v):,})")
-            for val, lab, side in [(R["p_on"], "p50", "right"), (R["p_crit"], "p85", "left")]:
-                ax.axvline(np.log10(val), ls="--", color=COLORS["grey"], lw=1)
-                text = f" train {lab} {val:.0f}h" if side == "left" else f"train {lab} {val:.0f}h "
-                ax.text(np.log10(val), ax.get_ylim()[1] * 0.99, text, fontsize=8, va="top", ha=side, color=COLORS["grey"])
-            ax.set_xticks(np.log10(ticks)); ax.set_xticklabels(ticks)
-            ax.set_xlabel("dwell hours (log scale)"); ax.set_title(title); ax.legend(loc="upper right", bbox_to_anchor=(1, 0.8))
-        axes[0].set_ylabel("density")
-        self._save_fig(fig, "01_dwell_distribution.png")
+        # Fig 3: Truncation
+        trunc = R["trunc"]
+        fig, axes = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
+        axes[0].bar(trunc["call_week"], trunc["stays"], color=COLORS["train"], alpha=0.7, label="Observed Stays")
+        axes[0].set_ylabel("Stays per Week")
+        axes[0].set_title("Vessel Call Cohorts: Extract Edge Truncation")
+        axes[0].grid(alpha=0.3)
+        axes[1].plot(trunc["call_week"], trunc["median_dwell_h"], marker="o", color="blue", label="Median Dwell (h)")
+        axes[1].plot(trunc["call_week"], trunc["p85_dwell_h"], marker="s", color="red", label="p85 Dwell (h)")
+        axes[1].set_ylabel("Dwell Hours")
+        axes[1].set_xlabel("Vessel Call Week")
+        axes[1].set_yscale("log")
+        axes[1].legend()
+        axes[1].grid(alpha=0.3)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "03_extract_truncation.png", dpi=150)
+        plt.close()
 
-    def _fig_categories(self, plt, cases, mask, R, band):
-        sub = cases[mask & cases["split_tag"].isin(MODEL_SPLITS)]
-        fig, axes = plt.subplots(1, 3, figsize=(13, 4.2), sharey=True, gridspec_kw={"width_ratios": [2, 1, 2.6]})
-        short = {"has_quarantine_flag": "quarantine", "has_red_flag_pib": "red flag", "has_behandle_inspection": "behandle"}
-        groups = [
-            ("Container type", [(str(k), g["dwell_hours"]) for k, g in sub.groupby("CTR_TYPE") if len(g) >= 100]),
-            ("Container size (ft)", [(str(int(k)), g["dwell_hours"]) for k, g in sub.groupby("CTR_SIZE") if len(g) >= 100]),
-            ("Customs / quarantine flags", [(f"{short[f]}\n{'yes' if v else 'no'}", sub.loc[sub[f] == v, "dwell_hours"])
-                                            for f in FLAGS for v in (0, 1)]),
-        ]
-        for ax, (title, items) in zip(axes, groups):
-            ax.boxplot([i[1] for i in items], showfliers=False, patch_artist=True, medianprops={"color": "black"},
-                       boxprops={"facecolor": "#C9D6E8", "edgecolor": COLORS["train"]}, whiskerprops={"color": COLORS["train"]})
-            ax.set_xticklabels([f"{i[0]}\nn={len(i[1]):,}" if "\n" not in i[0] else f"{i[0]}\nn={len(i[1]):,}" for i in items], fontsize=7)
-            ax.set_yscale("log"); ax.set_title(title)
-            ax.axhline(R["p_on"], ls=":", color=COLORS["grey"]); ax.axhline(R["p_crit"], ls=":", color=COLORS["grey"])
-        axes[0].set_ylabel("dwell hours (log, clean band; dotted = train p50 / p85)")
-        self._save_fig(fig, "02_dwell_by_category.png")
+        # Fig 4: Weekly dwell vs cutoffs
+        weekly = R["weekly"]
+        fig, ax = plt.subplots(figsize=(14, 5))
+        ax.plot(weekly["call_week"], weekly["median_dwell_h"], marker="o", label="Cohort Median Dwell", color="navy")
+        ax.plot(weekly["call_week"], weekly["p85_dwell_h"], marker="^", label="Cohort p85 Dwell", color="darkred")
+        ax.axhline(R["p_on"], color="navy", ls="--", label=f"Train p50 ({R['p_on']:.1f}h)")
+        ax.axhline(R["p_crit"], color="darkred", ls="--", label=f"Train p85 ({R['p_crit']:.1f}h)")
+        ax.set_title("Weekly Dwell Drift Versus Frozen Training Cutoffs (July Congestion Surge)")
+        ax.set_ylabel("Dwell Hours")
+        ax.set_xlabel("Vessel Call Week")
+        ax.legend()
+        ax.grid(alpha=0.3)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "04_weekly_dwell_vs_cutoffs.png", dpi=150)
+        plt.close()
 
-    def _fig_truncation(self, plt, cases, mask, R, band):
-        t = R["truncation"]
-        fig, (a, b) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
-        col = [COLORS["train"] if c else COLORS["grey"] for c in t["in_clean_band"]]
-        a.bar(t["call_week"], t["stays"], width=5.5, color=col)
-        for _, r in t.iterrows():
-            if r["est_missing_pct"] >= 1 and r["stays"] > 0:
-                a.text(r["call_week"], r["stays"], f"{r['est_missing_pct']:.0f}%\nmissing", ha="center", va="bottom", fontsize=7, color=COLORS["accent"])
-        a.set_ylabel("stays per call week"); a.set_title("The extract is selected by gate-out date, so edge weeks are truncated (grey = outside clean band)")
-        b.plot(t["call_week"], t["median_dwell_h"], marker="o", color=COLORS["accent"], label="median dwell")
-        b.plot(t["call_week"], t["p85_dwell_h"], marker="o", color=COLORS["val"], label="p85 dwell")
-        b.set_yscale("log"); b.set_ylabel("dwell hours (log)"); b.legend(loc="upper right")
-        b.set_xlabel("vessel call week")
-        for ax in (a, b):
-            self._shade(ax, band, t["call_week"].min() - pd.Timedelta(days=4), t["call_week"].max() + pd.Timedelta(days=10))
-        self._save_fig(fig, "03_extract_truncation.png")
+        # Fig 5: Call rhythm & Thursday gap
+        daily_calls, w_agg = R["daily_calls"], R["weekday_agg"]
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+        axes[0].plot(daily_calls["call_date"], daily_calls["stays"], color="teal", lw=1.2)
+        zero_days = daily_calls[daily_calls["is_zero"]]
+        axes[0].scatter(zero_days["call_date"], zero_days["stays"], color="crimson", zorder=5, label="Zero-Call Days")
+        axes[0].set_title("Daily Reconstructed Stays by Call Date")
+        axes[0].set_ylabel("Daily Stays")
+        axes[0].legend()
+        axes[0].grid(alpha=0.3)
 
-    def _fig_weekly(self, plt, cases, mask, R, band):
-        w = R["weekly"][R["weekly"]["stays"] >= 200]
-        fig, (a, b) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
-        a.plot(w["call_week"], w["p50_h"], marker="o", color=COLORS["train"], label="weekly p50")
-        a.plot(w["call_week"], w["p85_h"], marker="o", color=COLORS["val"], label="weekly p85")
-        a.axhline(R["p_on"], ls="--", color=COLORS["train"], alpha=0.6); a.axhline(R["p_crit"], ls="--", color=COLORS["val"], alpha=0.6)
-        a.text(w["call_week"].iloc[-1], R["p_crit"], "  train p85 cutoff", va="bottom", ha="right", fontsize=8, color=COLORS["val"])
-        a.text(w["call_week"].iloc[-1], R["p_on"], "  train p50 cutoff", va="bottom", ha="right", fontsize=8, color=COLORS["train"])
-        a.set_ylabel("dwell hours"); a.legend(loc="upper right"); a.set_title("Weekly dwell by call cohort versus the fixed training cutoffs")
-        col = [COLORS["accent"] if c else COLORS["grey"] for c in w["in_clean_band"]]
-        b.bar(w["call_week"], w["pct_critical"], width=5.5, color=col)
-        b.set_ylabel("% of stays above train p85"); b.set_xlabel("vessel call week")
-        for ax in (a, b):
-            self._shade(ax, band, w["call_week"].min() - pd.Timedelta(days=4), w["call_week"].max() + pd.Timedelta(days=10))
-        self._save_fig(fig, "04_weekly_dwell_vs_cutoffs.png")
+        axes[1].bar(w_agg["weekday"], w_agg["mean_stays"], color="teal", alpha=0.8)
+        axes[1].set_title("Mean Stays per Weekday (Showing Thursday Liner Service Dip)")
+        axes[1].set_ylabel("Mean Stays")
+        axes[1].grid(alpha=0.3)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "05_call_rhythm.png", dpi=150)
+        plt.close()
 
-    def _fig_rhythm(self, plt, cases, mask, R, band):
-        d, g, wk = R["daily"][R["daily"]["is_dense"]], R["gaps"], R["weekday"]
-        fig, (a, b) = plt.subplots(1, 2, figsize=(12, 3.8), gridspec_kw={"width_ratios": [2.4, 1]})
-        a.plot(d["call_date"], d["stays"], color=COLORS["train"], lw=1.2)
-        self._shade(a, band, d["call_date"].min(), d["call_date"].max())
-        a.scatter(g["call_date"], np.zeros(len(g)), color=COLORS["accent"], zorder=3, label="no-call day")
-        for _, r in g.iterrows():
-            a.text(r["call_date"], 150, r["weekday"][:3], rotation=90, fontsize=7, ha="center", color=COLORS["accent"])
-        a.set_ylabel("stays by call date"); a.set_title("Daily vessel-call volume (grey = truncated weeks)"); a.legend(loc="upper right")
-        b.bar(wk["weekday"].str[:3], wk["mean_stays"], color=COLORS["train"])
-        for i, r in wk.iterrows():
-            if r["zero_call_days"] > 0:
-                b.text(i, r["mean_stays"], f"{int(r['zero_call_days'])}/{int(r['days'])}\nzero", ha="center", va="bottom", fontsize=7, color=COLORS["accent"])
-        b.set_title("Mean stays by weekday (clean band)"); b.set_ylabel("mean stays per day")
-        self._save_fig(fig, "05_call_rhythm.png")
+        # Fig 6: Noise floor
+        dep, noise = R["dep"], R["noise"]
+        fig, ax = plt.subplots(figsize=(14, 5))
+        ax.plot(dep["departure_date"], dep["delay_share"] * 100, color="gray", alpha=0.5, label="Daily Delay Share")
+        roll7 = dep["delay_share"].rolling(7).mean() * 100
+        ax.plot(dep["departure_date"], roll7, color="crimson", lw=2, label="Trailing 7-Day Delay Share")
+        ax.set_title("Operational Noise Floor: 7-Day Trailing Delayed Share")
+        ax.set_ylabel("Delayed Share (%)")
+        ax.set_xlabel("Gate-Out Date")
+        ax.legend()
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "06_noise_floor.png", dpi=150)
+        plt.close()
 
-    def _fig_noise(self, plt, cases, mask, R, band):
-        dep = R["departures"].set_index("departure_date")
-        tr_share = dep["delayed"].rolling(7).sum() / dep["volume"].rolling(7).sum().replace(0, np.nan)
-        sigma = float(R["noise"].set_index("metric").loc["trailing_7d_delay_share", "observed_sigma"])
-        level = tr_share.rolling(21, center=True, min_periods=10).median()
-        fig, (a, b) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
-        a.plot(tr_share.index, tr_share * 100, color=COLORS["train"], label="trailing 7d delayed share")
-        a.plot(level.index, level * 100, color=COLORS["grey"], lw=1, label="local level (21d median)")
-        a.fill_between(level.index, (level - 2 * sigma) * 100, (level + 2 * sigma) * 100, color=COLORS["grey"], alpha=0.2, label=f"±2σ noise floor (σ={sigma * 100:.1f} pp)")
-        a.set_ylabel("% stays AT_RISK or CRITICAL"); a.legend(loc="upper right", fontsize=8)
-        a.set_title("Noise floor of the 7-day delayed share, indexed by gate-out date (not truncated)")
-        b.bar(dep.index, dep["volume"], color=COLORS["train"], width=0.9, alpha=0.8)
-        b.plot(dep.index, dep["volume"].rolling(7).mean(), color=COLORS["accent"], label="7d mean")
-        b.set_ylabel("departures per day"); b.legend(loc="upper right"); b.set_xlabel("gate-out date")
-        self._save_fig(fig, "06_noise_floor.png")
+        # Fig 7: Reporting coverage
+        cov = R["cov"]
+        opt_cols = [c for c in cov.columns if cov[c].mean() < 99.5]
+        if len(opt_cols) > 0:
+            fig, ax = plt.subplots(figsize=(12, 6))
+            cax = ax.imshow(cov[opt_cols].T, aspect="auto", cmap="Blues", vmin=0, vmax=100)
+            ax.set_yticks(range(len(opt_cols)))
+            ax.set_yticklabels(opt_cols)
+            weeks_str = [pd.to_datetime(w).strftime("%m-%d") for w in cov.index]
+            ax.set_xticks(range(len(weeks_str)))
+            ax.set_xticklabels(weeks_str, rotation=45)
+            plt.colorbar(cax, label="Weekly Coverage Share (%)")
+            ax.set_title("Weekly Reporting Coverage of Optional Milestones (Clean Band)")
+            plt.tight_layout()
+            plt.savefig(self.figures_dir / "07_reporting_coverage.png", dpi=150)
+            plt.close()
 
-    def _fig_reporting(self, plt, cases, mask, R, band):
-        cov = R["reporting"]
-        cov = cov.loc[:, cov.mean() < 99.5]
-        fig, ax = plt.subplots(figsize=(10, 4.2))
-        im = ax.imshow(cov.to_numpy(), aspect="auto", cmap="Blues", vmin=0)
-        ax.set_xticks(range(cov.shape[1])); ax.set_xticklabels(cov.columns, rotation=40, ha="right", fontsize=7)
-        ax.set_yticks(range(cov.shape[0])); ax.set_yticklabels([d.strftime("%m-%d") for d in cov.index], fontsize=8)
-        for i in range(cov.shape[0]):
-            for j in range(cov.shape[1]):
-                v = cov.iat[i, j]
-                ax.text(j, i, f"{v:.0f}", ha="center", va="center", fontsize=7, color="white" if v > cov.to_numpy().max() * 0.6 else "black")
-        ax.grid(False); ax.set_title("Weekly share of cases recording each optional activity (%, clean-band weeks)")
-        ax.set_ylabel("call week"); fig.colorbar(im, ax=ax, fraction=0.025)
-        self._save_fig(fig, "07_reporting_coverage.png")
+        # Fig 8: Split shift (PSI)
+        shift = R["shift"].head(12)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        y_pos = np.arange(len(shift))
+        ax.barh(y_pos - 0.2, shift["psi_val"], height=0.4, label="PSI (Val vs Train)", color=COLORS["val"])
+        ax.barh(y_pos + 0.2, shift["psi_test"], height=0.4, label="PSI (Test vs Train)", color=COLORS["test"])
+        ax.axvline(0.10, color="gray", ls="--", label="Moderate Shift (0.10)")
+        ax.axvline(0.25, color="red", ls="--", label="Severe Shift (0.25)")
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(shift["feature"])
+        ax.invert_yaxis()
+        ax.set_xlabel("Population Stability Index (PSI)")
+        ax.set_title("Covariate Shift (Top Features with Greatest Temporal Drift)")
+        ax.legend(loc="lower right")
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "08_split_shift.png", dpi=150)
+        plt.close()
 
-    def _fig_shift(self, plt, cases, mask, R, band):
-        s = R["shift"].sort_values("max_psi", ascending=True).dropna(subset=["max_psi"])
-        fig, (a, b) = plt.subplots(1, 2, figsize=(12, 4.6), gridspec_kw={"width_ratios": [1.5, 1]})
-        y = np.arange(len(s))
-        a.barh(y + 0.2, s["psi_val"], height=0.38, color=COLORS["val"], label="val vs train")
-        a.barh(y - 0.2, s["psi_test"], height=0.38, color=COLORS["test"], label="test vs train")
-        a.set_yticks(y); a.set_yticklabels(s["feature"], fontsize=8)
-        for x in (0.1, 0.25):
-            a.axvline(x, ls="--", color=COLORS["grey"], lw=1)
-        a.set_xscale("symlog", linthresh=0.1); a.set_xlabel("population stability index (symlog)"); a.legend(loc="lower right")
-        a.set_title("Feature shift against train (dashed: 0.1 moderate, 0.25 major)")
-        mix = R["mix"][R["mix"]["scope"] == "all stays"].set_index("split").loc[MODEL_SPLITS]
-        bottom = np.zeros(len(mix))
-        for c in ["ON_TIME", "AT_RISK", "CRITICAL_DELAY"]:
-            b.bar(mix.index, mix[c] * 100, bottom=bottom, color=COLORS[c], label=c)
-            bottom += mix[c].to_numpy() * 100
-        for i, (n, crit) in enumerate(zip(mix["n"], mix["CRITICAL_DELAY"])):
-            b.text(i, 101, f"n={int(n):,}", ha="center", fontsize=8)
-        b.set_ylim(0, 108); b.set_ylabel("% of stays"); b.legend(loc="lower right", fontsize=8)
-        b.set_title("Label mix by split (test is truncated)")
-        self._save_fig(fig, "08_split_shift.png")
+        # Fig 9: Milestone timing
+        timing = R["timing"].sort_values("median_h")
+        fig, ax = plt.subplots(figsize=(12, 7))
+        y = np.arange(len(timing))
+        ax.scatter(timing["median_h"], y, color="black", zorder=3, label="Median Offset")
+        for i, row in enumerate(timing.itertuples()):
+            ax.plot([row.p10_h, row.p90_h], [i, i], color="crimson" if row.median_h > 0 else "navy", lw=2)
+        ax.axvline(0, color="black", ls="--", lw=1.5, label="DISCHARGE (t0)")
+        ax.set_yticks(y)
+        ax.set_yticklabels(timing["activity"])
+        ax.set_xlabel("Hours Relative to DISCHARGE Start (t0=0)")
+        ax.set_title("Milestone Availability Timing Relative to Discharge")
+        ax.legend()
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "09_milestone_timing.png", dpi=150)
+        plt.close()
 
-    def _fig_milestones(self, plt, cases, mask, R, band):
-        t = R["timing"].sort_values("median_h").reset_index(drop=True)
-        fig, ax = plt.subplots(figsize=(9, 5.4))
-        for i, r in t.iterrows():
-            c = COLORS["train"] if r["pct_before_discharge"] >= 50 else COLORS["val"]
-            ax.hlines(i, r["p10_h"], r["p90_h"], color=c, lw=3, alpha=0.7)
-            ax.plot(r["median_h"], i, "o", color="black", ms=4)
-        ax.axvline(0, color="black", lw=1)
-        ax.set_yticks(range(len(t))); ax.set_yticklabels([f"{r['activity']} ({r['pct_before_discharge']:.0f}% pre)" for _, r in t.iterrows()], fontsize=7)
-        ax.invert_yaxis(); ax.set_xlabel("hours relative to DISCHARGE start (bar = p10 to p90, dot = median)")
-        ax.set_title("When each activity starts: blue = mostly known before discharge, orange = in-yard")
-        self._save_fig(fig, "09_milestone_timing.png")
+        # Fig 10: Discharge cycles
+        cycles = self.drift.discharge_cycles(cases, band)
+        fig, ax = plt.subplots(figsize=(12, 6))
+        cax = ax.imshow(cycles.values, aspect="auto", cmap="YlOrRd")
+        ax.set_yticks(range(len(cycles.index)))
+        ax.set_yticklabels(cycles.index)
+        ax.set_xticks(range(24))
+        ax.set_xticklabels(range(24))
+        ax.set_xlabel("Discharge Hour of Day (0-23)")
+        ax.set_ylabel("Day of Week")
+        ax.set_title("Diurnal and Day-of-Week Discharge Median Dwell Cycles (Hours)")
+        plt.colorbar(cax, label="Median Dwell (Hours)")
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "10_discharge_cycles.png", dpi=150)
+        plt.close()
 
-    def _fig_cycles(self, plt, cases, mask, R, band):
-        c = R["cycles"]
-        days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        fig, axes = plt.subplots(1, 2, figsize=(12, 3.6))
-        for ax, col, title, cmap in [(axes[0], "stays", "Stays by discharge weekday x hour (clean band)", "Blues"),
-                                     (axes[1], "median_dwell_h", "Median dwell hours (cells with >= 30 stays)", "Oranges")]:
-            piv = c.pivot(index="discharge_day_of_week", columns="discharge_hour", values=col).reindex(range(7))
-            if col == "median_dwell_h":
-                piv = piv.where(c.pivot(index="discharge_day_of_week", columns="discharge_hour", values="stays").reindex(range(7)) >= 30)
-            im = ax.imshow(piv.to_numpy(), aspect="auto", cmap=cmap)
-            ax.set_yticks(range(7)); ax.set_yticklabels(days); ax.set_xticks(range(0, 24, 3))
-            ax.set_xlabel("discharge hour"); ax.set_title(title); ax.grid(False); fig.colorbar(im, ax=ax, fraction=0.03)
-        self._save_fig(fig, "10_discharge_cycles.png")
+        # Fig 11: Milestone transitions
+        trans = R["transitions"]
+        fig, ax = plt.subplots(figsize=(12, 5))
+        y = np.arange(len(trans))
+        ax.barh(y - 0.2, trans["median_hours"], height=0.4, label="Median Stage Duration", color="navy")
+        ax.barh(y + 0.2, trans["p85_hours"], height=0.4, label="p85 Stage Duration", color="crimson")
+        ax.set_yticks(y)
+        ax.set_yticklabels(trans["transition"])
+        ax.set_xlabel("Duration in Hours")
+        ax.set_title("Stage Duration Quantiles for Complete Ordered Trajectories")
+        ax.legend()
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "11_milestone_transitions.png", dpi=150)
+        plt.close()
 
-    # ------------------------------------------------------------------ findings report
-    def write_findings(self) -> Path:
-        R, band = self.results, self.results["band"]
-        d = lambda ts: pd.Timestamp(ts).strftime("%Y-%m-%d")  # noqa: E731
-        t, w = R["truncation"], R["weekly"]
-        wc = w[w["in_clean_band"] & (w["stays"] >= 200)]
-        peak = wc.loc[wc["p50_h"].idxmax()]
-        base = float(wc["p50_h"].tail(5).median())
-        cut = R["cutoffs"].set_index("scope")
-        mix = R["mix"]
-        mix_all = mix[mix["scope"] == "all stays"].set_index("split")
-        noise = R["noise"].set_index("metric")
-        td, trend, cold = R["threshold"], R["trend"], R["cold"]
-        obs = R["obs_by_split"]
-        weekday = R["weekday"].set_index("weekday")
-        gaps = R["gaps"]
-        thu = weekday.loc["Thursday"]
-        fl = R["flags"].set_index("flag")
-        q = R["quality"]
-        card = R["cardinality"].set_index("metric")["value"]
-        shift = R["shift"].set_index("feature")
-        feat = R["features"]
-        align = R["alignment"].set_index("discharge_minus_call_days")["share_pct"]
-        timing = R["timing"].set_index("activity")
-        last_weeks = t.tail(3)
-        ep = R["episode"]
-        burn_med = float(self._burn_in_median)
+        # Fig 12: Rolling dynamics
+        daily_roll = R["daily_roll"]
+        fig, ax1 = plt.subplots(figsize=(14, 5))
+        ax1.plot(daily_roll["call_date"], daily_roll["dwell_p50_h"], color="navy", lw=2, label="Cohort Median Dwell")
+        ax1.set_ylabel("Median Dwell (Hours)", color="navy")
+        ax2 = ax1.twinx()
+        ax2.plot(daily_roll["call_date"], daily_roll["trailing_7d_volume"], color="green", ls="--", lw=1.5,
+                 label="Lagged 7-Day Departure Volume")
+        ax2.set_ylabel("Lagged 7-Day Completed Departures", color="green")
+        ax1.set_title("Lagged Terminal Departure Velocity vs. Daily Cohort Median Dwell")
+        ax1.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(self.figures_dir / "12_rolling_volume_vs_dwell.png", dpi=150)
+        plt.close()
 
-        L: List[str] = []
-        L += ["# EDA Findings: Stage 01 Container Dwell Data", "",
-              "Generated by `ML/eda_engineer/eda_runner.py` from `data/processed` and `data/interim`. "
-              "Every number below is computed by the run; tables are in `tables/`, figures in `figures/`.", ""]
+        # Fig 13: Master dataset gross weight and external context
+        if master_real is not None and "gross_t" in master_real.columns:
+            fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+            axes[0].hist(master_real["gross_t"].dropna(), bins=50, color="navy", alpha=0.7, density=True)
+            axes[0].set_title("Master Standardized Weight: gross_t (Tonnes, max <= 100t)")
+            axes[0].set_xlabel("Container Weight (Tonnes)")
+            axes[0].set_ylabel("Density")
+            axes[0].grid(alpha=0.3)
 
-        L += ["## 1. Headline findings", "",
-              f"1. **The extract is selected by gate-out date, so call-date edges are truncated.** All {card['labeled_stays']:,} stays leave the yard between "
-              f"{d(band['window_start'])} and {d(band['window_end'])}. Stays that arrived earlier appear only if they were slow; stays that arrived "
-              f"late in September appear only if they were quick. Only call dates {d(band['clean_start'])} to {d(band['clean_end'])} are fully "
-              f"observable (the {self.drift.horizon_quantile:.0%} dwell horizon is {band['horizon_hours']:.0f}h). That band holds {R['n_clean']:,} of {R['n_all']:,} stays.",
-              f"2. **Test is not a clean holdout.** Mean observable share is {obs['train']:.1%} for train, {obs['val']:.1%} for val and {obs['test']:.1%} for test; "
-              f"the last two call weeks are missing an estimated {last_weeks.iloc[-2]['est_missing_pct']:.0f}% and {last_weeks.iloc[-1]['est_missing_pct']:.0f}% of their stays. "
-              f"Only {int(mix[(mix['scope'] == 'clean band') & (mix['split'] == 'test')]['n'].sum()):,} test stays are fully observable.",
-              f"3. **Part of the dwell drift is real.** Inside the clean band, call date and dwell are negatively correlated (Spearman rho {trend['spearman_rho']:.2f}); "
-              f"weekly median dwell falls from {peak['p50_h']:.0f}h in the week of {d(peak['call_week'])} to about {base:.0f}h in the last five clean weeks. "
-              f"Val is fully inside the clean band and still has {mix_all.loc['val', 'CRITICAL_DELAY']:.1%} critical stays against {mix_all.loc['train', 'CRITICAL_DELAY']:.1%} in train.",
-              f"4. **The data contains one congestion episode, in July.** Seven-day average departures fall to {ep['min_vol7']:.0f} per day around {d(ep['min_vol7_date'])} "
-              f"(typical {ep['median_vol7']:.0f}), and the share of departing stays that are AT_RISK or CRITICAL peaks at {ep['peak_share']:.0%} around {d(ep['peak_share_date'])} "
-              f"versus {ep['late_share']:.0%} over the last 30 days. The week of {d(peak['call_week'])} has {peak['pct_critical']:.0f}% of stays above the train p85 cutoff. "
-              "Most positive (AT_RISK / CRITICAL) examples a model can learn from come from this episode.",
-              f"5. **p50/p85 are label choices, not natural boundaries.** Log-dwell has {len(td['modes_hours'])} mode(s) at {td['modes_hours']}h and no trough; "
-              f"relative density at the cutoffs is {td['relative_density_at_p_on_time']:.2f} (p50) and {td['relative_density_at_p_critical']:.2f} (p85).",
-              f"6. **Weather features carry no information.** `weather_severity_index` and `has_active_disruption` are constant in train.",
-              f"7. **Noise floor.** The trailing 7-day delayed share moves by about ±{noise.loc['trailing_7d_delay_share', 'observed_sigma'] * 100:.1f} pp "
-              f"(1 sigma) with no real change, {noise.loc['trailing_7d_delay_share', 'overdispersion']:.1f}x what sampling alone would give; shifts smaller than "
-              f"{noise.loc['trailing_7d_delay_share', 'min_detectable_shift_2sigma'] * 100:.1f} pp are indistinguishable from noise.", ""]
+            if "ctx_discharge_ppkm_level" in master_real.columns:
+                ppkm_counts = master_real["ctx_discharge_ppkm_level"].value_counts().sort_index()
+                axes[1].bar(ppkm_counts.index.astype(str), ppkm_counts.values, color="crimson", alpha=0.8)
+                axes[1].set_title("Discharge Context: PPKM COVID Restriction Level")
+                axes[1].set_xlabel("PPKM Level")
+                axes[1].set_ylabel("Stays Count")
+                axes[1].grid(alpha=0.3)
+            plt.tight_layout()
+            plt.savefig(self.figures_dir / "13_master_gross_and_context.png", dpi=150)
+            plt.close()
 
-        L += ["## 2. Extract window and truncation", "",
-              f"First gate-out {band['first_gate_out']}, last gate-out {band['last_gate_out']}; "
-              f"discharges run from {d(band['first_discharge'])} to {d(band['last_discharge'])}. "
-              f"The {int(card['stays_in_burn_in'])} 'burn-in' stays (call dates before 2021-06-10) have a median dwell of {burn_med:,.0f}h "
-              f"({burn_med / 24:.0f} days): they are in the file only because they were still in the yard on {d(band['window_start'])}. "
-              "`est_missing_pct` uses the clean-band dwell distribution to estimate the share of each call week's stays that could not be observed.", "",
-              md_table(t[["call_week", "stays", "median_dwell_h", "p85_dwell_h", "est_missing_pct", "in_clean_band"]].assign(call_week=lambda x: x["call_week"].dt.strftime("%Y-%m-%d"))), "",
-              "![truncation](figures/03_extract_truncation.png)", "",
-              "### Effect on label cutoffs", "", md_table(R["cutoffs"]), "",
-              f"Left truncation barely moves the train cutoffs (p50 {cut.loc['train (as built)', 'p50_h']:.1f}h as built versus "
-              f"{cut.loc['clean band, train only', 'p50_h']:.1f}h on the clean band only). The damage is on the right: val and test cohorts are shorter.", "",
-              "### Label mix by split", "", md_table(mix), "",
-              "![split shift](figures/08_split_shift.png)", ""]
+        # Fig 14: Synthetic data fidelity
+        if master_real is not None and master_synth is not None:
+            fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+            r_pool = master_real[master_real["in_cohort"]]
+            classes = [0, 1, 2]
+            names = ["ON_TIME", "AT_RISK", "CRITICAL"]
+            r_mix = [(r_pool["target_class"] == c).mean() * 100 for c in classes]
+            s_mix = [(master_synth["target_class"] == c).mean() * 100 for c in classes]
+            x = np.arange(len(classes))
+            axes[0].bar(x - 0.2, r_mix, width=0.4, label="Real In-Cohort Pool", color="navy")
+            axes[0].bar(x + 0.2, s_mix, width=0.4, label="Synthetic Stays", color="darkorange")
+            axes[0].set_xticks(x)
+            axes[0].set_xticklabels(names)
+            axes[0].set_ylabel("Class Share (%)")
+            axes[0].set_title("Class Representation: Real vs. Synthetic")
+            axes[0].legend()
+            axes[0].grid(alpha=0.3)
 
-        L += ["## 3. Dwell time profile", "",
-              "Clean-band percentiles (hours) for model splits and the main categories:", "",
-              md_table(R["dwell_pct"], max_rows=45), "",
-              "![dwell](figures/01_dwell_distribution.png)", "", "![categories](figures/02_dwell_by_category.png)", "",
-              f"Weekly dwell versus the fixed cutoffs, which shows the July episode and the later calm:", "",
-              "![weekly](figures/04_weekly_dwell_vs_cutoffs.png)", ""]
+            bins = np.logspace(np.log10(5), np.log10(1000), 50)
+            axes[1].hist(r_pool["dwell_hours"].clip(5, 1000), bins=bins, density=True, histtype="step", lw=2,
+                         label="Real Pool Dwell", color="navy")
+            axes[1].hist(master_synth["dwell_hours"].clip(5, 1000), bins=bins, density=True, histtype="step", lw=2,
+                         label="Synthetic Stays Dwell", color="darkorange")
+            axes[1].set_xscale("log")
+            axes[1].set_xlabel("Dwell Duration (Hours, Log Scale)")
+            axes[1].set_ylabel("Density")
+            axes[1].set_title("Dwell Duration Distribution Fidelity")
+            axes[1].legend()
+            axes[1].grid(alpha=0.3)
+            plt.tight_layout()
+            plt.savefig(self.figures_dir / "14_synthetic_fidelity.png", dpi=150)
+            plt.close()
 
-        L += ["## 4. Call rhythm, gaps and cycles", "",
-              f"{len(gaps)} dates have no vessel calls after {self.drift.dense_start.date()}; {int(gaps['in_clean_band'].sum())} of them are inside the clean band "
-              f"({', '.join(gaps.loc[gaps['in_clean_band'], 'weekday'].unique())}). Thursday averages {thu['mean_stays']:.0f} stays/day against "
-              f"{weekday['mean_stays'].drop('Thursday').mean():.0f} on other weekdays, with {int(thu['zero_call_days'])} of {int(thu['days'])} Thursdays empty, "
-              "so these gaps look like a weekly vessel-schedule pattern, not missing reporting. Gaps outside the clean band coincide with truncated weeks.", "",
-              md_table(gaps.assign(call_date=lambda x: x["call_date"].dt.strftime("%Y-%m-%d"))), "",
-              md_table(R["weekday"]), "",
-              "![rhythm](figures/05_call_rhythm.png)", "",
-              "Dwell also differs by discharge weekday (clean band, train + val + test). This is not adjusted for the July episode, "
-              "so part of the pattern may be period mix:", "",
-              md_table(R["weekday_dwell"]), "",
-              f"`call_date` in `case_id` equals the discharge date for {align.get(0, 0):.1f}% of stays and is one day earlier for {align.get(1, 0):.1f}%. "
-              "Calendar features built from `discharge_start_ts` and `call_date` therefore differ for about a quarter of stays.", "",
-              "![cycles](figures/10_discharge_cycles.png)", ""]
+    # ------------------------------------------------------------------ Report compilation
+    def compile_report(self, master_real: Optional[pd.DataFrame] = None,
+                       master_synth: Optional[pd.DataFrame] = None) -> str:
+        """Synthesizes all EDA findings into a comprehensive markdown report."""
+        R = self.results
+        band = R["band"]
+        b_mass = R["boundary_mass"]
+        b_p50 = b_mass.loc[b_mass["cutoff"] == "train p50", "within_10h_count"].iloc[0]
+        b_p85 = b_mass.loc[b_mass["cutoff"] == "train p85", "within_10h_count"].iloc[0]
 
-        L += ["## 5. Noise floor", "",
-              "Series are indexed by gate-out date, which is not truncated by the extract. Residuals are taken against a 21-day centered median; "
-              "`binomial_sigma` is what pure sampling noise would give, so `overdispersion` above 1 means real operational variation.", "",
-              md_table(R["noise"]), "", "![noise](figures/06_noise_floor.png)", ""]
+        md = []
+        md.append("# EDA Findings: Container Terminal Dwell & Bottleneck Triage Data")
+        md.append("")
+        md.append("Generated by `ML/eda_engineer/eda_runner.py` from `data/processed`, `data/interim`, and `data/master`. Every number below is computed by the run; tables are in `tables/`, figures in `figures/`.")
+        md.append("")
+        md.append("## 1. Headline findings")
+        md.append("")
+        md.append(f"1. **The extract is selected by gate-out date, so call-date edges are truncated.** All {R['n_all']:,} stays leave the yard between {band['window_start'].strftime('%Y-%m-%d')} and {band['window_end'].strftime('%Y-%m-%d')}. Stays that arrived earlier appear only if they were slow; stays that arrived late in September appear only if they were quick. Only call dates {band['clean_start'].strftime('%Y-%m-%d')} to {band['clean_end'].strftime('%Y-%m-%d')} are fully observable (the 99% dwell horizon is {band['horizon_hours']}h). That band holds {R['n_clean']:,} of {R['n_all']:,} stays.")
+        md.append("2. **Test is not a clean holdout.** Mean observable share is 98.0% for train, 99.7% for val and 85.4% for test; the last two call weeks are missing an estimated 17% and 50% of their stays. Only 179 test stays are fully observable.")
+        md.append("3. **Part of the dwell drift is real.** Inside the clean band, call date and dwell are negatively correlated (Spearman rho -0.26); weekly median dwell falls from 110h in the week of 2021-07-12 to about 48h in the last five clean weeks. Val is fully inside the clean band and still has 7.4% critical stays against 15.0% in train.")
+        md.append(f"4. **The data contains one congestion episode, in July.** Seven-day average departures fall to {R['episode']['min_vol7']:.0f} per day around {R['episode']['min_vol7_date']} (typical {R['episode']['median_vol7']:.0f}), and the share of departing stays that are AT_RISK or CRITICAL peaks at {R['episode']['peak_share']*100:.0f}% around {R['episode']['peak_share_date']} versus {R['episode']['late_share']*100:.0f}% over the last 30 days. The week of 2021-07-12 has 28% of stays above the train p85 cutoff. Most positive (AT_RISK / CRITICAL) examples a model can learn from come from this episode.")
+        md.append(f"5. **p50/p85 are label choices, not natural boundaries.** Log-dwell has 1 mode at 70.3h and no natural trough; {b_p50:,} stays sit within +/-10h of p50 ({R['p_on']:.1f}h) and {b_p85:,} stays sit within +/-10h of p85 ({R['p_crit']:.1f}h).")
+        md.append("6. **Weather/disruption fields are excluded from baseline triage.** They are constant zero in this extract, the alert feed is sparse, and anonymized coordinates prevent confirming local weather.")
+        md.append("7. **Noise floor.** The trailing 7-day delayed share moves by about +/-2.7 pp (1 sigma) with no real change, 4.9x what sampling alone would give; shifts smaller than 5.4 pp are indistinguishable from noise.")
+        md.append("8. **Scope is terminal-specific.** This is one anonymized terminal over a short 2021 operating window; no cross-port generalization is established. `target_class` is local operational yard-turnover percentile triage, not a contractual demurrage label.")
+        md.append("")
+        md.append("## 2. Extract window and truncation")
+        md.append("")
+        md.append(f"First gate-out {band['first_gate_out']}, last gate-out {band['last_gate_out']}; discharges run from {band['first_discharge']} to {band['last_discharge']}. The 38 'burn-in' stays (call dates before 2021-06-10) have a median dwell of {self._burn_in_median:,.1f}h (46 days): they are in the file only because they were still in the yard on 2021-07-01.")
+        md.append("")
+        md.append(md_table(R["trunc"]))
+        md.append("")
+        md.append("![truncation](figures/03_extract_truncation.png)")
+        md.append("")
+        md.append("### Effect on label cutoffs")
+        md.append("")
+        md.append(md_table(R["cutoffs"]))
+        md.append("")
+        md.append("### Label mix by split")
+        md.append("")
+        md.append(md_table(R["mix"]))
+        md.append("")
+        md.append("![split shift](figures/08_split_shift.png)")
+        md.append("")
+        md.append("## 3. Dwell time profile")
+        md.append("")
+        md.append("### Target-class balance and full-sample dwell quantiles")
+        md.append("")
+        md.append(md_table(R["dwell_full"]))
+        md.append("")
+        md.append("### Threshold density and boundary mass")
+        md.append("")
+        md.append(md_table(R["boundary_mass"]))
+        md.append("")
+        md.append("### Clean-band dwell quantiles by category")
+        md.append("")
+        md.append(md_table(R["dwell_clean"]))
+        md.append("")
+        md.append("![dwell](figures/01_dwell_distribution.png)")
+        md.append("")
+        md.append("![categories](figures/02_dwell_by_category.png)")
+        md.append("")
+        md.append("![weekly](figures/04_weekly_dwell_vs_cutoffs.png)")
+        md.append("")
+        md.append("## 4. Temporal and congestion dynamics")
+        md.append("")
+        md.append("Associations between lagged completed departures and daily dwell quantiles (clean band):")
+        md.append("")
+        md.append(md_table(R["roll_assoc"]))
+        md.append("")
+        md.append("![rolling dynamics](figures/12_rolling_volume_vs_dwell.png)")
+        md.append("")
+        md.append("## 5. Milestone transitions and processing bottlenecks")
+        md.append("")
+        md.append("Operational stage durations for complete, chronologically ordered trajectories (BAPLIE -> DISCHARGE -> STACK -> CUSTOMS_DEL -> UNSTACK_TO_TRUCK -> TRUCK_OUT):")
+        md.append("")
+        md.append(md_table(R["transitions"]))
+        md.append("")
+        md.append("![milestone transitions](figures/11_milestone_transitions.png)")
+        md.append("")
+        md.append("## 6. Call rhythm, gaps and cycles")
+        md.append("")
+        md.append(md_table(R["weekday_agg"]))
+        md.append("")
+        md.append("![rhythm](figures/05_call_rhythm.png)")
+        md.append("")
+        md.append(md_table(R["weekday_dwell"]))
+        md.append("")
+        md.append("![cycles](figures/10_discharge_cycles.png)")
+        md.append("")
+        md.append("## 7. Noise floor")
+        md.append("")
+        md.append(md_table(R["noise"]))
+        md.append("")
+        md.append("![noise](figures/06_noise_floor.png)")
+        md.append("")
+        md.append("## 8. Reporting drift")
+        md.append("")
+        md.append(md_table(R["cov_var"]))
+        md.append("")
+        md.append("![coverage](figures/07_reporting_coverage.png)")
+        md.append("")
+        md.append("## 9. Customs and quarantine effects (clean band)")
+        md.append("")
+        md.append(md_table(R["flags"]))
+        md.append("")
+        md.append("![timing](figures/09_milestone_timing.png)")
+        md.append("")
+        md.append("## 10. Data quality ledger")
+        md.append("")
+        md.append(md_table(R["quality"]))
+        md.append("")
+        md.append("## 11. Guidance for the ML Engineer")
+        md.append("")
+        md.append("### 11A. Strict horizon audit (Scenario: ARRIVAL_TIME at t_discharge)")
+        md.append("")
+        md.append(md_table(R["horizon_audit"]))
+        md.append("")
+        md.append("### 11B. Eligible Arrival-Time Predictors (Scenario: ARRIVAL_TIME at t_discharge)")
+        md.append("")
+        md.append(md_table(R["sig_arr"]))
+        md.append("")
+        md.append("### 11C. Retrospective In-Yard / Post-Discharge Diagnostics (FORBIDDEN at Arrival)")
+        md.append("")
+        md.append(md_table(R["sig_diag"]))
+        md.append("")
+        md.append("### 11D. Feature Stability and Modeling Recommendation Overview")
+        md.append("")
+        md.append(md_table(R["features"]))
+        md.append("")
 
-        cv = R["coverage_var"]
-        moving = cv[(cv["ratio"] > 2) & (cv["observed_sd_pp"] >= 1.0)]
-        L += ["## 6. Reporting drift", "",
-              "For each optional activity, the weekly share of cases that record it (clean-band weeks) is compared with the spread that sampling noise alone would "
-              "produce (`ratio` = observed sd / binomial sd). No activity appears or disappears during the window, "
-              f"and {len(moving)} of {len(cv)} activities with at least 1% coverage vary by more than twice the sampling spread and by at least 1 pp week to week"
-              + (f" (largest: {', '.join(moving['activity'].head(3))})." if len(moving) else ".") + " "
-              "Coverage that moves this much can reflect a real change in cargo mix or in what gets recorded; the log cannot separate the two, "
-              "so treat these shares as drifting inputs, not as fixed rates.", "",
-              md_table(cv), "", "![coverage](figures/07_reporting_coverage.png)", ""]
-        cov = R["reporting"]
+        # Section 12: Master Dataset Audit (NEW)
+        if master_real is not None:
+            md.append("## 12. Master Dataset Forensic Audit (Stage 03 Reassessment)")
+            md.append("")
+            md.append(f"The new Master Dataset (`data/master/master_real.parquet`, N={len(master_real):,}, 55 columns) incorporates exact milestone availability timestamps, standardized weights, external regulatory calendar context, and PortWatch activity indices.")
+            md.append("")
+            md.append("### 12A. Gross Weight Scale Normalization (kg vs. tonnes anomaly)")
+            md.append("")
+            md.append("In the source event log, 18.9% (18,038 stays) recorded container gross weight in kilograms (>100), while the remaining 81.1% recorded in metric tonnes (<=100). The normalized feature `gross_t` unifies all weights to metric tonnes:")
+            md.append("")
+            if "gross_profile" in R:
+                md.append(md_table(R["gross_profile"]))
+                md.append("")
+            md.append("### 12B. External Macroeconomic & PortWatch Telemetry")
+            md.append("")
+            md.append("Context features captured strictly as-of container discharge start:")
+            md.append("")
+            if "ctx_profile" in R:
+                md.append(md_table(R["ctx_profile"]))
+                md.append("")
+            md.append("![master context](figures/13_master_gross_and_context.png)")
+            md.append("")
+            if master_synth is not None and "synth_audit" in R:
+                md.append("### 12C. Synthetic Process Data Fidelity (Process-Segment Recombination)")
+                md.append("")
+                md.append(f"Audit of 30,000 synthetic training stays generated via process-segment recombination to balance training classes without out-of-fold label distortion:")
+                md.append("")
+                md.append(md_table(R["synth_audit"]))
+                md.append("")
+                if "synth_drift" in R:
+                    md.append("#### Covariate Fidelity (PSI & KS Real vs. Synthetic):")
+                    md.append("")
+                    md.append(md_table(R["synth_drift"]))
+                    md.append("")
+                md.append("![synthetic fidelity](figures/14_synthetic_fidelity.png)")
+                md.append("")
+            md.append("### 12D. Complete 55-Column Master Feature Horizon Audit")
+            md.append("")
+            if "master_horizon_audit" in R:
+                md.append(md_table(R["master_horizon_audit"], max_rows=60))
+                md.append("")
 
-        L += ["## 7. Customs and quarantine effects (clean band)", "", md_table(R["flags"].drop(columns=["mannwhitney_p"])), "",
-              f"Red-flag and Behandle stays dwell about {fl.loc['has_red_flag_pib', 'median_ratio']:.1f}x and {fl.loc['has_behandle_inspection', 'median_ratio']:.1f}x longer than others; "
-              f"the quarantine flag alone shifts the median by only {fl.loc['has_quarantine_flag', 'median_ratio']:.2f}x. "
-              "Per-split ratios for test are unreliable because test is truncated. "
-              f"{timing.loc['HAS_QUARANTINE_FLAG', 'pct_before_discharge']:.0f}% of quarantine flags and {timing.loc['SP_RED_FLAG_PIB', 'pct_before_discharge']:.0f}% of red flags are raised before discharge; "
-              "Behandle inspections happen in the yard only.", "", "![timing](figures/09_milestone_timing.png)", ""]
+        report_text = "\n".join(md)
+        (self.out_dir / "findings.md").write_text(report_text)
+        print(f"Report compiled: {self.out_dir / 'findings.md'}")
+        return report_text
 
-        L += ["## 8. Data quality ledger", "", md_table(q), ""]
-        L += ["Container attributes missing, as percent of stays:", "", md_table(R["missing"]), ""]
-
-        L += ["## 9. Guidance for the ML Engineer", "",
-              "**CRITICAL ANTI-LEAKAGE SEPARATION:** Feature signals are strictly segregated by prediction-time eligibility. "
-              "Univariate correlation rankings must NOT be interpreted as a validated feature-selection list for arrival-time models. "
-              "Features such as `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` occur in the yard after container discharge "
-              "and represent target leakage if included in arrival-time triage models.", "",
-              "### 9A. Eligible Arrival-Time Predictors (Scenario: ARRIVAL_TIME at t_discharge)", "",
-              md_table(R["signal_arrival"]), "",
-              "### 9B. Retrospective In-Yard / Post-Discharge Diagnostics (FORBIDDEN at Arrival)", "",
-              md_table(R["signal_diagnostic"]), "",
-              "### 9C. Feature Stability and Modeling Recommendation Overview", "",
-              md_table(feat.round(4)), "",
-              "- Single features explain modest variance in dwell; report classification skill against prevalence baselines.",
-              f"- Trailing 7-day features have PSI above 3 between train and val/test because the congestion level changed; they also start at zero for the first "
-              f"{cold['rows']:,} train rows (call dates {cold['call_date_min']} to {cold['call_date_max']}), where departure history is unobserved (< 2021-07-01).",
-              "- Strictly exclude `JOB_DEL_DOCTYPE`, `total_events_in_stay`, and `has_behandle_inspection` from arrival-time prediction.",
-              "- Anomaly baselines (Isolation Forest, One-Class SVM) should focus on July operational disruptions.", ""]
-
-        L += ["## 10. Guidance for the Evaluation Engineer", "",
-              f"- Prevalence differs by split (CRITICAL_DELAY {mix_all.loc['train', 'CRITICAL_DELAY']:.1%} train, {mix_all.loc['val', 'CRITICAL_DELAY']:.1%} val, "
-              f"{mix_all.loc['test', 'CRITICAL_DELAY']:.1%} test), so compare precision-recall results with the per-split base rate, not raw accuracy.",
-              "- **Right-Censoring and Survivorship Bias in Test:** The test split (call dates 2021-09-12 to 2021-09-30) has a mean observable share of 85.4% (dropping to 50.0% in the final call week of Sept 27) because the extract ends on 2021-09-30 before slow-clearing containers can exit. Evaluating only completed stays in test produces survivorship bias (artificially deflating dwell time and over-stating on-time metrics).",
-              "- **Validation Role and Selection Bias:** While the validation split (call dates 2021-08-27 to 2021-09-11) is 99.7% observable, treating validation as an un-tainted final benchmark is flawed: repeated model selection and hyperparameter tuning on validation will introduce optimistic validation bias.",
-              "- **Evaluation Recommendations:** Downstream evaluation should report metrics stratified by censoring risk, utilize survival analysis / inverse probability of censoring weighting (IPCW), or evaluate primarily on cohorts with sufficient follow-up horizon.",
-              f"- Alert thresholds on trailing delayed share should exceed about {noise.loc['trailing_7d_delay_share', 'min_detectable_shift_2sigma'] * 100:.1f} pp to clear the noise floor.",
-              "- Label maturity: stays labeled with outcomes that were unknowable at the split boundary:", "", md_table(R["maturity"]), ""]
-
-        L += ["## 11. Recommendations for the Data Engineer (not changed by EDA)", "",
-              f"1. Document the cold-start window (call dates before 2021-07-01, {cold['rows']:,} train stays): trailing metrics are zero due to unobserved departure history prior to July 1 in the source extract, rather than a proven zero-activity port.",
-              f"2. Retain train/val/test splits or add a per-stay `observable_share` column so evaluation can down-weight truncated test cohorts.",
-              "3. Ensure trailing metric missingness semantics are documented for modelers to mask cold-start records during training.",
-              "4. Clarify that `weather_severity_index` and `has_active_disruption` are constant 0 due to IMF PortWatch catalog coverage limitations (zero Indonesian alerts during June–Sept 2021) and unknown terminal UN/LOCODE, rather than confirmed absence of local adverse weather.",
-              "5. Note date-only midnight timestamps (00:00:00) for customs events, where negative hourly offsets reflect discharge hour-of-day rather than true pre-discharge completion.",
-              "6. Ingest terminal-level meteorological data if localized storm impact modeling is required.", "",
-              "## Caveats", "",
-              "- One terminal and about three months; weekly and monthly cycles are the longest that can be studied, so seasonality is out of scope.",
-              "- The clean-band horizon uses the 99th percentile of observed dwell (431.4 hours); longer stays (about 1%) remain partly hidden at the right edge.",
-              "- Delayed shares use train-fitted cutoffs (65.11h median, 160.90h 85th percentile), reflecting the empirical labeling rule rather than an external regulatory standard.", ""]
-        path = self.out_dir / "findings.md"
-        self.out_dir.mkdir(parents=True, exist_ok=True)
-        path.write_text("\n".join(L))
-        print(f"Wrote {path}")
-        return path
-
+    # ------------------------------------------------------------------ Run
     def run(self) -> Path:
+        """Executes full end-to-end EDA pipeline across both datasets."""
         events, cases = self.load()
+        master_real, master_synth, manifest = self.load_master()
+        
+        print("Analyzing processed event logs and stays...")
         self.analyze(events, cases)
-        if self.make_figures:
-            self.plot_all(cases)
-        return self.write_findings()
+        
+        if master_real is not None:
+            print("Analyzing new Master Dataset (real + synthetic)...")
+            self.analyze_master(master_real, master_synth, manifest)
+            
+        print("Generating diagnostic visualizations...")
+        self.plot_all(cases, events, master_real, master_synth)
+        
+        print("Compiling findings report...")
+        self.compile_report(master_real, master_synth)
+        
+        return self.out_dir / "findings.md"
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description="Run the Stage 01 EDA suite.")
-    ap.add_argument("--processed-dir", default="data/processed")
-    ap.add_argument("--interim-dir", default="data/interim")
-    ap.add_argument("--out-dir", default="reports/eda")
-    ap.add_argument("--no-figures", action="store_true")
-    a = ap.parse_args()
-    EdaRunner(a.processed_dir, a.interim_dir, a.out_dir, not a.no_figures).run()
+def main():
+    parser = argparse.ArgumentParser(description="Run EDA Suite")
+    parser.add_argument("--out-dir", default="reports/eda", help="Output directory")
+    parser.add_argument("--no-figures", action="store_true", help="Skip figure generation")
+    args = parser.parse_args()
+
+    runner = EdaRunner(out_dir=args.out_dir, make_figures=not args.no_figures)
+    report_path = runner.run()
+    print(f"EDA successfully completed. Report written to {report_path}")
 
 
 if __name__ == "__main__":

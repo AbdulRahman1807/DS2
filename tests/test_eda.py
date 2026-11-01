@@ -45,6 +45,55 @@ def test_milestone_timing_marks_pre_discharge_activities():
     assert timing.loc["CUSTOMS_DEL", "n"] == 1  # the 1954 sentinel is excluded from offsets
 
 
+def test_milestone_transitions_require_complete_ordered_trajectory():
+    rows = []
+    milestones = [
+        ("BAPLIE", "2021-07-09 00:00", "2021-07-09 01:00"),
+        ("DISCHARGE", "2021-07-09 02:00", "2021-07-09 03:00"),
+        ("STACK", "2021-07-09 04:00", "2021-07-09 05:00"),
+        ("CUSTOMS_DEL", "2021-07-09 06:00", "2021-07-09 07:00"),
+        ("UNSTACK_TO_TRUCK", "2021-07-09 08:00", "2021-07-09 09:00"),
+        ("TRUCK_OUT", "2021-07-09 10:00", "2021-07-09 11:00"),
+    ]
+    for case_id, customs_start in [("A", "2021-07-09 06:00"), ("B", "2021-07-09 01:00")]:
+        for activity, start, end in milestones:
+            if activity == "CUSTOMS_DEL":
+                start = customs_start
+            rows.append((case_id, activity, start, end))
+    events = pd.DataFrame(rows, columns=["case_id", "activity", "Start Timestamp", "End Timestamp"])
+    events["Start Timestamp"] = pd.to_datetime(events["Start Timestamp"])
+    events["End Timestamp"] = pd.to_datetime(events["End Timestamp"])
+
+    transitions = EventLogProfiler().milestone_transitions(events)
+
+    assert transitions.attrs["cases"] == 2
+    assert transitions.attrs["complete_cases"] == 2
+    assert transitions.attrs["out_of_order_complete_cases"] == 1
+    assert transitions["complete_ordered_trajectories"].eq(1).all()
+    assert transitions.loc[0, "transition"] == "BAPLIE -> DISCHARGE"
+    assert transitions.loc[0, "median_hours"] == 2.0
+
+
+def test_horizon_audit_uses_event_time_and_excludes_weather():
+    events = pd.DataFrame([
+        ("A", "DISCHARGE", "2021-07-10 08:00", "2021-07-10 09:00"),
+        ("A", "HAS_QUARANTINE_FLAG", "2021-07-10 07:00", "2021-07-10 07:30"),
+        ("B", "DISCHARGE", "2021-07-10 08:00", "2021-07-10 09:00"),
+        ("B", "HAS_QUARANTINE_FLAG", "2021-07-10 10:00", "2021-07-10 10:30"),
+    ], columns=["case_id", "activity", "Start Timestamp", "End Timestamp"])
+    events["Start Timestamp"] = pd.to_datetime(events["Start Timestamp"])
+    events["End Timestamp"] = pd.to_datetime(events["End Timestamp"])
+    timing = EventLogProfiler().milestone_timing(events)
+
+    audit = EventLogProfiler.horizon_audit(timing).set_index("feature")
+
+    assert len(audit) == 32
+    assert audit.index.is_unique
+    assert "50.0% of observed events start before discharge" in audit.loc["has_quarantine_flag", "audit_evidence"]
+    assert audit.loc["weather_severity_index", "status_at_t_discharge"] == "EXCLUDE_UNVERIFIED_WEATHER"
+    assert audit.loc["has_active_disruption", "status_at_t_discharge"] == "EXCLUDE_UNVERIFIED_WEATHER"
+
+
 @pytest.fixture
 def window_cases():
     """Stays with gate-outs from 2021-07-01 to 2021-09-30; dwell lognormal around 50h."""
@@ -122,7 +171,12 @@ def test_runner_end_to_end_on_real_outputs(tmp_path):
     report = EdaRunner(out_dir=str(tmp_path), make_figures=False).run()
     text = report.read_text()
     assert "## 1. Headline findings" in text and "clean band" in text
+    assert "## 5. Milestone transitions and processing bottlenecks" in text
+    assert "Strict horizon audit" in text
     assert (tmp_path / "tables" / "truncation.csv").exists()
+    assert (tmp_path / "tables" / "transitions.csv").exists()
+    assert (tmp_path / "tables" / "horizon_audit.csv").exists()
+    assert (tmp_path / "tables" / "rolling_associations.csv").exists()
     assert (tmp_path / "tables" / "signal_arrival.csv").exists()
     assert (tmp_path / "tables" / "signal_diagnostic.csv").exists()
 
@@ -140,10 +194,12 @@ def test_feature_signal_annotates_eligibility_and_filters_arrival_leakage():
         "total_events_in_stay": rng.integers(5, 25, n),
         "has_behandle_inspection": rng.choice([0, 1], n),
         "trailing_7d_volume": rng.uniform(500, 2000, n),
+        "weather_severity_index": np.zeros(n),
     })
 
     profiler = EventLogProfiler()
-    numeric = ["CTR_SIZE", "total_events_in_stay", "has_behandle_inspection", "trailing_7d_volume"]
+    numeric = ["CTR_SIZE", "total_events_in_stay", "has_behandle_inspection", "trailing_7d_volume",
+               "weather_severity_index"]
     categorical = ["carrier_prefix", "JOB_DEL_DOCTYPE"]
 
     sig = profiler.feature_signal(df, numeric=numeric, categorical=categorical)
@@ -157,6 +213,7 @@ def test_feature_signal_annotates_eligibility_and_filters_arrival_leakage():
     assert sig_map["JOB_DEL_DOCTYPE"] == "POST_DISCHARGE_DIAGNOSTIC"
     assert sig_map["total_events_in_stay"] == "POST_DISCHARGE_DIAGNOSTIC"
     assert sig_map["has_behandle_inspection"] == "POST_DISCHARGE_DIAGNOSTIC"
+    assert sig_map["weather_severity_index"] == "EXCLUDED_UNVERIFIED_WEATHER"
 
     # Filter for arrival-time models: post-discharge features MUST NOT be present
     arrival_sig = profiler.filter_eligible_signals(sig, scenario="ARRIVAL_TIME")
@@ -164,6 +221,7 @@ def test_feature_signal_annotates_eligibility_and_filters_arrival_leakage():
     assert "JOB_DEL_DOCTYPE" not in arrival_features
     assert "total_events_in_stay" not in arrival_features
     assert "has_behandle_inspection" not in arrival_features
+    assert "weather_severity_index" not in arrival_features
     assert "CTR_SIZE" in arrival_features
     assert "carrier_prefix" in arrival_features
 
@@ -196,3 +254,55 @@ def test_date_only_milestone_same_vs_different_day():
     # 1 of 3 same calendar day = 33.3%
     assert 30.0 < row["pct_calendar_same_day"] < 35.0
     assert "Date-only" in row["timing_note"]
+
+
+def test_master_horizon_audit_and_gross_profiling():
+    """Verifies that the new master dataset 55-feature audit and gross weight profiling operate correctly."""
+    from pathlib import Path
+    master_path = Path("data/master/master_real.parquet")
+    if not master_path.exists():
+        pytest.skip("data/master/master_real.parquet not found")
+    
+    df_real = pd.read_parquet(master_path)
+    profiler = EventLogProfiler()
+    
+    # 1. 55-column audit
+    audit = profiler.master_horizon_audit(df_real).set_index("column")
+    assert len(audit) == 55
+    assert audit.index.is_unique
+    assert audit.loc["gross_t", "status_at_t_discharge"] == "PASS_AT_DISCHARGE"
+    assert audit.loc["gross_recorded_in_kg", "status_at_t_discharge"] == "PASS_AT_DISCHARGE"
+    assert audit.loc["avail_CUSTOMS_DEL", "status_at_t_discharge"] == "AVAILABLE_AT_AS_OF_TIMESTAMP"
+    assert audit.loc["ctx_discharge_ppkm_level", "status_at_t_discharge"] == "PASS_AT_DISCHARGE"
+    
+    # 2. Gross weight profile
+    prof = profiler.gross_weight_profile(df_real).set_index("stratum")
+    assert "Values Recorded in Kilograms (> 100)" in prof.index
+    kg_row = prof.loc["Values Recorded in Kilograms (> 100)"]
+    assert kg_row["count"] == 18038
+    assert 18.0 < kg_row["share_pct"] < 19.5
+    assert kg_row["raw_gross_median"] > 1000
+    assert kg_row["gross_t_median"] <= 100
+
+
+def test_synthetic_data_fidelity_audit():
+    """Verifies fidelity comparison between real training pool and synthetic stays."""
+    from pathlib import Path
+    real_p = Path("data/master/master_real.parquet")
+    synth_p = Path("data/master/master_synthetic.parquet")
+    if not (real_p.exists() and synth_p.exists()):
+        pytest.skip("Master real or synthetic parquet missing")
+
+    real_df = pd.read_parquet(real_p)
+    synth_df = pd.read_parquet(synth_p)
+    real_pool = real_df[real_df["in_cohort"]]
+
+    profiler = EventLogProfiler()
+    fidelity = profiler.synthetic_fidelity_audit(real_pool, synth_df)
+    assert len(fidelity) == 3
+    # Synthetic target is class balanced (~30-38% per class)
+    for _, row in fidelity.iterrows():
+        assert 25.0 < row["synth_share_pct"] < 40.0
+        # Median dwell within 15% of real pool
+        assert abs(row["synth_dwell_p50"] - row["real_dwell_p50"]) / row["real_dwell_p50"] < 0.20
+
