@@ -1,0 +1,45 @@
+{
+  "portwatch_id": "port598",
+  "portwatch_name": "Kralendijk",
+  "portwatch_country": "Bonaire,  Saint Eustatius and Saba",
+  "portwatch_iso3": "BES",
+  "portwatch_iso2": "BQ",
+  "candidates": [
+    {
+      "portwatch_id": "port598",
+      "portwatch_name": "Kralendijk",
+      "portwatch_country": "Bonaire,  Saint Eustatius and Saba",
+      "portwatch_iso3": "BES",
+      "candidate_source": "UNLOCODE",
+      "candidate_id": "BQKRA",
+      "candidate_name": "Kralendijk",
+      "similarity_score": 100.0,
+      "match_method": "EXACT_NORMALIZED_NAME_COUNTRY",
+      "candidate_country": "BQ",
+      "source_file": "UNLOCODE CodeListPart1.csv",
+      "source_row": 7656.0,
+      "candidate_is_accepted": true
+    },
+    {
+      "portwatch_id": "port598",
+      "portwatch_name": "Kralendijk",
+      "portwatch_country": "Bonaire,  Saint Eustatius and Saba",
+      "portwatch_iso3": "BES",
+      "candidate_source": "UPPLY",
+      "candidate_id": "BQKRA",
+      "candidate_name": "Kralendijk",
+      "similarity_score": NaN,
+      "match_method": "IDENTIFIER_BRIDGE_COUNTRY_CONFLICT",
+      "candidate_country": "NL",
+      "source_file": NaN,
+      "source_row": NaN,
+      "candidate_is_accepted": false
+    }
+  ],
+  "investigation_findings": {
+    "root_cause": "The 'COUNTRY_CONFLICT' flag in canonical registry v1.2 is an artifact of Upply classifying the Caribbean Netherlands under the sovereign Kingdom code 'NL' (Netherlands), whereas PortWatch and UN/LOCODE strictly use the ISO 3166-1 territory code 'BQ' / 'BES' (Bonaire, Sint Eustatius and Saba).",
+    "portwatch_vs_unlocode_consistency": "Between PortWatch and UN/LOCODE, there is NO CONFLICT. PortWatch ISO-2 is 'BQ', and the accepted UN/LOCODE identifier is 'BQKRA' with country 'BQ' (100% exact match). Coordinates from UN/LOCODE (1209N 06816W -> 12.15\u00b0N, -68.2667\u00b0W) match the physical harbor of Kralendijk on Bonaire perfectly.",
+    "upply_bridge_artifact": "The Upply candidate was rejected during registry construction with match_method 'IDENTIFIER_BRIDGE_COUNTRY_CONFLICT' because Upply used country_code 'NL'. This triggered the registry builder's country_conflict boolean flag.",
+    "scientific_conclusion": "The recovered coordinates for port598 are authoritative, physically precise, and completely conflict-free with UN/LOCODE. The country conflict is purely a geopolitical cataloging discrepancy in Upply, not a spatial or geographic conflict."
+  }
+}

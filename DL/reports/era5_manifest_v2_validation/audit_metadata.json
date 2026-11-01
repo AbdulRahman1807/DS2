@@ -1,0 +1,35 @@
+{
+  "audit_name": "ERA5 Global Spatial Manifest v2 Scientific Validation and Discrepancy Investigation",
+  "generated_at_utc": "2026-10-31T21:28:20.585766+00:00",
+  "investigated_issues": [
+    "Issue 1: Surface Grid Cell Count Discrepancy (913 vs 736 vs 940)",
+    "Issue 2: Empirical Wave Ocean-Cell Temporal Persistence",
+    "Issue 3: Reassessment of 456 Offshore Wave Proxies",
+    "Issue 4: Kralendijk (port598) Country-Identity Provenance"
+  ],
+  "surface_reconciliation": {
+    "v1_mapped_ports": 949,
+    "v1_unique_surface_cells": 913,
+    "v2_mapped_ports": 980,
+    "v2_actual_unique_surface_cells": 940,
+    "common_ports_coordinate_identity": "100% identical between v1 and v2",
+    "new_unique_cells_from_31_recovered": 27,
+    "shared_cells_from_31_recovered": 3,
+    "narrative_736_status": "EXPLAINED_TYPOGRAPHICAL_REPORTING_ERROR_DATA_IS_940"
+  },
+  "wave_multi_temporal_audit": {
+    "timestamps_evaluated": 8,
+    "total_cells_evaluated": 1207,
+    "theoretical_cells_land_missing_rate": "429/886",
+    "selected_cells_ocean_persistence_rate": "760/776",
+    "seasonally_ice_affected_cells": 16
+  },
+  "offshore_proxy_risk_breakdown": {
+    "LOW_RISK_COASTAL_PROXY": 308,
+    "MODERATE_RISK_REGIONAL_PROXY": 112,
+    "HIGH_RISK_DISTANT_PROXY": 28,
+    "EXTREME_RISK_UNREPRESENTATIVE": 8
+  },
+  "kralendijk_provenance": "VALID_GEOGRAPHIC_UNLOCODE_MATCH_UPPLY_NL_SOVEREIGNTY_ARTIFACT",
+  "protected_files_verified": true
+}

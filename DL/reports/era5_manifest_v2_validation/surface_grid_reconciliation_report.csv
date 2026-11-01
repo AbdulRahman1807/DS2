@@ -1,0 +1,8 @@
+metric,value,notes
+v1_mapped_ports,949,Preserved Upply
+v1_unique_surface_cells,913,Authoritative v1 count
+v2_mapped_ports,980,949 Upply + 31 UN/LOCODE
+v2_actual_unique_surface_cells,940,913 existing + 27 brand new
+v2_narrative_reported_cells,736,Erroneous report narrative string (not in data)
+shared_surface_cells,3,3 cells shared between newly recovered and v1 ports
+brand_new_unique_cells,27,Net increase in unique surface extraction vertices

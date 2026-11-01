@@ -1,0 +1,4 @@
+split_tag,sequence_count,sequence_pct,unique_ports,min_reference_date,max_reference_date,min_input_start_date,max_input_start_date,min_target_start_date,max_target_end_date,mean_target_portcalls_7d,std_target_portcalls_7d,p50_target_portcalls_7d,p90_target_portcalls_7d,pct_sequences_with_noaa,pct_sequences_with_era5,pct_sequences_with_emdat,pct_sequences_with_bts
+train,3696350,71.34,2065,2019-01-30,2023-12-24,2019-01-01,2023-11-25,2019-01-31,2023-12-31,16.87,44.44,5.0,38.0,2.71,0.24,97.24,1.74
+val,743400,14.35,2065,2023-12-31,2024-12-24,2023-12-02,2024-11-25,2024-01-01,2024-12-31,17.43,45.79,5.0,40.0,2.71,0.24,97.24,1.74
+test,741335,14.31,2065,2024-12-31,2025-12-24,2024-12-02,2025-11-25,2025-01-01,2025-12-31,17.02,44.7,5.0,40.0,2.71,0.24,97.24,1.74

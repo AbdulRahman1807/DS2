@@ -1,0 +1,7 @@
+metric,value,notes
+total_ports,2065,Full PortWatch universe
+ports_with_accepted_coords,976,976 confirmed ports (975 conflict-free + 1 BES/BQ)
+ports_without_accepted_coords,1089,"1,085 originally unmapped + 4 exceptions = 1,089"
+identity_confirmed_coords_unavailable,2,Gary (USGYY) and Monroe (USMOI)
+source_conflict_manual_review,2,Bay City (USBCY/USYBZ) and Delfzijl (NLDZL typo)
+unmapped_ports_retained,1085,Strictly preserved with null coordinates

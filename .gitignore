@@ -51,3 +51,49 @@ catboost_info/
 .claude/
 catboost_info/
 ML/ml_engineer/artifacts/hybrid/*.joblib
+
+# Phase 2 - Deep Learning data and generated artifacts
+DL/data/raw/**
+DL/data/interim/**
+DL/data/processed/**
+DL/data/reference/**
+DL/models/**
+DL/.venv/
+DL/.env
+DL/.env.*
+DL/.pytest_cache/
+
+# Phase 2 - Supplementary staging raw data (Exceeds GitHub limits e.g. portcalls.csv 198MB)
+DL/data/staging/supplementary_acquisition/raw/**
+!DL/data/staging/supplementary_acquisition/raw/.gitkeep
+
+# Phase 2 - Model-ready Parquet datasets tracked via Git LFS (.gitattributes)
+# Processed parquets (<100MB each, total ~165MB) are managed by Git LFS.
+!DL/data/staging/supplementary_acquisition/processed/**/*.parquet
+!DL/data/staging/supplementary_acquisition/processed/**/.gitkeep
+
+# Preserve all manifests, schemas, crosswalks, CSVs, and markdown documentation
+!DL/data/staging/supplementary_acquisition/**/*.md
+!DL/data/staging/supplementary_acquisition/**/*.csv
+!DL/data/staging/supplementary_acquisition/**/*.json
+
+# Secrets, Keys, and Local Machine Credentials
+*.env
+*.env.*
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*id_rsa*
+*id_ed25519*
+credentials.json
+token.json
+secrets.json
+.DS_Store
+*/.DS_Store
+*.swp
+*.swo
+
+

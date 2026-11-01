@@ -1,0 +1,167 @@
+dataset_name,column_name,data_type,description,source_provenance,entity_coverage,missingness_handling
+port_daily_unified.parquet,year,int16,Calendar year (2019-2025),PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,month,int8,Calendar month (1-12),PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,day,int8,Day of month (1-31),PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,portwatch_id,object,Canonical alphanumeric port ID,PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,portwatch_name,object,Official port name,PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,country_name,object,Sovereign host country,PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,country_iso3,object,3-letter ISO-3 country code,PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,portcalls_container,int32,Container vessel calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls_dry_bulk,int32,Dry bulk vessel calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls_general_cargo,int32,General cargo calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls_roro,int32,Ro-Ro vehicle carrier calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls_tanker,int32,Tanker vessel calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls_cargo,int32,Combined cargo calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,portcalls,int32,Total vessel calls on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,import_container,int32,Estimated import containers on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,import_cargo,int32,Estimated import cargo tonnage on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,export_container,int32,Estimated export containers on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,export_cargo,int32,Estimated export cargo tonnage on day t,PortWatch AIS,Global (100%),0 for zero calls
+port_daily_unified.parquet,date_utc,object,Universal calendar date (YYYY-MM-DD),PortWatch Primary,Global (100%),Never null
+port_daily_unified.parquet,day_of_week,int8,"Day of week index (0=Mon, 6=Sun)",Derived Calendar,Global (100%),Never null
+port_daily_unified.parquet,is_weekend,int8,"Weekend binary indicator {0,1}",Derived Calendar,Global (100%),Never null
+port_daily_unified.parquet,day_of_year,int16,Julian day of year (1-366),Derived Calendar,Global (100%),Never null
+port_daily_unified.parquet,pw_calls_rolling_7d_mean,float32,Trailing 7-day rolling mean calls,Derived Rolling,Global (100%),Never null
+port_daily_unified.parquet,pw_calls_rolling_14d_mean,float32,Trailing 14-day rolling mean calls,Derived Rolling,Global (100%),Never null
+port_daily_unified.parquet,pw_calls_rolling_30d_mean,float32,Trailing 30-day rolling mean calls,Derived Rolling,Global (100%),Never null
+port_daily_unified.parquet,pw_container_rolling_7d_mean,float32,Trailing 7-day rolling container calls,Derived Rolling,Global (100%),Never null
+port_daily_unified.parquet,pw_container_rolling_14d_mean,float32,Trailing 14-day rolling container calls,Derived Rolling,Global (100%),Never null
+port_daily_unified.parquet,total_cargo_tonnage,float32,Total waterborne cargo (import + export),Derived Activity,Global (100%),Never null
+port_daily_unified.parquet,target_portcalls_lead_1d,float32,1-day ahead vessel calls (t+1),Forecasting Target,Global (100%),Null for final 1 day
+port_daily_unified.parquet,target_portcalls_lead_2d,float32,2-day ahead vessel calls (t+2),Forecasting Target,Global (100%),Null for final 2 days
+port_daily_unified.parquet,target_portcalls_lead_3d,float32,3-day ahead vessel calls (t+3),Forecasting Target,Global (100%),Null for final 3 days
+port_daily_unified.parquet,target_portcalls_lead_4d,float32,4-day ahead vessel calls (t+4),Forecasting Target,Global (100%),Null for final 4 days
+port_daily_unified.parquet,target_portcalls_lead_5d,float32,5-day ahead vessel calls (t+5),Forecasting Target,Global (100%),Null for final 5 days
+port_daily_unified.parquet,target_portcalls_lead_6d,float32,6-day ahead vessel calls (t+6),Forecasting Target,Global (100%),Null for final 6 days
+port_daily_unified.parquet,target_portcalls_lead_7d,float32,7-day ahead vessel calls (t+7),Forecasting Target,Global (100%),Null for final 7 days
+port_daily_unified.parquet,target_portcalls_7d_future_sum,float32,7-day cumulative total vessel calls sum,Forecasting Target,Global (100%),Null for final 7 days
+port_daily_unified.parquet,target_container_calls_7d_future_sum,float32,7-day cumulative container calls sum,Forecasting Target,Global (100%),Null for final 7 days
+port_daily_unified.parquet,target_cargo_tonnage_7d_future_sum,float32,7-day cumulative total cargo tonnage sum,Forecasting Target,Global (100%),Null for final 7 days
+port_daily_unified.parquet,has_era5_coverage,int8,Indicator for ERA5 reanalysis coverage,Spatial Governance,5 US Ports (0.24%),Never null (0 or 1)
+port_daily_unified.parquet,era5_wind_speed_mean_ms,float32,Daily mean 10m wind speed (m/s),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_wind_speed_max_ms,float32,Daily max 10m wind speed (m/s),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_t2m_mean_c,float32,Daily mean 2m air temp (deg C),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_t2m_min_c,float32,Daily min 2m air temp (deg C),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_t2m_max_c,float32,Daily max 2m air temp (deg C),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_msl_mean_hpa,float32,Daily mean barometric pressure (hPa),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_msl_min_hpa,float32,Daily min barometric pressure (hPa),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_msl_max_hpa,float32,Daily max barometric pressure (hPa),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_precipitation_mm,float32,Daily total precipitation (mm),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_wind_direction_mean_deg,float32,Daily mean wind direction (0-360 deg),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_swh_mean_m,float32,Daily mean significant wave height (m),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_swh_max_m,float32,Daily max significant wave height (m),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_mwp_mean_s,float32,Daily mean wave period (seconds),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_wave_direction_mean_deg,float32,Daily mean wave propagation dir (deg),ERA5 Reanalysis v2,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_wave_distance_km,float32,Distance from port to wave grid (km),Spatial Governance,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,era5_wave_proxy_type,object,Proxy classification (COASTAL/OFFSHORE),Spatial Governance,"5 Ports (12,785 rows)",Null if unmapped
+port_daily_unified.parquet,has_noaa_coverage,int8,Indicator for NOAA storm spatial match,Spatial Matching,56 US Ports (2.71%),Never null (0 or 1)
+port_daily_unified.parquet,noaa_storm_event_count_50km,float32,Severe storm events within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_marine_wind_event_count,float32,Marine wind / gale events within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_flood_event_flag,float32,Coastal/flash flood flag within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_tornado_event_flag,float32,Tornado touchdown flag within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_storm_damage_property_sum,float32,Total property damage USD within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_storm_event_count_100km,float32,Severe storm events within 100km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_hurricane_event_flag,float32,Tropical cyclone flag within 100km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_is_storm_active_50km,float32,Binary active storm flag within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_is_storm_active_100km,float32,Binary active storm flag within 100km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_rolling_7d_storm_event_count,float32,Trailing 7-day storm count within 50km,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,noaa_rolling_7d_storm_damage,float32,Trailing 7-day property damage USD,NOAA Storm Events,"56 Ports (143,192 rows)","0 if calm, null if unmapped"
+port_daily_unified.parquet,has_emdat_coverage,int8,Indicator for sovereign EM-DAT disaster panel,Sovereign Match,150 Countries (97.2%),Never null (0 or 1)
+port_daily_unified.parquet,emdat_active_disaster_count,float32,Total active disasters on date t,EM-DAT Database,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,emdat_natural_disaster_count,float32,Active natural disasters on date t,EM-DAT Database,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,emdat_technological_disaster_count,float32,Active tech disasters on date t,EM-DAT Database,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,emdat_total_deaths,float32,Recorded disaster fatalities,EM-DAT Database,150 Countries,NaN if missing/unreported
+port_daily_unified.parquet,emdat_total_affected,float32,Recorded affected persons,EM-DAT Database,150 Countries,NaN if missing/unreported
+port_daily_unified.parquet,emdat_total_damage_usd,float32,Recorded direct damage USD,EM-DAT Database,150 Countries,NaN if missing/unreported
+port_daily_unified.parquet,emdat_macro_disaster_active,float32,Binary macro disaster active flag,EM-DAT Database,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,emdat_log_affected_population,float32,Log10(1 + affected population),Derived Macro,150 Countries,"0.0 if zero, NaN if missing"
+port_daily_unified.parquet,emdat_rolling_7d_disaster_count,float32,Trailing 7-day disaster event-days,Derived Macro,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,emdat_rolling_30d_disaster_count,float32,Trailing 30-day disaster event-days,Derived Macro,150 Countries (5.13M rows),"0 if calm, null if unmapped"
+port_daily_unified.parquet,has_bts_coverage,int8,Indicator for BTS port capacity mapping,Structural Crosswalk,39 US Ports (1.74%),Never null (0 or 1)
+port_daily_unified.parquet,is_bts_forward_filled,float32,Binary flag: 1 if 2024-2025 carry-forward,Provenance Flag,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_baseline_year,float32,Reporting year of BTS baseline,Provenance Flag,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_annual_container_teu_baseline,float32,Annual container throughput baseline (TEU),BTS Port Catalog,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_annual_vessel_call_baseline,float32,Annual vessel arrivals baseline,BTS Port Catalog,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_annual_cargo_short_tons_baseline,float32,Annual cargo tonnage baseline (short tons),BTS Port Catalog,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_daily_expected_vessel_calls,float32,Design operational arrivals/day (annual/365),Derived Capacity,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_daily_expected_teu,float32,Design operational TEU/day (annual/365),Derived Capacity,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_daily_expected_short_tons,float32,Design operational tons/day (annual/365),Derived Capacity,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_annual_teu_growth_pct,float32,YoY TEU capacity growth percentage,Derived Capacity,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_annual_tonnage_growth_pct,float32,YoY tonnage capacity growth percentage,Derived Capacity,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_port_national_rank,float32,US national tonnage rank (1-50),BTS Port Catalog,"39 Ports (92,052 rows)",Null if unmapped
+port_daily_unified.parquet,bts_capacity_pressure_ratio_14d,float32,Rolling 14d calls / daily expected calls,Derived Bottleneck,"39 Ports (77,085 rows)",Null if unmapped or zero base
+sequence_metadata.parquet,sequence_id,object,Sequence pointer index / partition label: sequence_id,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,portwatch_id,object,Sequence pointer index / partition label: portwatch_id,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,portwatch_name,object,Sequence pointer index / partition label: portwatch_name,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,country_iso3,object,Sequence pointer index / partition label: country_iso3,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,split_tag,object,Sequence pointer index / partition label: split_tag,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,reference_date,object,Sequence pointer index / partition label: reference_date,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,input_start_date,object,Sequence pointer index / partition label: input_start_date,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,target_start_date,object,Sequence pointer index / partition label: target_start_date,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,target_end_date,object,Sequence pointer index / partition label: target_end_date,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,target_portcalls_7d_future_sum,float32,Sequence pointer index / partition label: target_portcalls_7d_future_sum,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,target_container_calls_7d_future_sum,float32,Sequence pointer index / partition label: target_container_calls_7d_future_sum,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,target_cargo_tonnage_7d_future_sum,float32,Sequence pointer index / partition label: target_cargo_tonnage_7d_future_sum,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,has_noaa_coverage,int8,Sequence pointer index / partition label: has_noaa_coverage,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,has_era5_coverage,int8,Sequence pointer index / partition label: has_era5_coverage,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,has_emdat_coverage,int8,Sequence pointer index / partition label: has_emdat_coverage,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+sequence_metadata.parquet,has_bts_coverage,int8,Sequence pointer index / partition label: has_bts_coverage,Workstream C Window Generator,"5,181,085 clean sequences",Never null
+north_american_graph_nodes.parquet,node_id,object,Multimodal hinterland node attribute: node_id,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,node_type,object,Multimodal hinterland node attribute: node_type,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,node_name,object,Multimodal hinterland node attribute: node_name,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,country,object,Multimodal hinterland node attribute: country,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,state_province,object,Multimodal hinterland node attribute: state_province,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,latitude,float64,Multimodal hinterland node attribute: latitude,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,longitude,float64,Multimodal hinterland node attribute: longitude,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,degree,int64,Multimodal hinterland node attribute: degree,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,is_canonical_port,int64,Multimodal hinterland node attribute: is_canonical_port,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,canonical_portwatch_id,object,Multimodal hinterland node attribute: canonical_portwatch_id,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,operator_name,object,Multimodal hinterland node attribute: operator_name,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_nodes.parquet,source_provenance,object,Multimodal hinterland node attribute: source_provenance,NTAD Rail / Intermodal / Canonical Ports,"251,646 nodes",Null if unmapped for modality
+north_american_graph_edges.parquet,edge_id,object,Rail and drayage connector edge attribute: edge_id,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,source_node,object,Rail and drayage connector edge attribute: source_node,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,target_node,object,Rail and drayage connector edge attribute: target_node,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,source_name,object,Rail and drayage connector edge attribute: source_name,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,target_name,object,Rail and drayage connector edge attribute: target_name,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,edge_type,object,Rail and drayage connector edge attribute: edge_type,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,distance_km,float32,Rail and drayage connector edge attribute: distance_km,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,distance_miles,float32,Rail and drayage connector edge attribute: distance_miles,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,tracks,int64,Rail and drayage connector edge attribute: tracks,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,operator,object,Rail and drayage connector edge attribute: operator,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,subdivision,object,Rail and drayage connector edge attribute: subdivision,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,net_type,object,Rail and drayage connector edge attribute: net_type,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,stracnet,object,Rail and drayage connector edge attribute: stracnet,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,is_inter_canonical_edge,int64,Rail and drayage connector edge attribute: is_inter_canonical_edge,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+north_american_graph_edges.parquet,source_provenance,object,Rail and drayage connector edge attribute: source_provenance,NTAD Rail / Intermodal Spatial Linkage,"303,016 edges",Null if unmapped for edge type
+caribbean_graph_nodes.parquet,node_id,object,Caribbean regional maritime port attribute: node_id,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,port_name,object,Caribbean regional maritime port attribute: port_name,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,country_name,object,Caribbean regional maritime port attribute: country_name,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,country_iso3,object,Caribbean regional maritime port attribute: country_iso3,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,unlocode,object,Caribbean regional maritime port attribute: unlocode,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,latitude,float64,Caribbean regional maritime port attribute: latitude,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,longitude,float64,Caribbean regional maritime port attribute: longitude,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,quay_meters,float32,Caribbean regional maritime port attribute: quay_meters,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,wharf_meters,float32,Caribbean regional maritime port attribute: wharf_meters,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,offshore_berths,int32,Caribbean regional maritime port attribute: offshore_berths,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,is_canonical_port,int8,Caribbean regional maritime port attribute: is_canonical_port,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,canonical_portwatch_id,object,Caribbean regional maritime port attribute: canonical_portwatch_id,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,canonical_portwatch_name,object,Caribbean regional maritime port attribute: canonical_portwatch_name,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,node_type,object,Caribbean regional maritime port attribute: node_type,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_nodes.parquet,source_provenance,object,Caribbean regional maritime port attribute: source_provenance,Caribbean Port Calls and Vessel AIS,528 ports,Null if unrecorded
+caribbean_graph_edges.parquet,edge_id,object,Directed empirical shipping corridor attribute: edge_id,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,source_node,object,Directed empirical shipping corridor attribute: source_node,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,target_node,object,Directed empirical shipping corridor attribute: target_node,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,source_name,object,Directed empirical shipping corridor attribute: source_name,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,target_name,object,Directed empirical shipping corridor attribute: target_name,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,source_canonical_id,object,Directed empirical shipping corridor attribute: source_canonical_id,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,target_canonical_id,object,Directed empirical shipping corridor attribute: target_canonical_id,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,is_inter_canonical_edge,int8,Directed empirical shipping corridor attribute: is_inter_canonical_edge,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_total,int32,Directed empirical shipping corridor attribute: voyages_total,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_container,int32,Directed empirical shipping corridor attribute: voyages_container,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_tanker,int32,Directed empirical shipping corridor attribute: voyages_tanker,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_dry_bulk,int32,Directed empirical shipping corridor attribute: voyages_dry_bulk,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_general_cargo,int32,Directed empirical shipping corridor attribute: voyages_general_cargo,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,voyages_island_feeder,int32,Directed empirical shipping corridor attribute: voyages_island_feeder,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,directionality,object,Directed empirical shipping corridor attribute: directionality,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,edge_type,object,Directed empirical shipping corridor attribute: edge_type,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null
+caribbean_graph_edges.parquet,source_provenance,object,Directed empirical shipping corridor attribute: source_provenance,Caribbean Port Calls and Vessel AIS,"9,969 directed lanes",Never null

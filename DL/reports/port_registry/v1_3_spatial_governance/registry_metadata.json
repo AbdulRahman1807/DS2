@@ -1,0 +1,15 @@
+{
+  "registry_version": "1.3",
+  "generated_at_utc": "2026-11-01T02:37:26.172659+00:00",
+  "total_portwatch_ports": 2065,
+  "total_ports_with_accepted_coordinates": 976,
+  "total_ports_without_accepted_coordinates": 1089,
+  "exceptions_resolved": [
+    "port377 (Gary)",
+    "port130 (Bay City)",
+    "port2270 (Monroe)",
+    "port285 (Delfzijl)"
+  ],
+  "governance_layer_link": "reports/port_identity_resolution/spatial_feature_governance.csv",
+  "description": "Canonical Port Registry v1.3 incorporates spatial governance, separates source coordinates from accepted coordinates, recovers 31 UN/LOCODE ports, and nullifies erroneous coordinates for four candidate collision exceptions."
+}

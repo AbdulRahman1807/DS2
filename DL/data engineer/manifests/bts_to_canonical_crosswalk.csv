@@ -1,0 +1,56 @@
+bts_port_id,bts_port_id_numeric,bts_port_name,bts_state,bts_region,canonical_portwatch_id,canonical_portwatch_name,canonical_unlocode,crosswalk_method,match_confidence,integration_role,operational_notes
+"4,820",4820,"Alaska, AK Port of",Alaska,Pacific Coast,,,,STATEWIDE_STATISTICAL,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Aggregated USACE district for Alaska statewide waterways
+700,700,"Baltimore, MD",Maryland,Atlantic Coast,port103,Baltimore,USBAL,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Direct match to major US Atlantic container/bulk port
+"2,393",2393,"Beaumont, TX",Texas,Gulf Coast & Mississippi River,port115,Beaumont,USBPT,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Major US Gulf crude/bulk port
+149,149,"Boston, MA",Massachusetts,Atlantic Coast,port159,Boston,USBOS,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Secondary USACE code for Boston harbor terminals
+"2,338",2338,"Cincinnati-Northern KY, Ports of",Kentucky and Ohio,Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Ohio River inland statistical area; no ocean port match
+"3,217",3217,"Cleveland-Cuyahoga Port, OH",Ohio,Great Lakes,,,,GREAT_LAKES_PORT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Lake Erie bulk port; excluded from deepwater ocean model
+"2,436",2436,"Corpus Christi, TX",Texas,Gulf Coast & Mississippi River,port264,Corpus Christi,USCRP,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Top US crude export port
+"3,924",3924,"Duluth-Superior, MN and WI",Minnesota and Wisconsin,Great Lakes,,,,GREAT_LAKES_PORT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Lake Superior bulk port; excluded from deepwater ocean model
+"4,719",4719,"Tacoma, WA",Washington,Pacific Coast,port1248,Tacoma,USTIW,NW_SEAPORT_ALLIANCE_MEMBER,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Part of NW Seaport Alliance with Seattle
+"2,252",2252,"Greater Baton Rouge, LA Port of",Louisiana,Gulf Coast & Mississippi River,port112,Baton Rouge,USBTR,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Lower Mississippi deepwater bulk/tanker port
+"2,083",2083,"Gulfport, MS",Mississippi,Gulf Coast & Mississippi River,port428,Gulfport,USGPT,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,US Gulf regional container port
+"4,421",4421,"Honolulu, O'ahu, HI",Hawaii,Pacific Coast,port476,Honolulu,USHNL,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Primary Hawaiian hub port
+"2,031",2031,"Houston Port Authority, TX",Texas,Gulf Coast & Mississippi River,port481,Houston (US-TX),USHOU,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Top US foreign waterborne tonnage port
+"2,348",2348,"Huntington-Tristate, KY, OH, WV","Kentucky, Ohio, and West Virginia",Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Ohio/Big Sandy inland waterway area; no ocean port match
+"7,713",7713,"Illinois Waterway Ports and Terminals Port Statistical Area, IL",Illinois,,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Illinois Waterway inland barge corridor; no ocean port match
+"2,017",2017,"Jacksonville, FL",Florida,Atlantic Coast,port513,Jacksonville,USJAX,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Florida South Atlantic container/vehicle port
+"4,626",4626,"Kalama, WA Port of",Washington,Pacific Coast,port2253,Kalama,USKAL,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Columbia River bulk export terminal
+"2,248",2248,"Lake Charles Harbor District, LA",Louisiana,Gulf Coast & Mississippi River,port613,Lake Charles,USLCH,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,US Gulf LNG and chemicals port
+"4,110",4110,"Long Beach, CA Port of",California,Pacific Coast,port664,Los Angeles-Long Beach,USLGB,COMPOSITE_DISAGGREGATED,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Reported separately in BTS; aggregated in PortWatch port664
+"4,622",4622,"Longview, WA Port of",Washington,Pacific Coast,port2267,Longview,USLOG,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Columbia River bulk port
+"4,120",4120,"Los Angeles, CA Port of",California,Pacific Coast,port664,Los Angeles-Long Beach,USLAX,COMPOSITE_DISAGGREGATED,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Reported separately in BTS; aggregated in PortWatch port664
+"2,306",2306,Mid-America Port Commission,"Illinois, Iowa, and Missouri",Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Upper Mississippi tri-state barge commission; no ocean port match
+"2,366",2366,"Mid-Ohio Valley Port, OH and WV",Ohio and West Virginia,,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Mid-Ohio River barge statistical area; no ocean port match
+"2,032",2032,"Mobile, AL",Alabama,Gulf Coast & Mississippi River,port754,Mobile,USMOB,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,US Gulf container and coal port
+"2,351",2351,"New Bourbon Port, MO",Missouri,Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Mississippi River barge port; no ocean port match
+"2,251",2251,"New Orleans, LA",Louisiana,Gulf Coast & Mississippi River,port812,New Orleans,USMSY,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Lower Mississippi container/breakbulk hub
+398,398,"New York, NY & NJ",New Jersey and New York,Atlantic Coast,port815,New York-New Jersey,USNYC,COMPOSITE_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Bi-state port district corresponding to canonical port815
+"3,743",3743,"Northern Indiana, IN",Indiana,,,,,GREAT_LAKES_REGIONAL,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Burns Harbor / Indiana Harbor multi-port statistical district
+"4,344",4344,"Oakland, CA Port of",California,Pacific Coast,port858,Oakland,USOAK,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Major Northern California container gateway
+552,552,"Philadelphia Regional Port, PA",Pennsylvania,Atlantic Coast,port898,Philadelphia,USPHL,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Delaware River container and reefer port
+"2,358",2358,"Pittsburgh, PA Port of",Pennsylvania,Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Three Rivers Pittsburgh inland barge port; no ocean port match
+"2,255",2255,"Plaquemines Port District, LA",Louisiana,Gulf Coast & Mississippi River,port912,Plaquemines,USPLQ,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Mississippi River mouth energy/bulk terminal
+"2,416",2416,"Port Arthur, TX",Texas,Gulf Coast & Mississippi River,port933,Port Arthur,USPOA,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Texas Sabine-Neches waterway energy port
+"1,911",1911,"Port Everglades, FL",Florida,Atlantic Coast,port951,Port Everglades,USPEF,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,South Florida petroleum and container port
+"2,408",2408,"Port Freeport, TX",Texas,Gulf Coast & Mississippi River,port358,Freeport (US-FL),USFPO,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Port Freeport TX (mapped to canonical Freeport entry)
+775,775,"Port of Charleston, SC",South Carolina,Atlantic Coast,port231,Charleston,USCHS,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Top East Coast container port
+"1,983",1983,"Port of Palm Beach District, FL",Florida,Atlantic Coast,port880,Palm Beach,USPBI,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Florida regional Caribbean feeder port
+"4,646",4646,"Port of Portland, OR",Oregon,Pacific Coast,port978,Portland (US-OR),USPDX,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Pacific Northwest Columbia/Willamette river port
+"1,992",1992,"PortMiami, FL",Florida,Atlantic Coast,port736,Miami,USMIA,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,PortMiami container and cruise terminal
+"1,913",1913,"San Juan, PR",Puerto Rico,Gulf Coast & Mississippi River,port1143,San Juan,PRSJU,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Puerto Rico primary container port
+776,776,"Savannah, GA Port of",Georgia,Atlantic Coast,port1170,Savannah,USTSA,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Major East Coast container hub
+"4,722",4722,"Seattle, WA",Washington,Pacific Coast,port1175,Seattle,USSEA,NW_SEAPORT_ALLIANCE_MEMBER,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Part of NW Seaport Alliance with Tacoma
+550,550,"South Jersey Port, NJ",New Jersey,Atlantic Coast,,,,REGIONAL_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,South Jersey port corporation multi-terminal river facilities
+"2,253",2253,"South Louisiana, LA, Port of",Louisiana,Gulf Coast & Mississippi River,port1214,South Louisiana,USSLO,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Largest tonnage port district in Western Hemisphere
+"2,363",2363,"Southern Indiana Maritime District, IN",Indiana,Great Lakes,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,Ohio River Southern Indiana barge district; no ocean port match
+"2,367",2367,"St. Louis, MO and IL",Illinois and Missouri,Gulf Coast & Mississippi River,,,,INLAND_RIVER_DISTRICT,EXCLUDED_COASTAL,INLAND_BENCHMARK_ONLY,St. Louis Mississippi River inland barge complex; no ocean port match
+"2,021",2021,"Tampa Port Authority, FL",Florida,Gulf Coast & Mississippi River,port1257,Tampa,USTPA,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Tampa Bay bulk and fertilizer gateway
+"2,428",2428,"Texas City, TX",Texas,Gulf Coast & Mississippi River,port1285,Texas City,USTXT,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Galveston Bay deepwater oil refining port
+"3,204",3204,"Toledo-Lucas County Port, OH",Ohio,Great Lakes,port1304,Toledo,USTOL,GREAT_LAKES_PORT,MEDIUM,COASTAL_SEAPORT_GROUND_TRUTH,Great Lakes / St. Lawrence Seaway bulk port
+"3,926",3926,"Two Harbors, MN",Minnesota,Great Lakes,port1333,Two Harbors,USTWO,GREAT_LAKES_PORT,MEDIUM,COASTAL_SEAPORT_GROUND_TRUTH,Lake Superior iron ore loading facility
+"4,816",4816,"Valdez, AK",Alaska,Pacific Coast,port1347,Valdez,USVDZ,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Trans-Alaska Pipeline marine crude oil terminal
+"5,700",5700,"Virginia, VA, Port of",Virginia,Atlantic Coast,port2066,Port of Virginia,USORF,COMPOSITE_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Hampton Roads / Norfolk / Newport News state authority
+555,555,"Wilmington, DE",Delaware,Atlantic Coast,port1401,Wilmington (US-DE),USILG,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Delaware River banana/reefer port
+766,766,"Wilmington, NC",North Carolina,Atlantic Coast,port1402,Wilmington (US-NC),USILM,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,North Carolina State Ports Authority container port
+90,90,"Boston, MA",Massachusetts,Atlantic Coast,port159,Boston,USBOS,DIRECT_PORT_MATCH,HIGH,COASTAL_SEAPORT_GROUND_TRUTH,Major US New England container port

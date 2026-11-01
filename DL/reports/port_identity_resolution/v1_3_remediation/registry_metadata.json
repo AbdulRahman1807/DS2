@@ -1,0 +1,16 @@
+{
+  "registry_version": "1.3-remediated",
+  "generated_at_utc": "2026-11-01T02:53:58.710688+00:00",
+  "total_portwatch_ports": 2065,
+  "total_ports_with_accepted_coordinates": 976,
+  "total_ports_without_accepted_coordinates": 1089,
+  "exceptions_resolved": [
+    "port377 (Gary -> USGYY, coordinates null)",
+    "port130 (Bay City -> unresolved identity, coordinates null)",
+    "port2270 (Monroe -> USMOI, coordinates null)",
+    "port285 (Delfzijl -> NLDZL, coordinates null pending errata)"
+  ],
+  "candidate_table_file": "port_identity_candidates.csv",
+  "governance_layer_file": "spatial_feature_governance.csv",
+  "description": "Remediated Canonical Port Registry v1.3 and Candidate Table: fully decoupled identity acceptance from coordinate acceptance, added explicit USGYY/USMOI/USBCY candidate rows, and established categorical modeling governance."
+}

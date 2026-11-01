@@ -1,0 +1,10 @@
+metric,value,notes
+total_ports,2065,Full PortWatch universe
+ports_with_accepted_coords,976,976 confirmed ports (975 conflict-free + 1 BES/BQ)
+ports_without_accepted_coords,1089,"1,085 originally unmapped + 4 exceptions = 1,089"
+candidate_table_rows,2876,"Full candidate table including explicit USGYY, USMOI, USBCY"
+surface_extraction_eligible,976,Mapped to 936 unique 0.25 deg grid vertices
+wave_extraction_extractable,961,940 model-eligible + 21 transit-only mapped to 774 unique ocean cells
+wave_dwell_modeling_eligible,940,714 Primary + 226 Conditional (with offshore_proxy_flag=True)
+wave_dwell_modeling_ineligible,1125,"21 transit-only + 15 blocked + 4 exceptions + 1,085 unmapped"
+offshore_proxy_flag_count,226,Strictly assigned to 226 regional marine proxies
