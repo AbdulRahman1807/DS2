@@ -1,0 +1,906 @@
+{
+  "milestone": "3.6.1_Phase_C4",
+  "description": "Full 2024 Validation Evaluation of Direct Throughput Forecaster",
+  "evaluation_partition": {
+    "year": 2024,
+    "dates": "2024-01-01 to 2024-12-31",
+    "total_sequences": 743400,
+    "total_ports": 2065
+  },
+  "checkpoints": {
+    "frozen_backbone_path": "/Users/abdul/Desktop/DS/DL/ml engineer/artifacts/transformer_mean_pooling/best_model.pt",
+    "frozen_backbone_sha256": "ff67c307183a73d03ceb2d0332520ff767a54c12971eeaa6acc68027f902711e",
+    "throughput_heads_path": "/Users/abdul/Desktop/DS/DL/ml engineer/artifacts/throughput_forecasting/best_model.pt",
+    "throughput_heads_sha256": "0e9b85cefcc06a62db1e5292101d550bc62db57fa6dda72a53f6d2c7d33bd19d"
+  },
+  "runtime_seconds": 84.19,
+  "inference_throughput_seq_per_sec": 10030.1,
+  "container_vessel_calls_7d": {
+    "target_name": "target_container_calls_7d_future_sum",
+    "unit": "vessel_calls",
+    "distribution_target": {
+      "mean": 4.5085,
+      "std": 17.262,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 2.0,
+      "max": 295.0
+    },
+    "distribution_prediction": {
+      "mean": 4.4162,
+      "std": 17.1815,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 0.0,
+      "q75": 1.9767,
+      "max": 295.7349
+    },
+    "global_model_metrics": {
+      "huber": 0.6397,
+      "mae": 0.8396,
+      "median_ae": 0.0078,
+      "rmse": 2.3215,
+      "r2": 0.9819,
+      "bias": -0.0923
+    },
+    "global_naive_metrics": {
+      "huber": 0.6822,
+      "mae": 0.8573,
+      "median_ae": 0.0,
+      "rmse": 2.4786,
+      "r2": 0.9794,
+      "bias": -0.0001
+    },
+    "improvements": {
+      "mae_reduction_pct": 2.06,
+      "rmse_reduction_pct": 6.34,
+      "huber_reduction_pct": 6.23
+    },
+    "zero_target_metrics": {
+      "model": {
+        "huber": 0.0526,
+        "mae": 0.1062,
+        "median_ae": 0.0,
+        "rmse": 0.3797,
+        "r2": 0.0,
+        "bias": 0.1062
+      },
+      "naive": {
+        "huber": 0.068,
+        "mae": 0.1092,
+        "median_ae": 0.0,
+        "rmse": 0.4342,
+        "r2": 0.0,
+        "bias": 0.1092
+      },
+      "count": 453700
+    },
+    "nonzero_target_metrics": {
+      "model": {
+        "huber": 1.5592,
+        "mae": 1.9881,
+        "median_ae": 1.0839,
+        "rmse": 3.6884,
+        "r2": 0.9801,
+        "bias": -0.4031
+      },
+      "naive": {
+        "huber": 1.6441,
+        "mae": 2.0288,
+        "median_ae": 1.0,
+        "rmse": 3.9332,
+        "r2": 0.9773,
+        "bias": -0.1713
+      },
+      "count": 289700
+    },
+    "activity_buckets": {
+      "Zero (0 calls)": {
+        "count": 453700,
+        "pct_of_total": 61.03,
+        "model_mae": 0.1062,
+        "naive_mae": 0.1092,
+        "mae_delta": 0.003,
+        "model_rmse": 0.3797,
+        "naive_rmse": 0.4342
+      },
+      "Low (1-7 calls)": {
+        "count": 197140,
+        "pct_of_total": 26.52,
+        "model_mae": 1.1885,
+        "naive_mae": 1.1616,
+        "mae_delta": -0.0269,
+        "model_rmse": 1.5864,
+        "naive_rmse": 1.6408
+      },
+      "Medium (8-28 calls)": {
+        "count": 68230,
+        "pct_of_total": 9.18,
+        "model_mae": 2.5596,
+        "naive_mae": 2.6519,
+        "mae_delta": 0.0923,
+        "model_rmse": 3.3453,
+        "naive_rmse": 3.5051
+      },
+      "High (>28 calls)": {
+        "count": 24330,
+        "pct_of_total": 3.27,
+        "model_mae": 6.8648,
+        "naive_mae": 7.308,
+        "mae_delta": 0.4432,
+        "model_rmse": 10.4981,
+        "naive_rmse": 11.3108
+      }
+    },
+    "monthly_performance": {
+      "2023-12": {
+        "count": 2065,
+        "model_mae": 0.949,
+        "naive_mae": 1.0073,
+        "r2": 0.9666,
+        "mae_reduction_pct": 5.79
+      },
+      "2024-01": {
+        "count": 64015,
+        "model_mae": 0.8566,
+        "naive_mae": 0.8784,
+        "r2": 0.984,
+        "mae_reduction_pct": 2.48
+      },
+      "2024-02": {
+        "count": 59885,
+        "model_mae": 0.9148,
+        "naive_mae": 0.9365,
+        "r2": 0.9722,
+        "mae_reduction_pct": 2.32
+      },
+      "2024-03": {
+        "count": 64015,
+        "model_mae": 0.8147,
+        "naive_mae": 0.823,
+        "r2": 0.9871,
+        "mae_reduction_pct": 1.01
+      },
+      "2024-04": {
+        "count": 61950,
+        "model_mae": 0.8406,
+        "naive_mae": 0.8616,
+        "r2": 0.9811,
+        "mae_reduction_pct": 2.44
+      },
+      "2024-05": {
+        "count": 64015,
+        "model_mae": 0.8108,
+        "naive_mae": 0.8171,
+        "r2": 0.9849,
+        "mae_reduction_pct": 0.77
+      },
+      "2024-06": {
+        "count": 61950,
+        "model_mae": 0.7851,
+        "naive_mae": 0.7953,
+        "r2": 0.9878,
+        "mae_reduction_pct": 1.28
+      },
+      "2024-07": {
+        "count": 64015,
+        "model_mae": 0.825,
+        "naive_mae": 0.8392,
+        "r2": 0.9826,
+        "mae_reduction_pct": 1.69
+      },
+      "2024-08": {
+        "count": 64015,
+        "model_mae": 0.827,
+        "naive_mae": 0.8321,
+        "r2": 0.9817,
+        "mae_reduction_pct": 0.61
+      },
+      "2024-09": {
+        "count": 61950,
+        "model_mae": 0.9078,
+        "naive_mae": 0.9311,
+        "r2": 0.9708,
+        "mae_reduction_pct": 2.5
+      },
+      "2024-10": {
+        "count": 64015,
+        "model_mae": 0.8692,
+        "naive_mae": 0.8906,
+        "r2": 0.9786,
+        "mae_reduction_pct": 2.4
+      },
+      "2024-11": {
+        "count": 61950,
+        "model_mae": 0.8081,
+        "naive_mae": 0.8323,
+        "r2": 0.9855,
+        "mae_reduction_pct": 2.91
+      },
+      "2024-12": {
+        "count": 49560,
+        "model_mae": 0.8095,
+        "naive_mae": 0.8477,
+        "r2": 0.9859,
+        "mae_reduction_pct": 4.51
+      }
+    },
+    "port_summary": {
+      "ports_improved": 858,
+      "ports_improved_pct": 41.55,
+      "ports_tied": 331,
+      "ports_tied_pct": 16.03,
+      "ports_worsened": 876,
+      "ports_worsened_pct": 42.42,
+      "top_10_improved": [
+        {
+          "portwatch_id": "port824",
+          "portwatch_name": "Ningbo",
+          "count": 360,
+          "target_mean": 229.05,
+          "target_std": 22.94,
+          "model_mae": 22.4009,
+          "naive_mae": 25.3056,
+          "mae_delta": 2.9047,
+          "pct_improvement": 11.48
+        },
+        {
+          "portwatch_id": "port1069",
+          "portwatch_name": "Qingdao Port",
+          "count": 360,
+          "target_mean": 154.89,
+          "target_std": 15.86,
+          "model_mae": 16.064,
+          "naive_mae": 18.2111,
+          "mae_delta": 2.1471,
+          "pct_improvement": 11.79
+        },
+        {
+          "portwatch_id": "port1188",
+          "portwatch_name": "Shanghai",
+          "count": 360,
+          "target_mean": 254.29,
+          "target_std": 22.34,
+          "model_mae": 21.2073,
+          "naive_mae": 22.5722,
+          "mae_delta": 1.3649,
+          "pct_improvement": 6.05
+        },
+        {
+          "portwatch_id": "port474",
+          "portwatch_name": "Hong Kong",
+          "count": 360,
+          "target_mean": 230.24,
+          "target_std": 19.87,
+          "model_mae": 17.2649,
+          "naive_mae": 18.475,
+          "mae_delta": 1.2101,
+          "pct_improvement": 6.55
+        },
+        {
+          "portwatch_id": "port541",
+          "portwatch_name": "Kaohsiung",
+          "count": 360,
+          "target_mean": 135.06,
+          "target_std": 21.56,
+          "model_mae": 15.5832,
+          "naive_mae": 16.7333,
+          "mae_delta": 1.1501,
+          "pct_improvement": 6.87
+        },
+        {
+          "portwatch_id": "port1404",
+          "portwatch_name": "Xiamen",
+          "count": 360,
+          "target_mean": 107.07,
+          "target_std": 10.68,
+          "model_mae": 11.2157,
+          "naive_mae": 12.1417,
+          "mae_delta": 0.926,
+          "pct_improvement": 7.63
+        },
+        {
+          "portwatch_id": "port1297",
+          "portwatch_name": "Tianjin Xin Gang",
+          "count": 360,
+          "target_mean": 73.0,
+          "target_std": 7.58,
+          "model_mae": 7.7751,
+          "naive_mae": 8.6944,
+          "mae_delta": 0.9193,
+          "pct_improvement": 10.57
+        },
+        {
+          "portwatch_id": "port1417",
+          "portwatch_name": "Yokohama",
+          "count": 360,
+          "target_mean": 97.47,
+          "target_std": 7.88,
+          "model_mae": 8.6931,
+          "naive_mae": 9.5389,
+          "mae_delta": 0.8458,
+          "pct_improvement": 8.87
+        },
+        {
+          "portwatch_id": "port581",
+          "portwatch_name": "Kobe",
+          "count": 360,
+          "target_mean": 81.66,
+          "target_std": 7.87,
+          "model_mae": 7.7533,
+          "naive_mae": 8.5583,
+          "mae_delta": 0.805,
+          "pct_improvement": 9.41
+        },
+        {
+          "portwatch_id": "port1065",
+          "portwatch_name": "Busan",
+          "count": 360,
+          "target_mean": 239.44,
+          "target_std": 10.96,
+          "model_mae": 10.9251,
+          "naive_mae": 11.6306,
+          "mae_delta": 0.7055,
+          "pct_improvement": 6.07
+        }
+      ],
+      "top_10_regressed": [
+        {
+          "portwatch_id": "port239",
+          "portwatch_name": "Chiba",
+          "count": 360,
+          "target_mean": 2.79,
+          "target_std": 0.93,
+          "model_mae": 2.2012,
+          "naive_mae": 1.0167,
+          "mae_delta": -1.1845,
+          "pct_improvement": -116.51
+        },
+        {
+          "portwatch_id": "port1338",
+          "portwatch_name": "Ulsan",
+          "count": 360,
+          "target_mean": 18.51,
+          "target_std": 6.9,
+          "model_mae": 4.8851,
+          "naive_mae": 4.0472,
+          "mae_delta": -0.8378,
+          "pct_improvement": -20.7
+        },
+        {
+          "portwatch_id": "port548",
+          "portwatch_name": "Kashima-Ibaraki",
+          "count": 360,
+          "target_mean": 0.67,
+          "target_std": 0.73,
+          "model_mae": 1.4956,
+          "naive_mae": 0.775,
+          "mae_delta": -0.7206,
+          "pct_improvement": -92.98
+        },
+        {
+          "portwatch_id": "port1128",
+          "portwatch_name": "Sakai-Semboku",
+          "count": 360,
+          "target_mean": 2.16,
+          "target_std": 0.96,
+          "model_mae": 1.583,
+          "naive_mae": 0.9417,
+          "mae_delta": -0.6413,
+          "pct_improvement": -68.1
+        },
+        {
+          "portwatch_id": "port450",
+          "portwatch_name": "Hanko",
+          "count": 360,
+          "target_mean": 2.16,
+          "target_std": 0.76,
+          "model_mae": 0.8178,
+          "naive_mae": 0.3111,
+          "mae_delta": -0.5067,
+          "pct_improvement": -162.87
+        },
+        {
+          "portwatch_id": "port538",
+          "portwatch_name": "Kanda",
+          "count": 360,
+          "target_mean": 0.0,
+          "target_std": 0.0,
+          "model_mae": 0.4561,
+          "naive_mae": 0.0,
+          "mae_delta": -0.4561,
+          "pct_improvement": 0.0
+        },
+        {
+          "portwatch_id": "port1378",
+          "portwatch_name": "Kitakyushu (Wakamatsu)",
+          "count": 360,
+          "target_mean": 0.0,
+          "target_std": 0.0,
+          "model_mae": 0.4492,
+          "naive_mae": 0.0,
+          "mae_delta": -0.4492,
+          "pct_improvement": 0.0
+        },
+        {
+          "portwatch_id": "port365",
+          "portwatch_name": "Funabashi",
+          "count": 360,
+          "target_mean": 1.11,
+          "target_std": 0.49,
+          "model_mae": 0.8969,
+          "naive_mae": 0.4694,
+          "mae_delta": -0.4274,
+          "pct_improvement": -91.05
+        },
+        {
+          "portwatch_id": "port309",
+          "portwatch_name": "Dumai",
+          "count": 360,
+          "target_mean": 0.94,
+          "target_std": 0.64,
+          "model_mae": 1.0035,
+          "naive_mae": 0.6028,
+          "mae_delta": -0.4007,
+          "pct_improvement": -66.48
+        },
+        {
+          "portwatch_id": "port846",
+          "portwatch_name": "Oita",
+          "count": 360,
+          "target_mean": 4.51,
+          "target_std": 1.42,
+          "model_mae": 1.8122,
+          "naive_mae": 1.425,
+          "mae_delta": -0.3872,
+          "pct_improvement": -27.17
+        }
+      ]
+    }
+  },
+  "cargo_tonnage_7d": {
+    "target_name": "target_cargo_tonnage_7d_future_sum",
+    "unit": "metric_tons",
+    "distribution_target": {
+      "mean": 162708.0,
+      "std": 707066.625,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 6538.0,
+      "q75": 67780.0,
+      "max": 19608542.0
+    },
+    "distribution_prediction": {
+      "mean": 159954.0156,
+      "std": 704737.5,
+      "min": 0.0,
+      "q25": 0.0,
+      "median": 4137.291,
+      "q75": 62765.5781,
+      "max": 19556310.0
+    },
+    "global_model_metrics": {
+      "huber": 1606295552.0,
+      "mae": 41840.332,
+      "median_ae": 5400.3604,
+      "rmse": 144398.4688,
+      "r2": 0.9583,
+      "bias": -2753.9917
+    },
+    "global_naive_metrics": {
+      "huber": 1649663744.0,
+      "mae": 42406.8281,
+      "median_ae": 3946.0,
+      "rmse": 147966.8438,
+      "r2": 0.9562,
+      "bias": -199.3607
+    },
+    "improvements": {
+      "mae_reduction_pct": 1.34,
+      "rmse_reduction_pct": 2.41,
+      "huber_reduction_pct": 2.63
+    },
+    "zero_target_metrics": {
+      "model": {
+        "huber": 49862616.0,
+        "mae": 2229.7949,
+        "median_ae": 0.0,
+        "rmse": 12586.54,
+        "r2": 0.0,
+        "bias": 2229.7949
+      },
+      "naive": {
+        "huber": 59072972.0,
+        "mae": 2410.1328,
+        "median_ae": 0.0,
+        "rmse": 13626.4658,
+        "r2": 0.0,
+        "bias": 2410.1328
+      },
+      "count": 235593
+    },
+    "nonzero_target_metrics": {
+      "model": {
+        "huber": 2328390144.0,
+        "mae": 60217.3242,
+        "median_ae": 15476.9199,
+        "rmse": 174502.2656,
+        "r2": 0.9573,
+        "bias": -5066.1792
+      },
+      "naive": {
+        "huber": 2387605248.0,
+        "mae": 60962.9727,
+        "median_ae": 14661.0,
+        "rmse": 178789.4844,
+        "r2": 0.9552,
+        "bias": -1410.0143
+      },
+      "count": 507807
+    },
+    "activity_buckets": {
+      "Zero (0 tons)": {
+        "count": 235593,
+        "pct_of_total": 31.69,
+        "model_mae": 2229.7949,
+        "naive_mae": 2410.1328,
+        "mae_delta": 180.34,
+        "model_rmse": 12586.54,
+        "naive_rmse": 13626.4658
+      },
+      "Low (1-20k tons)": {
+        "count": 219320,
+        "pct_of_total": 29.5,
+        "model_mae": 8348.5088,
+        "naive_mae": 8063.1807,
+        "mae_delta": -285.33,
+        "model_rmse": 19981.0879,
+        "naive_rmse": 21501.1875
+      },
+      "Medium (20k-150k tons)": {
+        "count": 167433,
+        "pct_of_total": 22.52,
+        "model_mae": 37090.8867,
+        "naive_mae": 36941.543,
+        "mae_delta": -149.34,
+        "model_rmse": 55416.6953,
+        "naive_rmse": 56709.8281
+      },
+      "High (>150k tons)": {
+        "count": 121054,
+        "pct_of_total": 16.28,
+        "model_mae": 186177.6094,
+        "naive_mae": 190029.0312,
+        "mae_delta": 3851.42,
+        "model_rmse": 350381.9375,
+        "naive_rmse": 358896.1875
+      }
+    },
+    "monthly_performance": {
+      "2023-12": {
+        "count": 2065,
+        "model_mae": 45489.9531,
+        "naive_mae": 46467.0312,
+        "r2": 0.934,
+        "mae_reduction_pct": 2.1
+      },
+      "2024-01": {
+        "count": 64015,
+        "model_mae": 40957.9609,
+        "naive_mae": 41483.9727,
+        "r2": 0.9613,
+        "mae_reduction_pct": 1.27
+      },
+      "2024-02": {
+        "count": 59885,
+        "model_mae": 42865.6211,
+        "naive_mae": 43396.8438,
+        "r2": 0.9407,
+        "mae_reduction_pct": 1.22
+      },
+      "2024-03": {
+        "count": 64015,
+        "model_mae": 43201.5977,
+        "naive_mae": 43520.1758,
+        "r2": 0.9479,
+        "mae_reduction_pct": 0.73
+      },
+      "2024-04": {
+        "count": 61950,
+        "model_mae": 43169.2461,
+        "naive_mae": 43684.6992,
+        "r2": 0.9509,
+        "mae_reduction_pct": 1.18
+      },
+      "2024-05": {
+        "count": 64015,
+        "model_mae": 41643.8516,
+        "naive_mae": 41925.7656,
+        "r2": 0.9701,
+        "mae_reduction_pct": 0.67
+      },
+      "2024-06": {
+        "count": 61950,
+        "model_mae": 40323.8828,
+        "naive_mae": 40643.2305,
+        "r2": 0.9735,
+        "mae_reduction_pct": 0.79
+      },
+      "2024-07": {
+        "count": 64015,
+        "model_mae": 41625.7969,
+        "naive_mae": 42227.4961,
+        "r2": 0.9526,
+        "mae_reduction_pct": 1.42
+      },
+      "2024-08": {
+        "count": 64015,
+        "model_mae": 41046.1641,
+        "naive_mae": 41394.8633,
+        "r2": 0.9662,
+        "mae_reduction_pct": 0.84
+      },
+      "2024-09": {
+        "count": 61950,
+        "model_mae": 44278.3125,
+        "naive_mae": 45303.8281,
+        "r2": 0.9402,
+        "mae_reduction_pct": 2.26
+      },
+      "2024-10": {
+        "count": 64015,
+        "model_mae": 41677.3828,
+        "naive_mae": 42541.2461,
+        "r2": 0.9602,
+        "mae_reduction_pct": 2.03
+      },
+      "2024-11": {
+        "count": 61950,
+        "model_mae": 40626.8906,
+        "naive_mae": 41423.7109,
+        "r2": 0.9636,
+        "mae_reduction_pct": 1.92
+      },
+      "2024-12": {
+        "count": 49560,
+        "model_mae": 40301.7031,
+        "naive_mae": 40996.6758,
+        "r2": 0.968,
+        "mae_reduction_pct": 1.7
+      }
+    },
+    "port_summary": {
+      "ports_improved": 1052,
+      "ports_improved_pct": 50.94,
+      "ports_tied": 173,
+      "ports_tied_pct": 8.38,
+      "ports_worsened": 840,
+      "ports_worsened_pct": 40.68,
+      "top_10_improved": [
+        {
+          "portwatch_id": "port1069",
+          "portwatch_name": "Qingdao Port",
+          "count": 360,
+          "target_mean": 8479397.0,
+          "target_std": 1320497.6,
+          "model_mae": 1246610.2,
+          "naive_mae": 1307569.8,
+          "mae_delta": 60959.5,
+          "pct_improvement": 4.66
+        },
+        {
+          "portwatch_id": "port824",
+          "portwatch_name": "Ningbo",
+          "count": 360,
+          "target_mean": 10839964.0,
+          "target_std": 1907514.6,
+          "model_mae": 1573672.8,
+          "naive_mae": 1633707.0,
+          "mae_delta": 60034.2,
+          "pct_improvement": 3.67
+        },
+        {
+          "portwatch_id": "port1188",
+          "portwatch_name": "Shanghai",
+          "count": 360,
+          "target_mean": 12647434.0,
+          "target_std": 3581672.5,
+          "model_mae": 1749633.8,
+          "naive_mae": 1798728.9,
+          "mae_delta": 49095.1,
+          "pct_improvement": 2.73
+        },
+        {
+          "portwatch_id": "port1073",
+          "portwatch_name": "Qiwei",
+          "count": 360,
+          "target_mean": 1725165.5,
+          "target_std": 284909.6,
+          "model_mae": 313703.6,
+          "naive_mae": 343998.3,
+          "mae_delta": 30294.8,
+          "pct_improvement": 8.81
+        },
+        {
+          "portwatch_id": "port1404",
+          "portwatch_name": "Xiamen",
+          "count": 360,
+          "target_mean": 3470831.8,
+          "target_std": 525780.7,
+          "model_mae": 584898.6,
+          "naive_mae": 612591.6,
+          "mae_delta": 27693.0,
+          "pct_improvement": 4.52
+        },
+        {
+          "portwatch_id": "port541",
+          "portwatch_name": "Kaohsiung",
+          "count": 360,
+          "target_mean": 3018580.0,
+          "target_std": 450990.3,
+          "model_mae": 435253.2,
+          "naive_mae": 462430.9,
+          "mae_delta": 27177.7,
+          "pct_improvement": 5.88
+        },
+        {
+          "portwatch_id": "port1253",
+          "portwatch_name": "Suzhou (Taicang)",
+          "count": 360,
+          "target_mean": 2366763.0,
+          "target_std": 468542.7,
+          "model_mae": 494001.5,
+          "naive_mae": 521082.7,
+          "mae_delta": 27081.2,
+          "pct_improvement": 5.2
+        },
+        {
+          "portwatch_id": "port792",
+          "portwatch_name": "Nantong",
+          "count": 360,
+          "target_mean": 1400963.8,
+          "target_std": 322539.4,
+          "model_mae": 322179.5,
+          "naive_mae": 340541.1,
+          "mae_delta": 18361.6,
+          "pct_improvement": 5.39
+        },
+        {
+          "portwatch_id": "port474",
+          "portwatch_name": "Hong Kong",
+          "count": 360,
+          "target_mean": 3304641.0,
+          "target_std": 431279.0,
+          "model_mae": 394240.5,
+          "naive_mae": 411804.3,
+          "mae_delta": 17563.8,
+          "pct_improvement": 4.27
+        },
+        {
+          "portwatch_id": "port1189",
+          "portwatch_name": "Shekou (Shenzhen)",
+          "count": 360,
+          "target_mean": 4034867.5,
+          "target_std": 842262.3,
+          "model_mae": 893455.1,
+          "naive_mae": 909979.4,
+          "mae_delta": 16524.2,
+          "pct_improvement": 1.82
+        }
+      ],
+      "top_10_regressed": [
+        {
+          "portwatch_id": "port1338",
+          "portwatch_name": "Ulsan",
+          "count": 360,
+          "target_mean": 241256.2,
+          "target_std": 86983.7,
+          "model_mae": 103182.1,
+          "naive_mae": 80258.3,
+          "mae_delta": -22923.8,
+          "pct_improvement": -28.56
+        },
+        {
+          "portwatch_id": "port1128",
+          "portwatch_name": "Sakai-Semboku",
+          "count": 360,
+          "target_mean": 63820.1,
+          "target_std": 11709.9,
+          "model_mae": 34775.0,
+          "naive_mae": 13081.1,
+          "mae_delta": -21693.9,
+          "pct_improvement": -165.84
+        },
+        {
+          "portwatch_id": "port2036",
+          "portwatch_name": "Siam Seaport",
+          "count": 360,
+          "target_mean": 247780.8,
+          "target_std": 62850.3,
+          "model_mae": 83276.2,
+          "naive_mae": 62523.1,
+          "mae_delta": -20753.2,
+          "pct_improvement": -33.19
+        },
+        {
+          "portwatch_id": "port466",
+          "portwatch_name": "Hiroshima",
+          "count": 360,
+          "target_mean": 27226.5,
+          "target_std": 6645.1,
+          "model_mae": 22341.4,
+          "naive_mae": 7265.5,
+          "mae_delta": -15075.9,
+          "pct_improvement": -207.5
+        },
+        {
+          "portwatch_id": "port2010",
+          "portwatch_name": "Azov",
+          "count": 360,
+          "target_mean": 17346.4,
+          "target_std": 14965.6,
+          "model_mae": 19403.2,
+          "naive_mae": 6802.0,
+          "mae_delta": -12601.1,
+          "pct_improvement": -185.25
+        },
+        {
+          "portwatch_id": "port1180",
+          "portwatch_name": "Sendai-Shiogama",
+          "count": 360,
+          "target_mean": 54721.4,
+          "target_std": 24963.8,
+          "model_mae": 39130.7,
+          "naive_mae": 27671.3,
+          "mae_delta": -11459.4,
+          "pct_improvement": -41.41
+        },
+        {
+          "portwatch_id": "port465",
+          "portwatch_name": "Himeji",
+          "count": 360,
+          "target_mean": 91341.2,
+          "target_std": 36638.1,
+          "model_mae": 48374.5,
+          "naive_mae": 37308.4,
+          "mae_delta": -11066.1,
+          "pct_improvement": -29.66
+        },
+        {
+          "portwatch_id": "port365",
+          "portwatch_name": "Funabashi",
+          "count": 360,
+          "target_mean": 61303.8,
+          "target_std": 13278.9,
+          "model_mae": 27058.3,
+          "naive_mae": 16493.5,
+          "mae_delta": -10564.8,
+          "pct_improvement": -64.05
+        },
+        {
+          "portwatch_id": "port2040",
+          "portwatch_name": "Naha",
+          "count": 360,
+          "target_mean": 37097.8,
+          "target_std": 5956.2,
+          "model_mae": 16187.2,
+          "naive_mae": 6818.0,
+          "mae_delta": -9369.2,
+          "pct_improvement": -137.42
+        },
+        {
+          "portwatch_id": "port239",
+          "portwatch_name": "Chiba",
+          "count": 360,
+          "target_mean": 303270.2,
+          "target_std": 88267.7,
+          "model_mae": 116733.3,
+          "naive_mae": 107648.4,
+          "mae_delta": -9084.9,
+          "pct_improvement": -8.44
+        }
+      ]
+    }
+  }
+}

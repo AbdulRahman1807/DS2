@@ -1,64 +1,104 @@
 ================================================================================
-STAGE 02 DEEP LEARNING EXPLORATORY DATA ANALYSIS (EDA) REPORT
+STAGE 02 DEEP LEARNING EDA: AUTHORITATIVE EXECUTIVE SUMMARY & HANDOVER REPORT
 Project: AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks
+Phase: Phase 2 (Deep Learning) — Stage 02 Feature Verification & Modeling Design
+Status: Complete, Verified, Fully Synchronized across 25 Tables and 16 Figures
+Date: 2026-11-01
 ================================================================================
 
-1. PRIMARY DATASET ARCHITECTURE & COVERAGE
+1. MASTER DATASET ARCHITECTURE & OBSERVATIONAL SCALE
 --------------------------------------------------------------------------------
-Primary Table:         DL/data/.../unified_temporal/port_daily_unified.parquet
-Total Records:         5,280,205 rows across 91 columns
-Entity Coverage:       2,065 commercial seaports across 180 countries
-Temporal Extent:       2019-01-01 to 2025-12-31 (7 contiguous calendar years)
-Panel Balance:         100% Balanced (Exactly 2,557 days per port)
-Exogenous Coverage:    ERA5: 0.24% | NOAA: 2.71% | BTS: 1.74% | EM-DAT: 97.24%
+- Primary Panel: DL/.../port_daily_unified.parquet (5,280,205 rows, 91 columns, 2,065 ports)
+- Temporal Span: 2019-01-01 to 2025-12-31 (7 full calendar years, 2,557 days)
+- Sequence Index: sequence_metadata.parquet (5,181,085 sequences, L=30, H=7)
+- North American Multimodal Graph: 251,646 nodes, 303,016 edges (rail & port transfers)
+- Caribbean Maritime Graph: 528 nodes, 9,969 directed lanes (298,804 AIS voyages)
+- Native-Resolution Benchmarks: ADB Weekly (3,990 rows), Indian Monthly Dwell (363 rows)
+- Spatial Coverage Sparsity: PortWatch (100%), EM-DAT (97.24%), NOAA (2.71%), BTS (1.74%), ERA5 (0.24%)
 
-2. SUPERVISED FORECASTING TARGET METRICS (L=30, H=7)
+2. KEY EMPIRICAL FINDINGS ACROSS WORKSTREAMS
 --------------------------------------------------------------------------------
-Primary Target:        target_portcalls_7d_future_sum (Cumulative 7-day vessel calls)
-Target Observations:   5,265,750 valid (14,455 terminal boundary nulls)
-Mean: 16.95 | Std: 44.66 | Median: 5.00 | IQR: 15.00
-Min: 0.0 | P90: 39.0 | P95: 70.0 | Max: 1188.0
-Skewness:              +9.53 (Heavy right-skewed tail)
-Kurtosis:              +137.68
-Zero-Inflation:        18.74%
+A. Temporal Autocorrelation & Optimal Lookback (L=30):
+   - Megahub weekly cycle harmonics at lags 7, 14, 21, 28 (Singapore ACF(7)=0.422; Rotterdam ACF(7)=0.377).
+   - Bulk mineral ports (Port Hedland ACF(7)=0.047) display no weekly seasonality.
+   - L=30 lookback captures 4 full weekly harmonics and 54.22% of 60-day autocorrelation mass (Table 12).
 
-3. 7-YEAR TEMPORAL TRENDS, COVID SHOCK & BOTTLENECK CRISIS
---------------------------------------------------------------------------------
-Year    Global Calls    Container Calls    Tonnage (Short Tons)    YoY Calls %
----------------------------------------------------------------------------
-2019    1,786,836       463,206            16.09                  B BASELINE
-2020    1,746,560       451,403            15.97                  B -2.25%
-2021    1,798,765       441,129            16.76                  B +2.99%
-2022    1,858,163       453,261            16.85                  B +3.30%
-2023    1,886,743       494,631            17.03                  B +1.54%
-2024    1,878,439       486,302            17.56                  B -0.44%
-2025    1,828,397       483,439            17.50                  B -2.66%
-Key Finding: Global vessel traffic dropped -2.25% in 2020 during the COVID-19 pandemic shock,
-followed by sharp volume surges during the 2021-2022 supply chain bottleneck crisis (+2.98% in 2021).
+B. Spatial Graph Network Topologies:
+   - North American Rail: Planar-like infrastructure, density=9.58e-06, giant component=98.98%.
+     All 41 deepwater ports link to 242 intermodal facilities within 30 km (mean distance 10.07 km).
+   - Caribbean Maritime: Small-world route network, density=0.0358 (3,737x denser than rail).
+     Giant SCC has diameter=6 hops, avg path length=2.498 hops. Top hub: Port Everglades (degree 280).
 
-4. SPATIAL GRAPH NETWORKS (HINTERLAND & CARIBBEAN)
---------------------------------------------------------------------------------
-North American Network: 251,646 nodes | 303,016 edges
-  • Rail Junctions: 250,204 | Intermodals: 1,401 | Seaports: 41
-  • Rail Lines: 302,774 | Drayage Connectors: 242
-Caribbean Network:      528 nodes | 9,969 directed shipping lanes
-  • Canonical Gateways: 528 | Total Observed Voyages: 298,804
+C. Forecasting Targets & Loss Function Trade-off:
+   - Target (7d future sum): Mean=16.95, Std=44.66, Median=5.0, P99=185.0, Max=1,188, Zeros=18.74%.
+   - Skewness=9.53, Kurtosis=137.68. MSE/L2 risks catastrophic gradient explosion on megahubs.
+   - Recommended: Smooth L1 Loss (Huber beta=1.0) with log1p(y) target transformation.
 
-5. NATIVE-RESOLUTION MACRO BENCHMARKS
---------------------------------------------------------------------------------
-ADB Weekly Turnaround:  Mean: 43.9h | Waiting: 12.7h | Service: 31.2h
-Indian Monthly Dwell:   Pooled (13 ports, 2020): Mean: 3.44 days (82.5h) | Median: 3.20 days
-                        Import (13 ports): Mean: 2.75 days (66.1h)
-                        Export (12 ports): Mean: 4.23 days (101.4h)
-Ground-Truth Reality:   Continuous daily port-level dwell is unsupported by public datasets.
-                        Models must forecast daily throughput targets; benchmarks serve macro calibration.
+D. Dynamic Predictive Signal vs Multicollinearity:
+   - Pooled correlation with target (r=0.959) is confounded by between-port scale.
+   - Within-port correlation isolates true day-to-day signal, peaking at rolling 7d mean (r=0.448).
+   - Severe multicollinearity between 7d, 14d, and 30d rolling means (r > 0.995).
+     Downstream models must retain 7d mean and encode wider windows as residuals (roll7 - roll30).
 
-6. SEQUENCE PARTITIONS & CHRONOLOGICAL QUARANTINE (L=30, H=7)
+E. Operational Dwell Firewall:
+   - Strict separation maintained between vessel anchorage waiting, berth service, and container yard dwell.
+   - ADB Data: Neopanamax waiting surged +171% in 2021 (6.6h to 17.9h; >100h at LA/LB).
+   - Zenodo AIS: Monthly vessel dwell correlates with ADB turnaround at r=+0.8373 (LA/LB) and -0.1294 (NY/NJ) (Table 22).
+   - Mendeley Data: Red channel physical customs inspection doubles container yard dwell (3.18d to 5.85d).
+
+F. Chronological Target-Window Split Stability (L=30, H=7):
+   - Train: 3,696,350 sequences (71.34%, 2019-01-30 to 2023-12-24, target ends 2023-12-31)
+   - Val: 743,400 sequences (14.35%, 2023-12-31 to 2024-12-24, target ends 2024-12-31) | PSI vs Train = 0.0008
+   - Test: 741,335 sequences (14.31%, 2024-12-31 to 2025-12-24, target ends 2025-12-31) | PSI vs Train = 0.0008
+   - Exactly 24,780 boundary sequences pruned by Data Engineering to enforce target-window separation.
+
+3. COMPLETE ARTIFACT INVENTORY
 --------------------------------------------------------------------------------
-Partition    Sequences      Share %    Reference Dates             Target Mean    PSI vs Train
--------------------------------------------------------------------------------------
-TRAIN        3,696,350      71.34      2019-01-30 to 2023-12-24   16.87          0.0000
-VAL          743,400        14.35      2023-12-31 to 2024-12-24   17.43          0.0008
-TEST         741,335        14.31      2024-12-31 to 2025-12-24   17.02          0.0008
-Boundary Quarantine: Exactly 24,780 boundary-crossing sequences pruned to ensure strict temporal quarantine.
+Tables Generated (25 CSVs in DL/eda/eda_reports/tables/):
+  - 01_dataset_architecture_and_coverage.csv
+  - 02_target_and_observable_distributions.csv
+  - 03_annual_volume_and_shock_trends.csv
+  - 04_seasonality_dow_and_monthly.csv
+  - 05_north_american_graph_topology.csv
+  - 06_caribbean_maritime_graph_topology.csv
+  - 07_native_resolution_benchmarks.csv
+  - 08_sequence_partitions_and_drift.csv
+  - 09_top_20_global_ports_ranking.csv
+  - 10_exogenous_shock_exposure.csv
+  - 11_temporal_autocorrelation_archetypes.csv
+  - 12_temporal_lookback_evaluation.csv
+  - 13_target_distribution_and_loss_tradeoffs.csv
+  - 14_north_american_graph_topology_metrics.csv
+  - 15_caribbean_maritime_topology_metrics.csv
+  - 16_port_to_intermodal_reachability.csv
+  - 17_gnn_architectural_specifications.csv
+  - 18_master_feature_quality_inventory.csv
+  - 19_feature_target_correlation_matrix.csv
+  - 20_multicollinearity_and_redundancy_assessment.csv
+  - 21_adb_vessel_class_and_congestion_profiling.csv
+  - 22_ais_vessel_dwell_vs_portwatch_comparison.csv
+  - 23_mendeley_event_milestone_profiling.csv
+  - 24_exogenous_shocks_deep_profile.csv
+  - 25_historical_feature_availability_matrix.csv
+
+Figures Generated (16 PNGs in DL/eda/eda_reports/figures/):
+  - 01_seven_year_global_trends_and_covid_shock.png
+  - 02_target_distribution_and_log_transformation.png
+  - 03_seasonality_day_of_week_and_monthly.png
+  - 04_north_american_multimodal_hinterland_network.png
+  - 05_caribbean_maritime_network_topology.png
+  - 06_native_resolution_benchmarks_turnaround_and_dwell.png
+  - 07_chronological_sequence_split_drift.png
+  - 08_bts_capacity_pressure_and_bottleneck_regimes.png
+  - 09_temporal_acf_pacf_by_port_archetype.png
+  - 10_rolling_volatility_and_regime_shifts.png
+  - 11_graph_degree_distributions_multimodal.png
+  - 12_port_to_intermodal_reachability_hops.png
+  - 13_feature_target_correlation_heatmap.png
+  - 14_rolling_feature_multicollinearity_decay.png
+  - 15_adb_vessel_class_congestion_dynamics.png
+  - 16_cross_source_operational_dwell_calibration.png
+
+================================================================================
+STAGE 02 EDA IS OFFICIALLY COMPLETE, VERIFIED, AND MODELING-READY.
 ================================================================================

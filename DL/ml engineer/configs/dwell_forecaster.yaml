@@ -1,0 +1,47 @@
+# =============================================================================
+# Milestone 3.6: Weekly Anchorage Waiting-Time Forecaster Configuration
+# =============================================================================
+pipeline_version: "3.6.0"
+model_name: "dwell_gru_residual"
+project_name: "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks"
+
+data:
+  raw_path: "DL/data/staging/supplementary_acquisition/raw/AISData.csv"
+  lookback_weeks: 8
+  forecast_horizons: [1, 4]  # 1-week ahead, 4-week cumulative/mean
+  primary_target: "avgwaiting_time"
+  secondary_target: "avgservice_time"
+  split_strategy: "chronological"
+  train_years: [2019, 2020]  # Weeks 1 to 105
+  val_years: [2021]          # Weeks 106 to 158 (Congestion Surge)
+  test_years: [2022]         # Weeks 159 to 210 (Held-Out Evaluation)
+
+model:
+  model_type: "ResidualDwellGRUForecaster"
+  num_ports: 19
+  port_embedding_dim: 8
+  num_temporal_features: 7
+  hidden_size: 32
+  num_layers: 2
+  dropout: 0.1
+  constraint: "relu"
+
+training:
+  batch_size: 32
+  learning_rate: 0.003
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  loss_type: "huber"
+  huber_delta: 3.0
+  num_epochs: 35
+  early_stopping_patience: 7
+  random_seed: 42
+  device: "mps"
+
+paths:
+  artifacts_dir: "artifacts/dwell_forecasting"
+  best_model: "artifacts/dwell_forecasting/best_model.pt"
+  training_history: "artifacts/dwell_forecasting/training_history.csv"
+  checkpoint_metadata: "artifacts/dwell_forecasting/checkpoint_metadata.json"
+  validation_predictions: "artifacts/dwell_forecasting/validation_predictions.parquet"
+  evaluation_metrics: "artifacts/dwell_forecasting/evaluation_metrics.json"

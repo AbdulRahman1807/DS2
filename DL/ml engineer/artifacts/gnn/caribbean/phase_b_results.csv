@@ -1,0 +1,5 @@
+Model,Description,Sequences,Huber,MAE,RMSE,R2,Bias
+Model A: Regional Frozen Transformer,No Graph (Reference),18360,1.2703,1.6801,2.4245,0.9734,-0.1087
+Model B: Transformer + Actual Graph,Actual 2019 AIS (777 edges),18360,1.2686,1.6802,2.425,0.9734,0.0187
+Model C: Transformer + Shuffled Graph,Shuffled Edges (Negative Control),18360,1.2669,1.6774,2.4231,0.9734,-0.0295
+Model D: Transformer + No Edges,Identity Matrix (Adapter Control),18360,1.2642,1.675,2.4192,0.9735,-0.0238

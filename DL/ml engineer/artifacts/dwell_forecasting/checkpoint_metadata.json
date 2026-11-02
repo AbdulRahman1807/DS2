@@ -1,0 +1,62 @@
+{
+  "model_type": "ResidualDwellGRUForecaster",
+  "sha256": "0b767ca74dfe7d43fcd2613d11ed9b5e02fdede342055ebccfdfeecd44b59371",
+  "best_epoch": 3,
+  "best_val_mae": 5.7353,
+  "config": {
+    "pipeline_version": "3.6.0",
+    "model_name": "dwell_gru_residual",
+    "project_name": "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks",
+    "data": {
+      "raw_path": "DL/data/staging/supplementary_acquisition/raw/AISData.csv",
+      "lookback_weeks": 8,
+      "forecast_horizons": [
+        1,
+        4
+      ],
+      "primary_target": "avgwaiting_time",
+      "secondary_target": "avgservice_time",
+      "split_strategy": "chronological",
+      "train_years": [
+        2019,
+        2020
+      ],
+      "val_years": [
+        2021
+      ],
+      "test_years": [
+        2022
+      ]
+    },
+    "model": {
+      "model_type": "ResidualDwellGRUForecaster",
+      "num_ports": 19,
+      "port_embedding_dim": 8,
+      "num_temporal_features": 7,
+      "hidden_size": 32,
+      "num_layers": 2,
+      "dropout": 0.1,
+      "constraint": "relu"
+    },
+    "training": {
+      "batch_size": 32,
+      "learning_rate": 0.003,
+      "weight_decay": 0.0001,
+      "grad_clip_norm": 1.0,
+      "loss_type": "huber",
+      "huber_delta": 3.0,
+      "num_epochs": 35,
+      "early_stopping_patience": 7,
+      "random_seed": 42,
+      "device": "mps"
+    },
+    "paths": {
+      "artifacts_dir": "DL/ml engineer/artifacts/dwell_forecasting",
+      "best_model": "DL/ml engineer/artifacts/dwell_forecasting/best_model.pt",
+      "training_history": "DL/ml engineer/artifacts/dwell_forecasting/training_history.csv",
+      "checkpoint_metadata": "DL/ml engineer/artifacts/dwell_forecasting/checkpoint_metadata.json",
+      "validation_predictions": "DL/ml engineer/artifacts/dwell_forecasting/validation_predictions.parquet",
+      "evaluation_metrics": "DL/ml engineer/artifacts/dwell_forecasting/evaluation_metrics.json"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+analysis_scope,year,vessel_class,total_calls,total_entrances,mean_waiting_hours,median_waiting_hours,mean_service_hours,median_service_hours,waiting_share_pct,operational_regime
+All 19 Ports — 2019,2019,All Vessel Classes,181996,132402,8.49,7.0,27.34,22.0,23.7,Baseline Pre-Pandemic
+All 19 Ports — 2019,2019,"Feeder (<3,000 TEU)",89003,64585,9.02,7.0,24.13,20.0,27.22,Regional Island & Coastal Feeder Operations
+All 19 Ports — 2019,2019,"Intermediate (3,000-8,000 TEU)",50246,37152,9.0,7.0,24.2,21.0,27.11,Intra-Asia & Secondary Liner Corridors
+All 19 Ports — 2019,2019,"Neopanamax (>8,000 TEU)",42747,30665,6.55,4.58,32.08,26.2,16.96,Major Transpacific / Transatlantic Megaships
+All 19 Ports — 2020,2020,All Vessel Classes,187185,130033,11.83,9.0,29.25,24.0,28.79,Initial Shock
+All 19 Ports — 2020,2020,"Feeder (<3,000 TEU)",95008,66609,11.83,9.0,26.08,21.0,31.2,Regional Island & Coastal Feeder Operations
+All 19 Ports — 2020,2020,"Intermediate (3,000-8,000 TEU)",47814,33599,13.17,9.0,25.74,23.0,33.84,Intra-Asia & Secondary Liner Corridors
+All 19 Ports — 2020,2020,"Neopanamax (>8,000 TEU)",44363,29825,10.22,6.0,34.63,29.12,22.8,Major Transpacific / Transatlantic Megaships
+All 19 Ports — 2021,2021,All Vessel Classes,179612,118695,17.9,12.0,35.22,28.0,33.7,Peak Congestion Crisis
+All 19 Ports — 2021,2021,"Feeder (<3,000 TEU)",93015,63059,16.14,11.0,29.16,24.0,35.64,Regional Island & Coastal Feeder Operations
+All 19 Ports — 2021,2021,"Intermediate (3,000-8,000 TEU)",44939,29916,19.94,13.0,30.93,27.0,39.19,Intra-Asia & Secondary Liner Corridors
+All 19 Ports — 2021,2021,"Neopanamax (>8,000 TEU)",41658,25720,17.86,10.11,44.57,35.83,28.6,Major Transpacific / Transatlantic Megaships
+All 19 Ports — 2022,2022,All Vessel Classes,165463,115723,12.44,10.0,33.15,25.0,27.29,Normalization Phase
+All 19 Ports — 2022,2022,"Feeder (<3,000 TEU)",87564,62707,10.97,9.0,27.36,23.0,28.61,Regional Island & Coastal Feeder Operations
+All 19 Ports — 2022,2022,"Intermediate (3,000-8,000 TEU)",39584,28006,12.67,9.0,28.42,24.0,30.84,Intra-Asia & Secondary Liner Corridors
+All 19 Ports — 2022,2022,"Neopanamax (>8,000 TEU)",38315,25010,14.92,8.93,42.61,32.3,25.93,Major Transpacific / Transatlantic Megaships
+Gateway Port: LALB — 2019,2019,"Neopanamax Megaships (>8,000 TEU)",1486,922,2.63,0.75,94.22,92.64,2.72,Port Choke Point Analysis (2019)
+Gateway Port: LALB — 2021,2021,"Neopanamax Megaships (>8,000 TEU)",2808,896,69.86,78.97,168.45,165.89,29.32,Port Choke Point Analysis (2021)
+Gateway Port: NYNJ — 2019,2019,"Neopanamax Megaships (>8,000 TEU)",1177,820,4.56,3.18,46.0,46.79,9.03,Port Choke Point Analysis (2019)
+Gateway Port: NYNJ — 2021,2021,"Neopanamax Megaships (>8,000 TEU)",1494,955,8.36,6.1,55.14,54.22,13.16,Port Choke Point Analysis (2021)
+Gateway Port: Singapore — 2019,2019,"Neopanamax Megaships (>8,000 TEU)",4180,3471,2.7,2.28,25.26,24.93,9.67,Port Choke Point Analysis (2019)
+Gateway Port: Singapore — 2021,2021,"Neopanamax Megaships (>8,000 TEU)",4039,3070,7.19,6.14,34.72,34.01,17.16,Port Choke Point Analysis (2021)
+Gateway Port: Rotterdam — 2019,2019,"Neopanamax Megaships (>8,000 TEU)",2290,1457,8.99,7.88,39.28,38.51,18.62,Port Choke Point Analysis (2019)
+Gateway Port: Rotterdam — 2021,2021,"Neopanamax Megaships (>8,000 TEU)",2479,1252,21.73,20.07,54.55,53.29,28.49,Port Choke Point Analysis (2021)
+Gateway Port: Shanghai — 2019,2019,"Neopanamax Megaships (>8,000 TEU)",5476,3672,17.87,16.07,26.21,26.35,40.53,Port Choke Point Analysis (2019)
+Gateway Port: Shanghai — 2021,2021,"Neopanamax Megaships (>8,000 TEU)",5181,3124,35.97,31.67,32.17,31.85,52.79,Port Choke Point Analysis (2021)

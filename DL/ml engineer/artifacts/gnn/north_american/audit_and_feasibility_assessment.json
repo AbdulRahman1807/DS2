@@ -1,0 +1,80 @@
+{
+  "benchmark": "Benchmark B: North American Port-Rail Multimodal Network",
+  "verdict": "BLOCKED / NOT JUSTIFIED FOR SPATIO-TEMPORAL MESSAGE PASSING",
+  "is_stgnn_feasible": false,
+  "blocking_reasons": [
+    "Zero inter-port maritime corridors exist in the graph (0 directed edges between seaports).",
+    "The graph is bipartite disconnected: 41 ports connect to 242 intermodal terminals via transfer edges, but intermodal terminals have zero connections to the 302,774 rail tracks.",
+    "Zero dynamic time-series features exist for the 1,401 intermodal terminals and 250,204 rail junctions in the unified temporal panel.",
+    "Executing spatio-temporal message passing over 251,605 inland nodes would require fabricating 100% synthetic/dummy temporal sequences.",
+    "Transfer edges represent static geodesic distance heuristics (mean 10.57 km) rather than operational cargo movements."
+  ],
+  "node_inventory": {
+    "total_nodes": 251646,
+    "counts_by_type": {
+      "RAIL_JUNCTION": 250204,
+      "INTERMODAL_FACILITY": 1401,
+      "PORT_GATEWAY": 41
+    },
+    "canonical_ports_count": 41,
+    "canonical_ports_in_panel_count": 41,
+    "canonical_ports_panel_coverage_pct": 100.0,
+    "inland_nodes_in_panel_count": 0,
+    "inland_nodes_temporal_coverage_pct": 0.0
+  },
+  "edge_inventory": {
+    "total_edges": 303016,
+    "counts_by_type": {
+      "RAIL_LINE": 302774,
+      "PORT_INTERMODAL_TRANSFER": 242
+    },
+    "inter_port_edges": 0,
+    "intermodal_to_rail_edges": 0,
+    "connectivity_structure": {
+      "PORT_INTERMODAL_TRANSFER:port->im": 242,
+      "RAIL_LINE:rail->rail": 302774
+    }
+  },
+  "hinterland_statistics": {
+    "num_ports_with_transfers": 41,
+    "mean_im_facilities_per_port": 5.902439024390244,
+    "median_im_facilities_per_port": 5.0,
+    "min_im_facilities_per_port": 1,
+    "max_im_facilities_per_port": 30,
+    "mean_transfer_distance_km": 10.56893253326416,
+    "min_transfer_distance_km": 0.5199999809265137,
+    "max_transfer_distance_km": 29.860000610351562
+  },
+  "static_conditioning_correlation": {
+    "im_count": {
+      "mae_pearson_r": 0.4555160523963117,
+      "mae_pearson_p": 0.0027649565937330235,
+      "mae_spearman_rho": 0.5417127895958846,
+      "mae_spearman_p": 0.0002543616189232157,
+      "rel_mae_pearson_r": -0.2807838893311783,
+      "rel_mae_pearson_p": 0.07536112701209302,
+      "rel_mae_spearman_rho": -0.4195747883731304,
+      "rel_mae_spearman_p": 0.00631828065770074
+    },
+    "min_transfer_dist_km": {
+      "mae_pearson_r": -0.2474833193560919,
+      "mae_pearson_p": 0.11875055528584491,
+      "mae_spearman_rho": -0.19756958074405076,
+      "mae_spearman_p": 0.21564622140715597,
+      "rel_mae_pearson_r": 0.2410994605792146,
+      "rel_mae_pearson_p": 0.12887618550473517,
+      "rel_mae_spearman_rho": 0.12361165567716405,
+      "rel_mae_spearman_p": 0.4413097446738783
+    },
+    "mean_transfer_dist_km": {
+      "mae_pearson_r": -0.0471469316794218,
+      "mae_pearson_p": 0.7697404090136263,
+      "mae_spearman_rho": -0.04668989547038328,
+      "mae_spearman_p": 0.7719127759434078,
+      "rel_mae_pearson_r": 0.19729186887529873,
+      "rel_mae_pearson_p": 0.21630515605690268,
+      "rel_mae_spearman_rho": 0.09756097560975611,
+      "rel_mae_spearman_p": 0.5439660097473695
+    }
+  }
+}

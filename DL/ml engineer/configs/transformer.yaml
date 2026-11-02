@@ -1,0 +1,45 @@
+# =============================================================================
+# Milestone 3.4: Lightweight Transformer Residual Forecasting Configuration
+# =============================================================================
+pipeline_version: "3.4.0"
+model_name: "transformer_residual"
+project_name: "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks"
+
+model:
+  model_type: "ResidualTransformerForecaster"
+  input_size: 20
+  seq_len: 30
+  d_model: 64
+  nhead: 4
+  num_layers: 2
+  dim_feedforward: 128
+  dropout: 0.1
+  pooling: "last"
+  pe_type: "sinusoidal"
+  roll7_idx: 12
+  roll7_mean: 2.4068180554238894
+  roll7_std: 6.3483944613159915
+  constraint: "relu"
+
+training:
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  loss_type: "huber"
+  huber_delta: 1.0
+  num_epochs: 1
+  early_stopping_patience: 2
+  random_seed: 42
+  device: "mps"
+  num_workers: 0
+  pin_memory: false
+
+paths:
+  pipeline_config: "DL/ml engineer/configs/sequence_pipeline.yaml"
+  artifacts_dir: "DL/ml engineer/artifacts/transformer"
+  best_model: "DL/ml engineer/artifacts/transformer/best_model.pt"
+  training_history: "DL/ml engineer/artifacts/transformer/training_history.csv"
+  checkpoint_metadata: "DL/ml engineer/artifacts/transformer/checkpoint_metadata.json"
+  validation_predictions: "DL/ml engineer/artifacts/transformer/validation_predictions.parquet"
+

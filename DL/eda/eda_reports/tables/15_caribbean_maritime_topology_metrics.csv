@@ -1,0 +1,18 @@
+metric_category,metric_name,value,unit,description
+Graph Scale,Total Node Count,528,nodes,"Ports, terminals, and island anchorages in the Greater Caribbean basin"
+Graph Scale,Total Directed Edges,9969,edges,Empirical AIS-derived point-to-point commercial shipping lanes
+Graph Topology,Graph Density,0.0358,ratio,Dense regional feeder-hub network (3.58% density vs 9.58e-6 for rail)
+Connectivity,Weakly Connected Components,123,components,Weakly connected network clusters
+Connectivity,Giant WCC Node Share,76.52%,percent,Dominant weakly connected component (404 nodes)
+Connectivity,Strongly Connected Components,135,components,Strongly connected bidirectional routing clusters
+Connectivity,Giant SCC Node Share,74.62%,percent,Dominant strongly connected component (394 nodes)
+Small-World Metrics,Giant SCC Average Path Length,2.498,hops,Average maritime route hops between any port pair in giant SCC
+Small-World Metrics,Giant SCC Diameter,6,hops,Maximum shortest path distance across Caribbean maritime basin
+Degree Distribution,Mean Total Degree,37.76,degree,Average total connections (in + out) per maritime node
+Degree Distribution,Mean In-Degree,18.88,degree,Average incoming voyage lanes per port
+Degree Distribution,Mean Out-Degree,18.88,degree,Average outgoing voyage lanes per port
+Degree Distribution,Median Degree,15.5,degree,Median port degree
+Degree Distribution,90th Percentile Degree,120.0,degree,90th percentile port degree
+Degree Distribution,Maximum Degree,280,degree,Maximum port degree (Port Everglades: 280 directed lanes)
+Centrality,Top Hub by Degree,Port Everglades (280 deg),string,Highest total connectivity hub in network
+Centrality,Top Hub by Betweenness,Port Everglades (BC=0.0432),string,Primary bridge between North America and Caribbean island trade

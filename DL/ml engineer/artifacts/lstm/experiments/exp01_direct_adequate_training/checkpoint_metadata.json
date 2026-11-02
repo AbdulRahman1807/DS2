@@ -1,0 +1,38 @@
+{
+  "architecture": {
+    "model_type": "LSTMForecaster",
+    "input_size": 20,
+    "hidden_size": 64,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "output_size": 1,
+    "output_activation": "softplus"
+  },
+  "best_epoch": 1,
+  "best_val_huber": 6.269738649784444,
+  "latest_epoch": 1,
+  "val_metrics": {
+    "count": 743400,
+    "mae": 6.747028666966571,
+    "rmse": 24.45955680296485,
+    "huber_loss": 6.269738649784444,
+    "r2": 0.7146799951946792,
+    "mean_target": 17.429830508474577,
+    "mean_pred": 15.114165173710948,
+    "min_pred": 3.256864070892334,
+    "max_pred": 277.36279296875,
+    "min_target": 0.0,
+    "max_target": 1188.0,
+    "val_duration_sec": 19.291357278823853,
+    "val_batches": 1452
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "grad_clip_norm": 1.0
+  },
+  "device": "mps",
+  "torch_version": "2.10.0",
+  "last_updated": "2026-11-01T20:00:23Z"
+}

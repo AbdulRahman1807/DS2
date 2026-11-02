@@ -1,0 +1,10 @@
+{
+  "model_type": "TemporalAttentionLSTMForecaster",
+  "trainable_parameters": 57473,
+  "training_duration_sec": 840.6781947612762,
+  "best_epoch": 1,
+  "best_val_huber": 2.4432381945372206,
+  "inference_duration_sec": 23.01641011238098,
+  "inference_throughput_seq_per_sec": 32298.69455619886,
+  "peak_rss_mb": 419.359375
+}

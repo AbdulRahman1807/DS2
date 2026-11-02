@@ -1,0 +1,38 @@
+{
+  "storage_format": "numpy_memmap",
+  "dat_filename": "features_core20.dat",
+  "shape": [
+    2065,
+    2557,
+    20
+  ],
+  "dtype": "float32",
+  "num_ports": 2065,
+  "num_days": 2557,
+  "num_features": 20,
+  "feature_names": [
+    "portcalls",
+    "portcalls_container",
+    "portcalls_dry_bulk",
+    "portcalls_general_cargo",
+    "portcalls_roro",
+    "portcalls_tanker",
+    "portcalls_cargo",
+    "import_container",
+    "import_cargo",
+    "export_container",
+    "export_cargo",
+    "total_cargo_tonnage",
+    "pw_calls_rolling_7d_mean",
+    "pw_calls_rolling_14d_mean",
+    "pw_calls_rolling_30d_mean",
+    "pw_container_rolling_7d_mean",
+    "pw_container_rolling_14d_mean",
+    "day_of_week",
+    "is_weekend",
+    "day_of_year"
+  ],
+  "file_size_bytes": 422416400,
+  "file_sha256": "1e8072e5eabe1ba79cc06c426f31ce82ecd2d1c2fcf46170e6e12922d177eb46",
+  "created_at": "2026-11-01T18:30:35Z"
+}

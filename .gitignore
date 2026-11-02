@@ -62,6 +62,8 @@ DL/.venv/
 DL/.env
 DL/.env.*
 DL/.pytest_cache/
+*.dat
+DL/ml engineer/artifacts/preprocessing/storage/*.dat
 
 # Phase 2 - Supplementary staging raw data (Exceeds GitHub limits e.g. portcalls.csv 198MB)
 DL/data/staging/supplementary_acquisition/raw/**

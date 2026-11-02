@@ -1,0 +1,42 @@
+port_node_id,portwatch_id,port_name,reachable_facilities_1_hop,reachable_facilities_5_hops,reachable_facilities_10_hops,reachable_facilities_20_hops,min_distance_km,mean_distance_km,max_distance_km,reachability_status,topological_note
+port_port815,port815,New York-New Jersey,30,30,30,30,3.59,11.53,29.78,CONNECTED_DIRECT,Directly links to 30 intermodal freight terminals within 30 km
+port_port901,port901,Philadelphia,22,22,22,22,2.39,8.21,28.52,CONNECTED_DIRECT,Directly links to 22 intermodal freight terminals within 30 km
+port_port2053,port2053,Chicago,17,17,17,17,4.79,19.95,28.64,CONNECTED_DIRECT,Directly links to 17 intermodal freight terminals within 30 km
+port_port951,port951,Port Everglades,11,11,11,11,0.52,1.26,2.26,CONNECTED_DIRECT,Directly links to 11 intermodal freight terminals within 30 km
+port_port103,port103,Baltimore,10,10,10,10,4.23,7.14,11.64,CONNECTED_DIRECT,Directly links to 10 intermodal freight terminals within 30 km
+port_port826,port826,Norfolk,10,10,10,10,10.15,12.11,14.04,CONNECTED_DIRECT,Directly links to 10 intermodal freight terminals within 30 km
+port_port264,port264,Corpus Christi,10,10,10,10,1.43,8.04,22.25,CONNECTED_DIRECT,Directly links to 10 intermodal freight terminals within 30 km
+port_port629,port629,Lake Charles,9,9,9,9,2.96,8.5,25.2,CONNECTED_DIRECT,Directly links to 9 intermodal freight terminals within 30 km
+port_port418,port418,Green Bay,8,8,8,8,1.58,2.28,2.88,CONNECTED_DIRECT,Directly links to 8 intermodal freight terminals within 30 km
+port_port134,port134,Beaumont,8,8,8,8,6.88,14.26,27.7,CONNECTED_DIRECT,Directly links to 8 intermodal freight terminals within 30 km
+port_port933,port933,Port Arthur,8,8,8,8,7.09,11.68,14.87,CONNECTED_DIRECT,Directly links to 8 intermodal freight terminals within 30 km
+port_port126,port126,Baton Rouge,6,6,6,6,5.59,12.96,24.95,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port1229,port1229,Stockton,6,6,6,6,4.38,7.79,22.77,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port159,port159,Boston,6,6,6,6,1.53,5.0,16.52,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port1175,port1175,Seattle,6,6,6,6,2.85,8.35,19.34,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port839,port839,Oakland,6,6,6,6,10.58,12.43,15.81,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port48,port48,Anchorage,6,6,6,6,3.32,4.05,5.54,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port2252,port2252,Marcus Hook,6,6,6,6,0.58,17.14,29.07,CONNECTED_DIRECT,Directly links to 6 intermodal freight terminals within 30 km
+port_port373,port373,Galveston,5,5,5,5,12.63,13.78,14.99,CONNECTED_DIRECT,Directly links to 5 intermodal freight terminals within 30 km
+port_port812,port812,New Orleans,5,5,5,5,3.31,13.07,24.95,CONNECTED_DIRECT,Directly links to 5 intermodal freight terminals within 30 km
+port_port144,port144,Benicia,5,5,5,5,2.0,6.58,9.76,CONNECTED_DIRECT,Directly links to 5 intermodal freight terminals within 30 km
+port_port1140,port1140,San Diego,5,5,5,5,0.64,4.75,10.68,CONNECTED_DIRECT,Directly links to 5 intermodal freight terminals within 30 km
+port_port476,port476,Honolulu,4,4,4,4,2.78,4.37,7.43,CONNECTED_DIRECT,Directly links to 4 intermodal freight terminals within 30 km
+port_port464,port464,Hilo,4,4,4,4,3.26,3.34,3.38,CONNECTED_DIRECT,Directly links to 4 intermodal freight terminals within 30 km
+port_port1248,port1248,Tacoma,3,3,3,3,1.1,2.0,3.72,CONNECTED_DIRECT,Directly links to 3 intermodal freight terminals within 30 km
+port_port967,port967,Port Manatee,3,3,3,3,24.96,25.56,26.4,CONNECTED_DIRECT,Directly links to 3 intermodal freight terminals within 30 km
+port_port1141,port1141,San Francisco,3,3,3,3,9.84,13.76,15.89,CONNECTED_DIRECT,Directly links to 3 intermodal freight terminals within 30 km
+port_port1024,port1024,Providence,2,2,2,2,0.99,2.36,3.72,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port324,port324,Empire,2,2,2,2,25.09,25.84,26.59,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port736,port736,Miami,2,2,2,2,10.6,10.61,10.62,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port754,port754,Mobile,2,2,2,2,3.88,7.19,10.5,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port2254,port2254,Albany,2,2,2,2,3.47,8.89,14.31,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port130,port130,Bay City,2,2,2,2,0.68,1.08,1.49,CONNECTED_DIRECT,Directly links to 2 intermodal freight terminals within 30 km
+port_port1399,port1399,"Wilmington, NC",1,1,1,1,1.77,1.77,1.77,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port956,port956,Port Hueneme,1,1,1,1,22.31,22.31,22.31,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port809,port809,New Haven,1,1,1,1,29.86,29.86,29.86,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port963,port963,Port Lavaca,1,1,1,1,20.37,20.37,20.37,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port2248,port2248,Rodeo,1,1,1,1,3.44,3.44,3.44,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port117,port117,Barbor's Point,1,1,1,1,0.68,0.68,0.68,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port143,port143,Bellingham,1,1,1,1,17.52,17.52,17.52,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km
+port_port2462,port2462,Salem,1,1,1,1,21.53,21.53,21.53,CONNECTED_DIRECT,Directly links to 1 intermodal freight terminals within 30 km

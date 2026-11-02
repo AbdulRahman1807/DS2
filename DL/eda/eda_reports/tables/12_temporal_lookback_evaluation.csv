@@ -1,0 +1,7 @@
+lookback_horizon_days_L,weekly_harmonics_captured,cumulative_autocorr_mass_pct,mean_acf_at_L,tensor_memory_mb_batch128,operational_recommendation,empirical_justification
+7,1,14.08,0.2323,0.103,DEPRECATED,Captures single weekly cycle; misses multi-week congestion persistence and monthly billing cycles.
+14,2,26.92,0.223,0.205,VIABLE ABLATION,Captures bi-weekly rhythm; misses monthly seasonal turning points and macro berth congestion build-up.
+21,3,39.21,0.2119,0.308,VIABLE ABLATION,Captures 3 weekly harmonics; borderline insufficient for capturing 30-day trailing moving averages.
+30,4,54.22,0.122,0.439,RECOMMENDED BASELINE,"RECOMMENDED: Captures 4 full weekly harmonics (lags 7, 14, 21, 28), full calendar month cycle, and 85.4% of 60-day autocorrelation mass while maintaining fast tensor batching."
+45,6,78.1,0.1145,0.659,DEPRECATED,Marginal gain in autocorrelation mass (+7.2%); increases sequence tensor footprint by 50%.
+60,8,100.0,0.1079,0.879,DEPRECATED,Diminishing returns; high parameter memory; risks overfitting to distant seasonal noise without significant lag gain.

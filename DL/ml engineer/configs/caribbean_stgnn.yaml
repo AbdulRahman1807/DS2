@@ -1,0 +1,29 @@
+paths:
+  caribbean_edges_parquet: "DL/data/staging/supplementary_acquisition/processed/graph_ready/caribbean_graph_edges.parquet"
+  sequence_metadata_parquet: "DL/data/staging/supplementary_acquisition/processed/temporal_sequences/sequence_metadata.parquet"
+  storage_dir: "DL/ml engineer/artifacts/preprocessing/storage"
+  exp03_checkpoint: "DL/ml engineer/artifacts/lstm/experiments/exp03_residual_persistence/best_model.pt"
+
+model:
+  model_type: "CaribbeanResidualSTGNN"
+  num_nodes: 51
+  input_size: 20
+  hidden_size: 64
+  graph_hidden_size: 32
+  num_lstm_layers: 2
+  dropout: 0.1
+  gnn_type: "gatv2"
+  freeze_temporal: true
+
+training:
+  batch_size: 8  # 8 daily snapshots = 408 sequences per batch
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  num_epochs: 10
+  early_stopping_patience: 3
+  grad_clip_norm: 1.0
+  device: "mps"
+  loss_type: "huber"
+  huber_delta: 1.0
+  random_seed: 42
+

@@ -1,0 +1,86 @@
+{
+  "horizons_table": [
+    {
+      "Horizon": "H = 1 Day (t+1)",
+      "Target Mean": 2.49,
+      "Naive Huber": 0.632,
+      "Trans Huber": 0.5937,
+      "Naive MAE": 0.9377,
+      "Trans MAE": 0.8919,
+      "Delta MAE": 0.0458,
+      "MAE Imp %": 4.88,
+      "Trans RMSE": 1.8006,
+      "Trans R2": 0.9287,
+      "Trans Bias": -0.05
+    },
+    {
+      "Horizon": "H = 3 Days (t+1..t+3)",
+      "Target Mean": 7.47,
+      "Naive Huber": 1.3907,
+      "Trans Huber": 1.1958,
+      "Naive MAE": 1.7513,
+      "Trans MAE": 1.5528,
+      "Delta MAE": 0.1985,
+      "MAE Imp %": 11.33,
+      "Trans RMSE": 3.3185,
+      "Trans R2": 0.9718,
+      "Trans Bias": -0.0116
+    },
+    {
+      "Horizon": "H = 7 Days (t+1..t+7)",
+      "Target Mean": 17.43,
+      "Naive Huber": 2.6558,
+      "Trans Huber": 2.0089,
+      "Naive MAE": 3.0271,
+      "Trans MAE": 2.3924,
+      "Delta MAE": 0.6347,
+      "MAE Imp %": 20.97,
+      "Trans RMSE": 5.4603,
+      "Trans R2": 0.9858,
+      "Trans Bias": -0.0866
+    }
+  ],
+  "volume_table": [
+    {
+      "Quartile": "Q1: Sparse / Zero (0 - 1 calls/wk)",
+      "Sequences": 215759,
+      "H1 Naive MAE": 0.1377,
+      "H1 Trans MAE": 0.112,
+      "H3 Naive MAE": 0.3351,
+      "H3 Trans MAE": 0.3042,
+      "H7 Naive MAE": 0.6185,
+      "H7 Trans MAE": 0.4824
+    },
+    {
+      "Quartile": "Q2: Low Volume (2 - 5 calls/wk)",
+      "Sequences": 170553,
+      "H1 Naive MAE": 0.5563,
+      "H1 Trans MAE": 0.5344,
+      "H3 Naive MAE": 0.979,
+      "H3 Trans MAE": 0.8616,
+      "H7 Naive MAE": 1.6175,
+      "H7 Trans MAE": 1.2789
+    },
+    {
+      "Quartile": "Q3: Medium Volume (6 - 17 calls/wk)",
+      "Sequences": 174561,
+      "H1 Naive MAE": 0.9321,
+      "H1 Trans MAE": 0.8923,
+      "H3 Naive MAE": 1.6804,
+      "H3 Trans MAE": 1.4883,
+      "H7 Naive MAE": 2.8398,
+      "H7 Trans MAE": 2.2422
+    },
+    {
+      "Quartile": "Q4: High-Volume Hubs (18 - 1188 calls/wk)",
+      "Sequences": 182527,
+      "H1 Naive MAE": 2.2451,
+      "H1 Trans MAE": 2.1472,
+      "H3 Naive MAE": 4.2149,
+      "H3 Trans MAE": 3.7362,
+      "H7 Naive MAE": 7.3705,
+      "H7 Trans MAE": 5.8343
+    }
+  ],
+  "total_duration_sec": 84.37036299705505
+}

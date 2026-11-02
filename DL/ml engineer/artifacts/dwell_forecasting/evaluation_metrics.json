@@ -1,0 +1,377 @@
+{
+  "milestone": "3.6_Phase_B",
+  "task": "Weekly Anchorage Waiting-Time Forecasting",
+  "model_type": "ResidualDwellGRUForecaster",
+  "trainable_parameters": 13114,
+  "checkpoint_path": "/Users/abdul/Desktop/DS/DL/ml engineer/DL/ml engineer/artifacts/dwell_forecasting/best_model.pt",
+  "checkpoint_sha256": "0b767ca74dfe7d43fcd2613d11ed9b5e02fdede342055ebccfdfeecd44b59371",
+  "runtime_seconds": 17.09,
+  "sample_counts": {
+    "train": 1843,
+    "val": 1007,
+    "test": 931,
+    "ports": 19
+  },
+  "validation_evaluation_2021": {
+    "model_metrics_h1": {
+      "huber": 13.5554,
+      "mae": 5.7353,
+      "rmse": 10.8556,
+      "r2": 0.7185,
+      "bias": -1.4779
+    },
+    "persistence_metrics_h1": {
+      "huber": 14.0323,
+      "mae": 5.8669,
+      "rmse": 10.9689,
+      "r2": 0.7126,
+      "bias": -0.1509
+    },
+    "mae_reduction_pct": 2.24,
+    "rmse_reduction_pct": 1.03,
+    "huber_reduction_pct": 3.4,
+    "per_port": {
+      "Antwerp": {
+        "count": 53,
+        "model_mae": 3.8217,
+        "naive_mae": 3.9623,
+        "model_rmse": 4.5863,
+        "naive_rmse": 4.9297,
+        "mean_actual": 14.47
+      },
+      "Busan": {
+        "count": 53,
+        "model_mae": 0.9117,
+        "naive_mae": 0.9623,
+        "model_rmse": 1.1276,
+        "naive_rmse": 1.3247,
+        "mean_actual": 2.57
+      },
+      "Dubai": {
+        "count": 53,
+        "model_mae": 3.1203,
+        "naive_mae": 3.4717,
+        "model_rmse": 3.9049,
+        "naive_rmse": 4.374,
+        "mean_actual": 12.32
+      },
+      "Guangzhou": {
+        "count": 53,
+        "model_mae": 4.8854,
+        "naive_mae": 4.9811,
+        "model_rmse": 7.4994,
+        "naive_rmse": 6.8045,
+        "mean_actual": 12.79
+      },
+      "Hamburg": {
+        "count": 53,
+        "model_mae": 3.1586,
+        "naive_mae": 3.7736,
+        "model_rmse": 4.4045,
+        "naive_rmse": 5.1359,
+        "mean_actual": 8.36
+      },
+      "Hong Kong": {
+        "count": 53,
+        "model_mae": 5.1009,
+        "naive_mae": 4.6038,
+        "model_rmse": 8.5429,
+        "naive_rmse": 7.4505,
+        "mean_actual": 13.91
+      },
+      "Kaohsiung": {
+        "count": 53,
+        "model_mae": 2.3869,
+        "naive_mae": 2.9623,
+        "model_rmse": 3.9968,
+        "naive_rmse": 4.5287,
+        "mean_actual": 10.4
+      },
+      "LALB": {
+        "count": 53,
+        "model_mae": 28.1662,
+        "naive_mae": 27.8679,
+        "model_rmse": 36.7096,
+        "naive_rmse": 37.0092,
+        "mean_actual": 79.13
+      },
+      "NYNJ": {
+        "count": 53,
+        "model_mae": 3.8041,
+        "naive_mae": 3.8679,
+        "model_rmse": 5.1883,
+        "naive_rmse": 5.3359,
+        "mean_actual": 8.4
+      },
+      "Ningbo": {
+        "count": 53,
+        "model_mae": 7.1045,
+        "naive_mae": 7.3396,
+        "model_rmse": 9.4295,
+        "naive_rmse": 9.6378,
+        "mean_actual": 28.0
+      },
+      "Port Klang": {
+        "count": 53,
+        "model_mae": 6.4938,
+        "naive_mae": 6.566,
+        "model_rmse": 10.3372,
+        "naive_rmse": 10.334,
+        "mean_actual": 19.55
+      },
+      "Qingdao": {
+        "count": 53,
+        "model_mae": 5.1128,
+        "naive_mae": 5.4906,
+        "model_rmse": 6.9096,
+        "naive_rmse": 7.4694,
+        "mean_actual": 12.19
+      },
+      "Rotterdam": {
+        "count": 53,
+        "model_mae": 2.2218,
+        "naive_mae": 2.3585,
+        "model_rmse": 2.9779,
+        "naive_rmse": 3.2476,
+        "mean_actual": 11.74
+      },
+      "Shanghai": {
+        "count": 53,
+        "model_mae": 6.3036,
+        "naive_mae": 6.4717,
+        "model_rmse": 10.0327,
+        "naive_rmse": 10.5106,
+        "mean_actual": 28.21
+      },
+      "Shenzhen": {
+        "count": 53,
+        "model_mae": 6.5833,
+        "naive_mae": 7.0,
+        "model_rmse": 9.9998,
+        "naive_rmse": 9.7099,
+        "mean_actual": 21.38
+      },
+      "Singapore": {
+        "count": 53,
+        "model_mae": 4.6865,
+        "naive_mae": 4.0943,
+        "model_rmse": 6.0103,
+        "naive_rmse": 5.3957,
+        "mean_actual": 15.34
+      },
+      "Tanjung Pelepas": {
+        "count": 53,
+        "model_mae": 5.8139,
+        "naive_mae": 5.1509,
+        "model_rmse": 7.5407,
+        "naive_rmse": 6.8639,
+        "mean_actual": 17.17
+      },
+      "Tianjin": {
+        "count": 53,
+        "model_mae": 4.6298,
+        "naive_mae": 4.9811,
+        "model_rmse": 7.1961,
+        "naive_rmse": 8.4026,
+        "mean_actual": 12.08
+      },
+      "Xiamen": {
+        "count": 53,
+        "model_mae": 4.6651,
+        "naive_mae": 5.566,
+        "model_rmse": 8.0343,
+        "naive_rmse": 8.7383,
+        "mean_actual": 12.17
+      }
+    }
+  },
+  "validation_4week_horizon": {
+    "model": {
+      "huber": 13.9416,
+      "mae": 5.8675,
+      "rmse": 10.8131,
+      "r2": 0.6677,
+      "bias": -1.1337
+    },
+    "naive": {
+      "huber": 16.0347,
+      "mae": 6.5963,
+      "rmse": 11.6194,
+      "r2": 0.6163,
+      "bias": 0.0144
+    }
+  },
+  "test_held_out_evaluation_2022": {
+    "model_metrics_h1": {
+      "huber": 8.7176,
+      "mae": 4.0824,
+      "rmse": 6.4028,
+      "r2": 0.6103,
+      "bias": -0.8185
+    },
+    "persistence_metrics_h1": {
+      "huber": 9.6767,
+      "mae": 4.391,
+      "rmse": 6.8002,
+      "r2": 0.5604,
+      "bias": 0.1375
+    },
+    "mae_reduction_pct": 7.03,
+    "rmse_reduction_pct": 5.84,
+    "huber_reduction_pct": 9.91,
+    "per_port": {
+      "Antwerp": {
+        "count": 49,
+        "model_mae": 2.7707,
+        "naive_mae": 3.3673,
+        "model_rmse": 3.6444,
+        "naive_rmse": 4.3962,
+        "mean_actual": 11.8
+      },
+      "Busan": {
+        "count": 49,
+        "model_mae": 1.1543,
+        "naive_mae": 1.3061,
+        "model_rmse": 1.5269,
+        "naive_rmse": 1.8295,
+        "mean_actual": 2.63
+      },
+      "Dubai": {
+        "count": 49,
+        "model_mae": 2.9521,
+        "naive_mae": 3.6735,
+        "model_rmse": 3.8907,
+        "naive_rmse": 4.6379,
+        "mean_actual": 11.63
+      },
+      "Guangzhou": {
+        "count": 49,
+        "model_mae": 4.0698,
+        "naive_mae": 4.5918,
+        "model_rmse": 5.357,
+        "naive_rmse": 6.3519,
+        "mean_actual": 9.9
+      },
+      "Hamburg": {
+        "count": 49,
+        "model_mae": 8.2192,
+        "naive_mae": 8.6531,
+        "model_rmse": 12.4292,
+        "naive_rmse": 12.2408,
+        "mean_actual": 28.24
+      },
+      "Hong Kong": {
+        "count": 49,
+        "model_mae": 2.1046,
+        "naive_mae": 2.4082,
+        "model_rmse": 3.507,
+        "naive_rmse": 3.8545,
+        "mean_actual": 5.57
+      },
+      "Kaohsiung": {
+        "count": 49,
+        "model_mae": 1.8253,
+        "naive_mae": 2.102,
+        "model_rmse": 2.4387,
+        "naive_rmse": 2.7218,
+        "mean_actual": 9.51
+      },
+      "LALB": {
+        "count": 49,
+        "model_mae": 4.6233,
+        "naive_mae": 5.8367,
+        "model_rmse": 7.2544,
+        "naive_rmse": 9.1607,
+        "mean_actual": 6.78
+      },
+      "NYNJ": {
+        "count": 49,
+        "model_mae": 8.3728,
+        "naive_mae": 9.3265,
+        "model_rmse": 11.3968,
+        "naive_rmse": 12.3973,
+        "mean_actual": 23.65
+      },
+      "Ningbo": {
+        "count": 49,
+        "model_mae": 5.0394,
+        "naive_mae": 5.1429,
+        "model_rmse": 6.9151,
+        "naive_rmse": 6.7643,
+        "mean_actual": 18.12
+      },
+      "Port Klang": {
+        "count": 49,
+        "model_mae": 3.6774,
+        "naive_mae": 3.8571,
+        "model_rmse": 4.9511,
+        "naive_rmse": 5.113,
+        "mean_actual": 14.55
+      },
+      "Qingdao": {
+        "count": 49,
+        "model_mae": 7.1788,
+        "naive_mae": 6.8367,
+        "model_rmse": 9.0424,
+        "naive_rmse": 8.719,
+        "mean_actual": 20.02
+      },
+      "Rotterdam": {
+        "count": 49,
+        "model_mae": 2.4901,
+        "naive_mae": 2.8571,
+        "model_rmse": 3.409,
+        "naive_rmse": 3.7362,
+        "mean_actual": 12.29
+      },
+      "Shanghai": {
+        "count": 49,
+        "model_mae": 3.4934,
+        "naive_mae": 3.6122,
+        "model_rmse": 5.1394,
+        "naive_rmse": 5.8815,
+        "mean_actual": 12.14
+      },
+      "Shenzhen": {
+        "count": 49,
+        "model_mae": 7.2407,
+        "naive_mae": 6.8571,
+        "model_rmse": 10.2752,
+        "naive_rmse": 10.1177,
+        "mean_actual": 18.04
+      },
+      "Singapore": {
+        "count": 49,
+        "model_mae": 2.3453,
+        "naive_mae": 2.4898,
+        "model_rmse": 3.093,
+        "naive_rmse": 3.1687,
+        "mean_actual": 8.57
+      },
+      "Tanjung Pelepas": {
+        "count": 49,
+        "model_mae": 3.8381,
+        "naive_mae": 3.7347,
+        "model_rmse": 4.701,
+        "naive_rmse": 5.2001,
+        "mean_actual": 10.9
+      },
+      "Tianjin": {
+        "count": 49,
+        "model_mae": 3.0935,
+        "naive_mae": 3.6735,
+        "model_rmse": 4.1883,
+        "naive_rmse": 5.7923,
+        "mean_actual": 5.1
+      },
+      "Xiamen": {
+        "count": 49,
+        "model_mae": 3.0769,
+        "naive_mae": 3.102,
+        "model_rmse": 4.1597,
+        "naive_rmse": 3.8598,
+        "mean_actual": 8.61
+      }
+    }
+  }
+}

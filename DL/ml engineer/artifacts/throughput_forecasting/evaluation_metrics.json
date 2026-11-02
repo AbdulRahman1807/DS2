@@ -1,0 +1,66 @@
+{
+  "milestone": "3.6_Phase_C",
+  "task": "Direct Throughput Forecasting",
+  "model_type": "DirectThroughputResidualForecaster",
+  "frozen_backbone_path": "/Users/abdul/Desktop/DS/DL/ml engineer/artifacts/transformer_mean_pooling/best_model.pt",
+  "frozen_backbone_sha256": "ff67c307183a73d03ceb2d0332520ff767a54c12971eeaa6acc68027f902711e",
+  "throughput_checkpoint_sha256": "0e9b85cefcc06a62db1e5292101d550bc62db57fa6dda72a53f6d2c7d33bd19d",
+  "trainable_parameters": 4226,
+  "frozen_parameters": 68481,
+  "runtime_seconds": 97.99,
+  "sample_counts": {
+    "train_sample": 100000,
+    "val_sample": 30000,
+    "total_val_panel_sequences": 743400
+  },
+  "container_calls_7d_future_sum": {
+    "model_metrics": {
+      "huber": 0.6266,
+      "mae": 0.8257,
+      "rmse": 2.1762,
+      "r2": 0.9839,
+      "bias": -0.0895
+    },
+    "persistence_metrics": {
+      "huber": 0.6664,
+      "mae": 0.8404,
+      "rmse": 2.275,
+      "r2": 0.9824,
+      "bias": 0.0055
+    },
+    "mae_reduction_pct": 1.75,
+    "rmse_reduction_pct": 4.34,
+    "huber_reduction_pct": 5.97,
+    "volume_quartiles": {
+      "(-0.001, 2.0]": {
+        "count": 22888,
+        "model_mae": 0.2659,
+        "naive_mae": 0.2612
+      },
+      "(2.0, 287.0]": {
+        "count": 7112,
+        "model_mae": 2.6274,
+        "naive_mae": 2.7042
+      }
+    }
+  },
+  "cargo_tonnage_7d_future_sum": {
+    "model_metrics": {
+      "huber": 1565838219.0061,
+      "mae": 41046.6217,
+      "rmse": 130086.4968,
+      "r2": 0.9661,
+      "bias": -2107.2248
+    },
+    "persistence_metrics": {
+      "huber": 1607189218.0457,
+      "mae": 41577.9645,
+      "rmse": 132685.3254,
+      "r2": 0.9647,
+      "bias": 505.8727
+    },
+    "mae_reduction_pct": 1.28,
+    "rmse_reduction_pct": 1.96,
+    "huber_reduction_pct": 2.57
+  }
+}

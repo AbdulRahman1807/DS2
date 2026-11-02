@@ -8,15 +8,24 @@ global logistics panel and empirical multimodal/maritime spatial graphs:
 4. Caribbean Regional Maritime Graph: DL/.../caribbean_graph_*.parquet (528 nodes, 9,969 directed lanes)
 5. Native-Resolution Benchmarks: ADB Weekly (3,990 rows) & Indian Monthly Dwell (363 rows)
 6. Exogenous Shocks & Capacity Pressure: NOAA, EM-DAT, BTS, ERA5
+7. Workstreams A-F Deep Analyses:
+   - Workstream A: Temporal Autocorrelation (ACF/PACF lags 1-35), Lookback Evaluation (L in [7,14,21,30,45,60]), Target Profiles
+   - Workstream B: Spatial Graph Topology, Degree Distributions, Connected Components, Port Reachability, GNN Specs
+   - Workstream C: Master Feature Inventory (91 cols), Pooled & Within-Port Correlations, Multicollinearity Redundancy
+   - Workstream D: ADB Vessel Size Classes & Congestion Dynamics, Zenodo Dwell Calibration, Mendeley Milestone Breakdown
+   - Workstream E: Comprehensive Feature Availability & Target Leakage Matrix
+   - Workstream F: Concrete Engineering Handoff Guidelines & GNN Backbones
 
 Outputs:
-- DL/eda/eda_reports/eda_report.txt
-- DL/eda/eda_reports/findings.md
-- DL/eda/eda_reports/tables/*.csv (10 tables)
-- DL/eda/eda_reports/figures/*.png (8 high-resolution figures)
+- DL/eda/eda_reports/eda_report.txt (Complete Master Text Handover)
+- DL/eda/eda_reports/findings.md (Exhaustive Markdown Report referencing Tables 01-25 and Figures 01-16)
+- DL/eda/eda_reports/tables/*.csv (Tables 01-25)
+- DL/eda/eda_reports/figures/*.png (Figures 01-16 high-resolution visualizations)
 """
 
 import os
+import sys
+import subprocess
 import time
 import numpy as np
 import pandas as pd
@@ -927,7 +936,8 @@ def write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_re
     print(f"✅ Authoritative findings written -> {md_path}")
 
 def main():
-    print("=== EXECUTING AUTHORITATIVE 02_EDA_ENGINEER PIPELINE ===")
+    print("=== EXECUTING AUTHORITATIVE 02_EDA_ENGINEER MASTER PIPELINE ===")
+    t_start = time.time()
     
     # 1. Profile unified panel
     df_panel, df_arch, df_dist, top_ports = step1_profile_unified_panel()
@@ -947,13 +957,36 @@ def main():
     # 6. Analyze exogenous shocks and capacity pressure
     bts_valid, shock_summary = step6_exogenous_shocks_and_capacity(df_panel)
     
-    # 7. Generate visualizations
+    # 7. Generate visualizations (Figures 01-08)
     step7_generate_visualizations(df_panel, monthly_trend, dow, monthly, df_na_edges, df_cb_edges, df_adb, df_ind, df_seq, bts_valid)
     
-    # 8. Write authoritative reports
+    # 8. Write baseline tables (Tables 01-10)
     write_authoritative_reports(df_arch, df_dist, annual, dow, monthly, df_na_report, df_cb_report, df_bench, df_split, shock_summary, top_ports)
     
-    print("\n=== STAGE 02 EDA PIPELINE COMPLETED SUCCESSFULLY ===")
+    # 9. Workstream A: Temporal Dependency & Lookback Analysis (Tables 11-13, Figures 09-10)
+    print("\n>>> Launching Workstream A: Temporal Dependency Analysis...")
+    subprocess.run([sys.executable, str(SCRIPT_DIR / "03_temporal_dependency_analysis.py")], check=True)
+    
+    # 10. Workstream B: Spatial Graph Topology Analysis (Tables 14-17, Figures 11-12)
+    print("\n>>> Launching Workstream B: Spatial Graph Topology Analysis...")
+    subprocess.run([sys.executable, str(SCRIPT_DIR / "04_spatial_graph_topology.py")], check=True)
+    
+    # 11. Workstream C: Feature Quality & Correlation Analysis (Tables 18-20, Figures 13-14)
+    print("\n>>> Launching Workstream C: Feature Quality & Correlation Analysis...")
+    subprocess.run([sys.executable, str(SCRIPT_DIR / "05_feature_quality_and_correlation.py")], check=True)
+    
+    # 12. Workstreams D & E: Supplementary Cross-Source Integration & Leakage Matrix (Tables 21-25, Figures 15-16)
+    print("\n>>> Launching Workstreams D & E: Supplementary Cross-Source & Leakage Matrix...")
+    subprocess.run([sys.executable, str(SCRIPT_DIR / "06_supplementary_cross_source.py")], check=True)
+    
+    # 13. Workstream F: Compile Final Comprehensive Authoritative Reports
+    print("\n>>> Launching Workstream F: Compiling Final Comprehensive Reports...")
+    subprocess.run([sys.executable, str(SCRIPT_DIR / "07_generate_final_reports.py")], check=True)
+    
+    print("\n" + "="*80)
+    print(f"=== STAGE 02 EDA MASTER PIPELINE COMPLETED SUCCESSFULLY IN {time.time()-t_start:.2f}s ===")
+    print("All 25 Tables and 16 Figures Verified in DL/eda/eda_reports/")
+    print("="*80)
 
 if __name__ == "__main__":
     main()

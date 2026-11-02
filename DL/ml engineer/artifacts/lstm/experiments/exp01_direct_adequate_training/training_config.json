@@ -1,0 +1,38 @@
+{
+  "pipeline_version": "3.2.0",
+  "model_name": "lstm_baseline",
+  "project_name": "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks",
+  "model": {
+    "input_size": 20,
+    "seq_len": 30,
+    "hidden_size": 64,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "output_size": 1,
+    "output_activation": "softplus",
+    "model_type": "LSTMForecaster"
+  },
+  "training": {
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "grad_clip_norm": 1.0,
+    "loss_type": "huber",
+    "huber_delta": 1.0,
+    "num_epochs": 3,
+    "early_stopping_patience": 2,
+    "random_seed": 42,
+    "device": "mps",
+    "num_workers": 0,
+    "pin_memory": false
+  },
+  "paths": {
+    "pipeline_config": "DL/ml engineer/configs/sequence_pipeline.yaml",
+    "artifacts_dir": "DL/ml engineer/artifacts/lstm",
+    "best_model": "DL/ml engineer/artifacts/lstm/best_model.pt",
+    "last_model": "DL/ml engineer/artifacts/lstm/last_model.pt",
+    "training_history": "DL/ml engineer/artifacts/lstm/training_history.csv",
+    "checkpoint_metadata": "DL/ml engineer/artifacts/lstm/checkpoint_metadata.json",
+    "validation_predictions": "DL/ml engineer/artifacts/lstm/validation_predictions.parquet"
+  }
+}

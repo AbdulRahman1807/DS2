@@ -1,0 +1,36 @@
+{
+  "paths": {
+    "caribbean_edges_parquet": "DL/data/staging/supplementary_acquisition/processed/graph_ready/caribbean_graph_edges.parquet",
+    "sequence_metadata_parquet": "DL/data/staging/supplementary_acquisition/processed/temporal_sequences/sequence_metadata.parquet",
+    "storage_dir": "DL/ml engineer/artifacts/preprocessing/storage",
+    "transformer_checkpoint": "DL/ml engineer/artifacts/transformer_mean_pooling/best_model.pt"
+  },
+  "model": {
+    "model_type": "CaribbeanResidualTransformerGNN",
+    "num_nodes": 51,
+    "input_size": 20,
+    "seq_len": 30,
+    "d_model": 64,
+    "nhead": 4,
+    "num_transformer_layers": 2,
+    "dim_feedforward": 128,
+    "graph_hidden_size": 32,
+    "dropout": 0.1,
+    "pooling": "mean",
+    "pe_type": "sinusoidal",
+    "gnn_type": "gatv2",
+    "freeze_temporal": true
+  },
+  "training": {
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 10,
+    "early_stopping_patience": 3,
+    "grad_clip_norm": 1.0,
+    "device": "mps",
+    "loss_type": "huber",
+    "huber_delta": 1.0,
+    "random_seed": 42
+  }
+}

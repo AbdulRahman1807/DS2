@@ -1,0 +1,92 @@
+column_index,column_name,domain_category,geographic_scope,data_type,null_count,null_pct,zero_count,zero_pct,unique_values,min,p25,median_p50,p75,max,mean,std
+1,year,Identifiers & Metadata,"Global (All 2,065 ports)",int16,0,0.0,0,0.0,7,2019.0,2020.0,2022.0,2024.0,2025.0,2022.0,2.0
+2,month,Identifiers & Metadata,"Global (All 2,065 ports)",int8,0,0.0,0,0.0,12,1.0,4.0,7.0,10.0,12.0,6.5225,3.4488
+3,day,Identifiers & Metadata,"Global (All 2,065 ports)",int8,0,0.0,0,0.0,31,1.0,8.0,16.0,23.0,31.0,15.7309,8.8006
+4,portwatch_id,Identifiers & Metadata,"Global (All 2,065 ports)",object,0,0.0,0,0.0,2065,,,,,,,
+5,portwatch_name,Identifiers & Metadata,"Global (All 2,065 ports)",object,0,0.0,0,0.0,2044,,,,,,,
+6,country_name,Identifiers & Metadata,"Global (All 2,065 ports)",object,0,0.0,0,0.0,180,,,,,,,
+7,country_iso3,Identifiers & Metadata,"Global (All 2,065 ports)",object,0,0.0,0,0.0,180,,,,,,,
+8,portcalls_container,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4243361,80.36,62,0.0,0.0,0.0,0.0,76.0,0.6199,2.4898
+9,portcalls_dry_bulk,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4312269,81.67,77,0.0,0.0,0.0,0.0,88.0,0.3793,1.3979
+10,portcalls_general_cargo,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4023217,76.19,40,0.0,0.0,0.0,0.0,43.0,0.522,1.4919
+11,portcalls_roro,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4829709,91.47,19,0.0,0.0,0.0,0.0,19.0,0.1385,0.5922
+12,portcalls_tanker,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,3846038,72.84,111,0.0,0.0,0.0,1.0,117.0,0.7614,2.8727
+13,portcalls_cargo,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,3010299,57.01,149,0.0,0.0,0.0,2.0,182.0,1.6597,4.4551
+14,portcalls,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,2537760,48.06,186,0.0,0.0,1.0,2.0,224.0,2.4211,6.5812
+15,import_container,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4512719,85.46,122238,0.0,0.0,0.0,0.0,2888960.0,4177.876,34077.7108
+16,import_cargo,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,3563131,67.48,205898,0.0,0.0,0.0,1133.0,3385948.0,11231.3384,55010.2977
+17,export_container,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,4567752,86.51,120717,0.0,0.0,0.0,0.0,2017212.0,4246.6966,36047.2173
+18,export_cargo,Operational Ground Truth,"Global (All 2,065 ports)",int32,0,0.0,3616041,68.48,201088,0.0,0.0,0.0,741.0,2657613.0,11073.7287,61750.9397
+19,date_utc,Identifiers & Metadata,"Global (All 2,065 ports)",object,0,0.0,0,0.0,2557,,,,,,,
+20,day_of_week,Calendar Features,"Global (All 2,065 ports)",int8,0,0.0,753725,14.27,7,0.0,1.0,3.0,5.0,6.0,2.9988,1.9997
+21,is_weekend,Calendar Features,"Global (All 2,065 ports)",int8,0,0.0,3772755,71.45,2,0.0,0.0,0.0,1.0,1.0,0.2855,0.4516
+22,day_of_year,Calendar Features,"Global (All 2,065 ports)",int16,0,0.0,0,0.0,366,1.0,92.0,183.0,274.0,366.0,183.1431,105.449
+23,pw_calls_rolling_7d_mean,Trailing Rolling Features,"Global (All 2,065 ports)",float32,0,0.0,991411,18.78,1293,0.0,0.1429,0.7143,2.2857,169.7143,2.4208,6.3789
+24,pw_calls_rolling_14d_mean,Trailing Rolling Features,"Global (All 2,065 ports)",float32,0,0.0,706737,13.38,2822,0.0,0.1429,0.7143,2.2143,158.3571,2.4206,6.3615
+25,pw_calls_rolling_30d_mean,Trailing Rolling Features,"Global (All 2,065 ports)",float32,0,0.0,513072,9.72,7074,0.0,0.1667,0.7,2.2333,156.3667,2.42,6.3509
+26,pw_container_rolling_7d_mean,Trailing Rolling Features,"Global (All 2,065 ports)",float32,0,0.0,3233643,61.24,470,0.0,0.0,0.0,0.2857,52.0,0.6199,2.3946
+27,pw_container_rolling_14d_mean,Trailing Rolling Features,"Global (All 2,065 ports)",float32,0,0.0,2954879,55.96,1092,0.0,0.0,0.0,0.2857,52.0,0.6198,2.388
+28,total_cargo_tonnage,Operational Ground Truth,"Global (All 2,065 ports)",float32,0,0.0,3154426,59.74,286403,0.0,0.0,0.0,4045.0,4140242.0,22305.0664,100073.3359
+29,target_portcalls_lead_1d,Forecasting Targets,"Global (All 2,065 ports)",float32,2065,0.04,2536586,48.06,186,0.0,0.0,1.0,2.0,224.0,2.4214,6.5815
+30,target_portcalls_lead_2d,Forecasting Targets,"Global (All 2,065 ports)",float32,4130,0.08,2535478,48.06,186,0.0,0.0,1.0,2.0,224.0,2.4216,6.5818
+31,target_portcalls_lead_3d,Forecasting Targets,"Global (All 2,065 ports)",float32,6195,0.12,2534446,48.06,186,0.0,0.0,1.0,2.0,224.0,2.4217,6.582
+32,target_portcalls_lead_4d,Forecasting Targets,"Global (All 2,065 ports)",float32,8260,0.16,2533385,48.05,186,0.0,0.0,1.0,2.0,224.0,2.4218,6.5823
+33,target_portcalls_lead_5d,Forecasting Targets,"Global (All 2,065 ports)",float32,10325,0.2,2532314,48.05,186,0.0,0.0,1.0,2.0,224.0,2.4219,6.5823
+34,target_portcalls_lead_6d,Forecasting Targets,"Global (All 2,065 ports)",float32,12390,0.23,2531237,48.05,186,0.0,0.0,1.0,2.0,224.0,2.4221,6.5825
+35,target_portcalls_lead_7d,Forecasting Targets,"Global (All 2,065 ports)",float32,14455,0.27,2530256,48.05,186,0.0,0.0,1.0,2.0,224.0,2.422,6.5822
+36,target_portcalls_7d_future_sum,Forecasting Targets,"Global (All 2,065 ports)",float32,14455,0.27,986607,18.74,1041,0.0,1.0,5.0,16.0,1188.0,16.9548,44.6632
+37,target_container_calls_7d_future_sum,Forecasting Targets,"Global (All 2,065 ports)",float32,14455,0.27,3223333,61.21,319,0.0,0.0,0.0,2.0,356.0,4.3405,16.7631
+38,target_cargo_tonnage_7d_future_sum,Forecasting Targets,"Global (All 2,065 ports)",float32,14455,0.27,1677437,31.86,705170,0.0,0.0,6187.0,65989.0,19608542.0,156149.3906,653125.5
+39,has_era5_coverage,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",int8,0,0.0,5267420,99.76,2,0.0,0.0,0.0,0.0,1.0,0.0024,0.0491
+40,era5_wind_speed_mean_ms,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12779,0.4572,2.2845,3.0849,4.1045,13.6152,3.3115,1.4514
+41,era5_wind_speed_max_ms,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12777,0.9664,3.7398,4.9374,6.2664,19.9262,5.1392,1.9332
+42,era5_t2m_mean_c,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12779,-12.4876,11.9246,16.8774,22.2598,32.8706,16.6673,7.4988
+43,era5_t2m_min_c,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12668,-15.7944,8.7305,14.5275,19.504,28.4625,14.0223,7.5302
+44,era5_t2m_max_c,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12665,-8.5105,14.7083,19.6395,26.2754,42.3463,19.9933,7.8511
+45,era5_msl_mean_hpa,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12535,984.3716,1013.1059,1016.2358,1019.9754,1045.9572,1016.6276,5.7723
+46,era5_msl_min_hpa,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,10445,975.9475,1010.43,1013.56,1017.0906,1041.9962,1013.6439,5.9925
+47,era5_msl_max_hpa,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,10472,993.9706,1015.1194,1018.3225,1022.3744,1048.895,1019.0052,5.7772
+48,era5_precipitation_mm,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,3398,26.58,5444,0.0,0.0,0.1435,2.3961,142.2324,2.9413,7.1891
+49,era5_wind_direction_mean_deg,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12779,0.0375,117.3471,194.1461,255.2365,359.9951,183.3334,93.7475
+50,era5_swh_mean_m,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12784,0.0323,0.3407,0.6895,0.935,4.4474,0.6994,0.4856
+51,era5_swh_max_m,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12783,0.0354,0.4347,0.8087,1.1213,6.293,0.8665,0.6124
+52,era5_mwp_mean_s,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12783,1.632,3.3607,5.0108,6.9622,14.2658,5.2902,2.6099
+53,era5_wave_direction_mean_deg,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,12778,0.0006,114.1877,167.0973,218.8036,359.997,166.216,76.8717
+54,era5_wave_distance_km,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",float32,5267420,99.76,0,0.0,5,13.4,18.5,53.2,57.6,77.8,44.1,24.4901
+55,era5_wave_proxy_type,ERA5 Weather,"Pilot Ports (5 ports, 12,785 rows)",object,5267420,99.76,0,0.0,2,,,,,,,
+56,has_noaa_coverage,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",int8,0,0.0,5137013,97.29,2,0.0,0.0,0.0,0.0,1.0,0.0271,0.1624
+57,noaa_storm_event_count_50km,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,136304,95.19,66,0.0,0.0,0.0,0.0,159.0,0.224,1.8743
+58,noaa_marine_wind_event_count,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,140540,98.15,26,0.0,0.0,0.0,0.0,42.0,0.0541,0.5817
+59,noaa_flood_event_flag,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,141051,98.5,2,0.0,0.0,0.0,0.0,1.0,0.015,0.1214
+60,noaa_tornado_event_flag,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,142343,99.41,2,0.0,0.0,0.0,0.0,1.0,0.0059,0.0768
+61,noaa_storm_damage_property_sum,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,141224,98.63,415,0.0,0.0,0.0,0.0,500009984.0,33460.668,2907787.5
+62,noaa_storm_event_count_100km,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,131382,91.75,119,0.0,0.0,0.0,0.0,267.0,0.5604,4.0474
+63,noaa_hurricane_event_flag,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,143192,100.0,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+64,noaa_is_storm_active_50km,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,136304,95.19,2,0.0,0.0,0.0,0.0,1.0,0.0481,0.214
+65,noaa_is_storm_active_100km,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,131382,91.75,2,0.0,0.0,0.0,0.0,1.0,0.0825,0.2751
+66,noaa_rolling_7d_storm_event_count,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,110974,77.5,114,0.0,0.0,0.0,0.0,179.0,1.5677,5.8534
+67,noaa_rolling_7d_storm_damage,NOAA Storm Shocks,"US Coastal Ports (56 ports, 143,192 rows)",float32,5137013,97.29,132053,92.22,656,0.0,0.0,0.0,0.0,516985984.0,234224.6562,8067876.5
+68,has_emdat_coverage,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",int8,0,0.0,145749,2.76,2,0.0,1.0,1.0,1.0,1.0,0.9724,0.1638
+69,emdat_active_disaster_count,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,3781171,73.64,7,0.0,0.0,0.0,1.0,6.0,0.3325,0.6276
+70,emdat_natural_disaster_count,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,3796326,73.94,7,0.0,0.0,0.0,1.0,6.0,0.3269,0.6208
+71,emdat_technological_disaster_count,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,5105961,99.45,4,0.0,0.0,0.0,0.0,3.0,0.0056,0.0756
+72,emdat_total_deaths,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,4499773,85.22,0,0.0,462,1.0,15.0,80.0,288.0,53000.0,838.6555,2574.4846
+73,emdat_total_affected,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,4487588,84.99,0,0.0,1616,1.0,6000.0,41499.0,1301279.0,33012864.0,2224773.75,4720545.5
+74,emdat_total_damage_usd,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,4530831,85.81,0,0.0,436,42000.0,2400000000.0,3204999936.0,7600000000.0,121999998976.0,6018737152.0,7579542016.0
+75,emdat_macro_disaster_active,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,3781171,73.64,2,0.0,0.0,0.0,1.0,1.0,0.2636,0.4406
+76,emdat_log_affected_population,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,4341839,84.56,1606,0.0,0.0,0.0,0.0,7.5187,0.7471,1.8545
+77,emdat_rolling_7d_disaster_count,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,3502248,68.21,36,0.0,0.0,0.0,4.0,36.0,2.3274,4.2102
+78,emdat_rolling_30d_disaster_count,EM-DAT Disasters,"Global Disasters (2,008 ports, 150 countries)",float32,145749,2.76,2819858,54.92,132,0.0,0.0,0.0,14.0,142.0,9.9744,17.1668
+79,has_bts_coverage,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",int8,0,0.0,5188153,98.26,2,0.0,0.0,0.0,0.0,1.0,0.0174,0.1309
+80,is_bts_forward_filled,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,65736,71.41,2,0.0,0.0,0.0,1.0,1.0,0.2859,0.4518
+81,bts_baseline_year,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,0,0.0,5,2019.0,2020.0,2022.0,2023.0,2023.0,2021.5714,1.4983
+82,bts_annual_container_teu_baseline,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,16441,17.86,145,0.0,129.3,232014.0,1040830.0,13458442.0,1078531.0,2165927.5
+83,bts_annual_vessel_call_baseline,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,14967,16.26,140,0.0,580.5,1724.0,4516.5,50564.5,4790.0322,8384.9844
+84,bts_annual_cargo_short_tons_baseline,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,1826,1.98,177,0.0,14417022.0,27832840.0,57182560.0,309531232.0,52411508.0,64218592.0
+85,bts_daily_expected_vessel_calls,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,14967,16.26,137,0.0,1.59,4.72,12.37,138.44,13.1145,22.9566
+86,bts_daily_expected_teu,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,16441,17.86,144,0.0,0.35,635.22,2849.6399,36847.2109,2952.8569,5929.9863
+87,bts_daily_expected_short_tons,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,1826,1.98,177,0.0,39471.6602,76202.1719,156557.2969,847450.3125,143494.8906,175820.9219
+88,bts_annual_teu_growth_pct,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5202402,98.53,0,0.0,137,-100.0,-12.8211,-1.3054,7.9461,inf,inf,
+89,bts_annual_tonnage_growth_pct,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5188153,98.26,0,0.0,177,-100.0,-7.9456,-2.0729,7.6189,inf,inf,
+90,bts_port_national_rank,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5202402,98.53,0,0.0,56,1.0,9.0,17.0,30.0,109.0,23.8808,22.6325
+91,bts_capacity_pressure_ratio_14d,BTS Hinterland Baselines,"US Major Freight Ports (36 ports, 92,052 rows)",float32,5203120,98.54,1367,1.77,4624,0.0,0.1842,0.3484,0.7972,15.7827,0.7309,1.72

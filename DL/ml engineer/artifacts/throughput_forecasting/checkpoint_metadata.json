@@ -1,0 +1,59 @@
+{
+  "model_type": "DirectThroughputResidualForecaster",
+  "sha256": "0e9b85cefcc06a62db1e5292101d550bc62db57fa6dda72a53f6d2c7d33bd19d",
+  "backbone_sha256": "ff67c307183a73d03ceb2d0332520ff767a54c12971eeaa6acc68027f902711e",
+  "best_epoch": 5,
+  "config": {
+    "pipeline_version": "3.6.0",
+    "model_name": "direct_throughput_residual_forecaster",
+    "project_name": "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks",
+    "targets": {
+      "container_calls": {
+        "name": "target_container_calls_7d_future_sum",
+        "unit": "calls",
+        "roll_idx": 15,
+        "huber_delta": 1.0
+      },
+      "cargo_tonnage": {
+        "name": "target_cargo_tonnage_7d_future_sum",
+        "unit": "metric_tons",
+        "feature_idx": 11,
+        "huber_delta": 1.0
+      }
+    },
+    "backbone": {
+      "checkpoint_path": "artifacts/transformer_mean_pooling/best_model.pt",
+      "d_model": 64,
+      "freeze_weights": true
+    },
+    "model": {
+      "model_type": "DirectThroughputResidualForecaster",
+      "head_hidden_dim": 32,
+      "dropout": 0.1,
+      "constraint": "relu"
+    },
+    "training": {
+      "batch_size": 256,
+      "learning_rate": 0.005,
+      "weight_decay": 0.0001,
+      "grad_clip_norm": 1.0,
+      "num_epochs": 5,
+      "train_sample_limit": 100000,
+      "val_sample_limit": 30000,
+      "random_seed": 42,
+      "device": "mps"
+    },
+    "paths": {
+      "pipeline_config": "configs/sequence_pipeline.yaml",
+      "sequence_metadata": "data/staging/supplementary_acquisition/processed/temporal_sequences/sequence_metadata.parquet",
+      "storage_dir": "artifacts/preprocessing/storage",
+      "scaler_params": "artifacts/preprocessing/scaler_params.json",
+      "artifacts_dir": "artifacts/throughput_forecasting",
+      "best_model": "artifacts/throughput_forecasting/best_model.pt",
+      "training_history": "artifacts/throughput_forecasting/training_history.csv",
+      "checkpoint_metadata": "artifacts/throughput_forecasting/checkpoint_metadata.json",
+      "validation_predictions": "artifacts/throughput_forecasting/validation_predictions.parquet",
+      "evaluation_metrics": "artifacts/throughput_forecasting/evaluation_metrics.json"
+    }
+  }
+}

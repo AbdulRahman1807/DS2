@@ -1,0 +1,80 @@
+# =============================================================================
+# Milestone 3.1: Sequence Data Pipeline Configuration
+# =============================================================================
+pipeline_version: "3.1.0"
+project_name: "AI-Powered Prediction of Global Supply Chain Logistics Bottlenecks"
+
+paths:
+  panel_parquet: "DL/data/staging/supplementary_acquisition/processed/unified_temporal/port_daily_unified.parquet"
+  sequence_metadata_parquet: "DL/data/staging/supplementary_acquisition/processed/temporal_sequences/sequence_metadata.parquet"
+  artifacts_dir: "DL/ml engineer/artifacts/preprocessing"
+  storage_dir: "DL/ml engineer/artifacts/preprocessing/storage"
+  scaler_params_file: "DL/ml engineer/artifacts/preprocessing/scaler_params.json"
+
+feature_contract:
+  name: "universal_operational_core_20"
+  num_features: 20
+  feature_names:
+    # 12 Operational Ground Truth
+    - portcalls
+    - portcalls_container
+    - portcalls_dry_bulk
+    - portcalls_general_cargo
+    - portcalls_roro
+    - portcalls_tanker
+    - portcalls_cargo
+    - import_container
+    - import_cargo
+    - export_container
+    - export_cargo
+    - total_cargo_tonnage
+    # 5 Trailing Rolling Features
+    - pw_calls_rolling_7d_mean
+    - pw_calls_rolling_14d_mean
+    - pw_calls_rolling_30d_mean
+    - pw_container_rolling_7d_mean
+    - pw_container_rolling_14d_mean
+    # 3 Calendar Features
+    - day_of_week
+    - is_weekend
+    - day_of_year
+
+target_contract:
+  primary_target: "target_portcalls_7d_future_sum"
+  target_shape: [1]
+  target_dtype: "float32"
+  approved_alternatives:
+    - "target_container_calls_7d_future_sum"
+    - "target_cargo_tonnage_7d_future_sum"
+
+availability_policy:
+  policy_name: "portwatch_t_minus_2"
+  lag_days: 2
+  lookback_days: 30
+  forecast_horizon_days: 7
+  total_window_span: 37
+  quarantined_gap_days: 2  # [t-1, t]
+  observation_window_formula: "[t - 31, t - 2]"
+  target_window_formula: "[t + 1, t + 7]"
+
+preprocessing:
+  scaler_type: "TrainingStandardScaler"
+  fit_cutoff_date: "2023-12-22"  # Strict TRAIN observation union (<= 2023-12-22; excludes target window Dec 23-31)
+  streaming_batch_size: 100000
+
+storage:
+  format: "numpy_memmap"
+  dat_filename: "features_core20.dat"
+  dtype: "float32"
+  shape: [2065, 2557, 20]
+  total_bytes: 422416400  # 402.85 MB
+
+dataloader:
+  batch_size: 64
+  num_workers: 0  # Bounded for single-process macOS stability
+  pin_memory: false
+  train_shuffle: true
+  val_shuffle: false
+  test_shuffle: false
+  drop_last: false
+  filter_valid_dates: true

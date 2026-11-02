@@ -1,0 +1,11 @@
+{
+  "model_type": "ResidualTransformerForecaster",
+  "pooling": "mean",
+  "trainable_parameters": 68481,
+  "training_duration_sec": 1108.285679101944,
+  "best_epoch": 1,
+  "best_val_huber": 2.008928477200796,
+  "inference_duration_sec": 35.88050174713135,
+  "inference_throughput_seq_per_sec": 20718.773813118012,
+  "peak_rss_mb": 355.390625
+}

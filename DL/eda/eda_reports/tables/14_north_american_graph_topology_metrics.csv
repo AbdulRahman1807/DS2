@@ -1,0 +1,18 @@
+metric_category,metric_name,value,unit,description
+Graph Scale,Total Node Count,251646,nodes,Total multimodal entities in North American hinterland graph
+Graph Scale,Total Edge Count,289343,edges,Undirected rail track segments and port transfer links
+Graph Topology,Graph Density,9.138284e-06,ratio,Extremely sparse planar-like continental rail infrastructure network
+Node Modalities,Rail Junctions (RAIL_JUNCTION),250204,nodes,"Physical rail track junction switches across US, Canada, and Mexico"
+Node Modalities,Intermodal Facilities (INTERMODAL_FACILITY),1401,nodes,Multimodal freight rail/truck/crude transfer terminals
+Node Modalities,Deepwater Port Gateways (PORT_GATEWAY),41,nodes,Canonical deepwater seaports resolved to PortWatch registry
+Edge Modalities,Rail Track Lines (RAIL_LINE),302774,edges,Physical mainline and corridor track segments
+Edge Modalities,Port-Intermodal Transfers (PORT_INTERMODAL_TRANSFER),242,edges,Geodesic transfer connectors from ports to transfer terminals within 50 km
+Connectivity,Connected Components Count,1453,components,Total disconnected topological clusters (rail networks + isolated facilities)
+Connectivity,Giant Component Node Count,249070,nodes,Primary continental transcontinental rail network
+Connectivity,Giant Component Share,98.98%,percent,Share of all nodes belonging to the giant component
+Connectivity,Isolated Nodes (Degree 0),1159,nodes,Inland intermodal facilities without direct seaport transfer links
+Degree Distribution,Mean Degree,2.2996,degree,Average connections per node across network
+Degree Distribution,Median Degree,3.0,degree,Median node degree (typical rail switch degree = 3)
+Degree Distribution,90th Percentile Degree,3.0,degree,90th percentile node degree
+Degree Distribution,95th Percentile Degree,3.0,degree,95th percentile node degree
+Degree Distribution,Maximum Degree,30,degree,Maximum node degree (Port of New York-New Jersey: 30 connectors)

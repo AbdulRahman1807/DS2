@@ -1,0 +1,41 @@
+{
+  "architecture": {
+    "model_type": "TemporalAttentionLSTMForecaster",
+    "input_size": 20,
+    "hidden_size": 64,
+    "attention_dim": 32,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "roll7_idx": 12,
+    "roll7_mean": 2.406818151473999,
+    "roll7_std": 6.348394393920898,
+    "constraint": "relu"
+  },
+  "best_epoch": 1,
+  "best_val_huber": 2.4432381945372206,
+  "latest_epoch": 1,
+  "val_metrics": {
+    "count": 743400,
+    "mae": 2.892850417536627,
+    "rmse": 6.224411632300052,
+    "huber_loss": 2.4432381945372206,
+    "r2": 0.9815229911463362,
+    "mean_target": 17.429830508474577,
+    "mean_pred": 17.736879681004034,
+    "min_pred": 0.5768846869468689,
+    "max_pred": 1187.278076171875,
+    "min_target": 0.0,
+    "max_target": 1188.0,
+    "val_duration_sec": 25.558218717575073,
+    "val_batches": 1452
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "grad_clip_norm": 1.0
+  },
+  "device": "mps",
+  "torch_version": "2.10.0",
+  "last_updated": "2026-11-01T21:57:22Z"
+}
