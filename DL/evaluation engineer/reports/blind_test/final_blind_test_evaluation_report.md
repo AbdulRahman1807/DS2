@@ -11,7 +11,7 @@
 
 ## 1. Executive Summary
 
-In accordance with the frozen [2025 Blind-Test Evaluation Protocol](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/reports/final_blind_evaluation_protocol.md), the frozen deep learning throughput forecasting models were evaluated on the **complete 2025 blind-test partition**:
+In accordance with the frozen [2025 Blind-Test Evaluation Protocol](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/protocols/final_blind_evaluation_protocol.md), the frozen deep learning throughput forecasting models were evaluated on the **complete 2025 blind-test partition**:
 - **Population:** Exactly **741,335 sequence windows** across all **2,065 commercial ports**.
 - **Temporal Span:** Reference dates `2024-12-31` to `2025-12-24` (forecasting target dates `2025-01-01` to `2025-12-31`).
 - **Sequences per Port:** Exactly **359 sequences per port** ($359 \times 2,065 = 741,335$).

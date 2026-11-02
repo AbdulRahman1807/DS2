@@ -29,7 +29,7 @@ import torch
 
 # Add workspace to path
 SCRIPT_DIR = Path(__file__).resolve().parent
-WORKSPACE_DIR = SCRIPT_DIR.parent
+WORKSPACE_DIR = SCRIPT_DIR.parents[2] / "ml engineer"
 if str(WORKSPACE_DIR) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_DIR))
 

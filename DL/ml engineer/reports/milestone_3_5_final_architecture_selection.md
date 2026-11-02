@@ -81,7 +81,7 @@ The Milestone 3.4 report presented the monthly breakdown for the Last-Token Tran
 Temporal stability is remarkable: monthly MAE remains confined between 2.1524 calls (June) and 2.5988 calls (August), and $R^2$ exceeds 0.974 across every month of 2024.
 
 ### 3.3 Attention Entropy Aggregation Procedure and Non-Causal Interpretation
-In Milestone 3.4, temporal attention distributions were extracted using [`extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/extract_attention_diagnostics.py):
+In Milestone 3.4, temporal attention distributions were extracted using [`extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/analysis/extract_attention_diagnostics.py):
 1. **Extraction:** From the final Pre-LN Transformer layer, attention weights $\mathbf{A} \in \mathbb{R}^{B \times 4 \times 30 \times 30}$ were sliced at query position 29 ($t-2$, the latest available observation token) attending to all 30 keys ($t-31 \dots t-2$).
 2. **Head Averaging:** $\bar{\alpha}_i = \frac{1}{4}\sum_{h=1}^4 \mathbf{A}_{:, h, 29, i} \in \mathbb{R}^{B \times 30}$.
 3. **Entropy Calculation:** For each sequence $j$, Shannon entropy was computed as:
@@ -229,7 +229,7 @@ The Multi-Horizon Residual Transformer predicts inductive residual adjustments u
 $$\hat{y}^{(H)} = \operatorname{ReLU}\left( H \cdot \bar{x}_{\text{roll7}} + \mathbf{w}_H^T h_{\text{mean}} + b_H \right)$$
 
 ### 8.3 Global Horizon Results ($N = 743,400$ Validation Sequences)
-Evaluation across all 743,400 global validation sequences ([`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_multi_horizon.py)) yielded the following horizon-specific benchmarks:
+Evaluation across all 743,400 global validation sequences ([`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_multi_horizon.py)) yielded the following horizon-specific benchmarks:
 
 | Forecast Horizon | Target Mean | Naive Huber | Trans Huber | Naive MAE | Trans MAE | $\Delta$ MAE | MAE Imp % | Trans RMSE | Trans $R^2$ | Trans Bias |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -340,7 +340,7 @@ All code, configurations, checkpoints, and prediction files generated during Mil
 3. **Execution Workflows:**
    - [`training/train_transformer_gnn.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer_gnn.py) — Training and streaming prediction export workflow for Transformer-GNN.
    - [`training/run_phase_b_experiments.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/run_phase_b_experiments.py) — Controlled Phase B benchmark runner across actual, shuffled, and no-edge conditions.
-   - [`training/evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_multi_horizon.py) — Multi-horizon ($H=1, 3, 7$) training, inference, and volume-stratified evaluation workflow.
+   - [`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_multi_horizon.py) — Multi-horizon ($H=1, 3, 7$) training, inference, and volume-stratified evaluation workflow.
 4. **Prediction & Benchmark Artifacts:**
    - [`artifacts/gnn/caribbean/trans_gatv2_actual/validation_predictions.parquet`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/artifacts/gnn/caribbean/trans_gatv2_actual/validation_predictions.parquet) — Model B predictions (18,360 rows).
    - [`artifacts/gnn/caribbean/trans_gatv2_shuffled/validation_predictions.parquet`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/artifacts/gnn/caribbean/trans_gatv2_shuffled/validation_predictions.parquet) — Model C predictions (18,360 rows).

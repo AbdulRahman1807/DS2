@@ -152,11 +152,11 @@ Maritime Logistics Hierarchy
   - `configs/dwell_forecaster.yaml`
   - `models/dwell_time_forecaster.py`
   - `training/train_dwell_forecaster.py`
-  - `training/evaluate_dwell_forecaster.py`
+  - `training/evaluate_dwell_forecaster.py` (canonical evaluation location: `DL/evaluation engineer/scripts/evaluation/evaluate_dwell_forecaster.py`)
   - `configs/throughput_forecaster.yaml`
   - `models/throughput_forecaster.py`
   - `training/train_throughput_forecaster.py`
-  - `training/evaluate_throughput_forecaster.py`
+  - `training/evaluate_throughput_forecaster.py` (canonical evaluation location: `DL/evaluation engineer/scripts/evaluation/evaluate_throughput_forecaster.py`)
   - `reports/milestone_3_6_data_audit.md`
   - `reports/milestone_3_6_dwell_forecasting_report.md`
   - `reports/milestone_3_6_throughput_forecasting_report.md`

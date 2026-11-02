@@ -1,0 +1,4 @@
+split,horizon,sequences,naive_mae,model_mae,mae_reduction_pct,naive_rmse,model_rmse,model_r2
+validation_2021,H1 (1 week),1007,5.8669,5.7353,2.24,10.9689,10.8556,0.7185
+held_out_test_2022,H1 (1 week),931,4.391,4.0824,7.03,6.8002,6.4028,0.6103
+validation_2021,H4 (4 weeks),1007,6.5963,5.8675,11.05,11.6194,10.8131,0.6677

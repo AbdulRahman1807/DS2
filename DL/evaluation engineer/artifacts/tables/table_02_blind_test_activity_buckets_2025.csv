@@ -1,0 +1,9 @@
+target,tier,count,pct_of_total,model_mae,naive_mae,mae_delta,model_rmse,naive_rmse
+container_calls,Zero (0 calls),456588,61.59,0.1023,0.1046,0.0023,0.4019,0.4488
+container_calls,Low (1-7 calls),193338,26.08,1.1837,1.1569,-0.0268,1.6033,1.6637
+container_calls,Medium (8-28 calls),67683,9.13,2.6008,2.6963,0.0955,3.4196,3.5881
+container_calls,High (>28 calls),23726,3.2,6.9723,7.44,0.4677,10.5139,11.3722
+cargo_tonnage,Zero (0 tons),237571,32.05,2264.6072,2481.186,216.58,13377.4492,14398.8945
+cargo_tonnage,Low (1-20k tons),216370,29.19,8351.6865,8113.5908,-238.1,22548.7266,24086.2305
+cargo_tonnage,Medium (20k-150k tons),166704,22.49,37049.7109,36977.6172,-72.09,59197.1602,60516.9258
+cargo_tonnage,High (>150k tons),120690,16.28,184784.5,188876.8125,4092.31,335652.6875,344189.4062

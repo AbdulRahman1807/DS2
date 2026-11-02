@@ -4,7 +4,7 @@
 **Milestone Under Audit:** Milestone 3.5 (Final Architecture Selection, Transformer-GNN Feasibility & Multi-Horizon Forecasting)  
 **Role:** Independent Deep Learning Audit Engineer  
 **Workspace:** [`DL/ml engineer/`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/)  
-**Audit Deliverable:** [`reports/milestone_3_5_1_audit_report.md`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/reports/milestone_3_5_1_audit_report.md)  
+**Audit Deliverable:** [`reports/audit/milestone_3_5_1_audit_report.md`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/reports/audit/milestone_3_5_1_audit_report.md)  
 **Audit Date:** November 2, 2026  
 **Audit Nature:** STRICT AUDIT-ONLY (Read-Only Inspection, Code Verification, Artifact Hashing, Metric Recomputation)  
 
@@ -44,7 +44,7 @@ This audit was conducted under strict audit-only constraints:
 
 ### A1. Training Data Provenance
 - **Status:** **PASS**
-- **Data Source:** Line 148 of [`training/evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_multi_horizon.py):
+- **Data Source:** Line 148 of [`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_multi_horizon.py):
   ```python
   meta = pd.read_parquet(meta_p, columns=["sequence_id", "portwatch_id", "reference_date", "split_tag", "target_portcalls_7d_future_sum"])
   train_meta = meta[meta["split_tag"] == "train"].sample(n=500000, random_state=42).copy()
@@ -107,7 +107,7 @@ This audit was conducted under strict audit-only constraints:
 
 ### B1. Origin of Seven-Day Predictions
 - **Status:** **PASS**
-- In [`training/evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_multi_horizon.py) line 268:
+- In [`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_multi_horizon.py) line 268:
   ```python
   p_7d = F.relu(7.0 * roll7 + transformer.head(h_pooled)).cpu().numpy().reshape(-1)
   ```
@@ -245,7 +245,7 @@ Recomputed port-clustered standard error tests (51 clusters):
 - **Status:** **PASS**
 - **Test Set Population:** Verified that [`sequence_metadata.parquet`](file:///Users/abdul/Desktop/DS/DL/data/staging/supplementary_acquisition/processed/temporal_sequences/sequence_metadata.parquet) contains exactly **741,335 sequences** marked `split_tag == 'test'` covering reference dates 2024-12-31 to 2025-12-24 (targets: 2025-01-01 to 2025-12-31).
 - **Zero Test Artifacts:** Global glob search across `DL/ml engineer/artifacts/` confirmed that zero test evaluation files, predictions, or test metrics exist.
-- **Code Audit:** In [`training/evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_multi_horizon.py), [`training/train_transformer_gnn.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer_gnn.py), and [`training/train_transformer.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer.py), the string `"test"` is never passed as a split filter.
+- **Code Audit:** In [`evaluate_multi_horizon.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_multi_horizon.py), [`training/train_transformer_gnn.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer_gnn.py), and [`training/train_transformer.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer.py), the string `"test"` is never passed as a split filter.
 - **Integrity Verdict:** The claim that the 2025 blind test set remains 100% untouched and unread is fully supported by all available forensic evidence.
 
 ---

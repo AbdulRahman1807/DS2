@@ -354,7 +354,7 @@ All code, configurations, trained weights, validation exports, and diagnostic su
 
 ### 12.3 Training & Evaluation Workflows
 - [`DL/ml engineer/training/train_caribbean_stgnn.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_caribbean_stgnn.py): CLI workflow for regional model training, early stopping, and Parquet streaming export.
-- [`DL/ml engineer/training/evaluate_regional_gnn.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_regional_gnn.py): Statistical audit suite computing paired tests, quartile breakdowns, and centrality correlations.
+- [`evaluate_regional_gnn.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_regional_gnn.py): Statistical audit suite computing paired tests, quartile breakdowns, and centrality correlations.
 - [`DL/ml engineer/training/audit_north_american_graph.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/audit_north_american_graph.py): Comprehensive audit of the 251k-node North American multimodal network.
 
 ### 12.4 Benchmark A (Caribbean) Artifacts Inventory

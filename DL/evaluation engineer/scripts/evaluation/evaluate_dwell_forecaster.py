@@ -13,8 +13,10 @@ import pandas as pd
 import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parent
-ARTIFACTS_DIR = PROJECT_ROOT / "artifacts" / "dwell_forecasting"
+EVAL_ROOT = SCRIPT_DIR.parents[1]
+DL_ROOT = SCRIPT_DIR.parents[2]
+ML_ROOT = DL_ROOT / "ml engineer"
+ARTIFACTS_DIR = ML_ROOT / "artifacts" / "dwell_forecasting"
 
 
 def main():

@@ -191,7 +191,7 @@ Across all 2,065 canonical global ports:
 
 ## 10. Attention Diagnostics & Interpretability
 
-We extracted and analyzed learned attention distributions across 51,200 validation sequences ([`extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/extract_attention_diagnostics.py)):
+We extracted and analyzed learned attention distributions across 51,200 validation sequences ([`extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/analysis/extract_attention_diagnostics.py)):
 
 ### 10.1 Diagnostic Comparison
 
@@ -274,8 +274,8 @@ flowchart TD
 - [`DL/ml engineer/configs/attention_lstm.yaml`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/configs/attention_lstm.yaml): Attention-LSTM configuration.
 - [`DL/ml engineer/training/train_transformer.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_transformer.py): End-to-end training and export pipeline.
 - [`DL/ml engineer/training/train_attention_lstm.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/train_attention_lstm.py): End-to-end training and export pipeline.
-- [`DL/ml engineer/training/evaluate_temporal_attention.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/evaluate_temporal_attention.py): Diagnostic evaluation and paired benchmarking suite.
-- [`DL/ml engineer/training/extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/ml%20engineer/training/extract_attention_diagnostics.py): Interpretability and attention diagnostic extractor.
+- [`evaluate_temporal_attention.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/evaluation/evaluate_temporal_attention.py): Diagnostic evaluation and paired benchmarking suite.
+- [`extract_attention_diagnostics.py`](file:///Users/abdul/Desktop/DS/DL/evaluation%20engineer/scripts/analysis/extract_attention_diagnostics.py): Interpretability and attention diagnostic extractor.
 
 ### 14.2 Artifacts Directory Manifest
 
