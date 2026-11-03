@@ -203,6 +203,13 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
+    if not getattr(dl_service, "TORCH_AVAILABLE", True):
+        st.warning(
+            "⚠️ PyTorch (`torch`) is currently installing or missing in the deployment environment. "
+            "Please ensure `torch>=2.0.0` is present in `requirements.txt`. Once installed, deep learning forecasting will activate automatically."
+        )
+        return
+
     # ==========================================================================
     # Forecast Controls
     # ==========================================================================

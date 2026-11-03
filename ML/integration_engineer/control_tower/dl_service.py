@@ -17,10 +17,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-import torch
-
-# Prevent macOS OpenMP thread collision with XGBoost/LightGBM
-torch.set_num_threads(1)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DL_ML_ROOT = REPO_ROOT / "DL" / "ml engineer"
@@ -30,10 +26,21 @@ import sys
 if str(DL_ML_ROOT) not in sys.path:
     sys.path.insert(0, str(DL_ML_ROOT))
 
-from models.transformer_forecaster import ResidualTransformerForecaster
-from models.throughput_forecaster import DirectThroughputResidualForecaster
-from models.dwell_time_forecaster import ResidualDwellGRUForecaster
-from data.storage import MemmapStorageReader
+try:
+    import torch
+    # Prevent macOS OpenMP thread collision with XGBoost/LightGBM
+    torch.set_num_threads(1)
+
+    from models.transformer_forecaster import ResidualTransformerForecaster
+    from models.throughput_forecaster import DirectThroughputResidualForecaster
+    from models.dwell_time_forecaster import ResidualDwellGRUForecaster
+    from data.storage import MemmapStorageReader
+    TORCH_AVAILABLE = True
+    _TORCH_IMPORT_ERROR = None
+except (ImportError, ModuleNotFoundError) as err:
+    torch = None
+    TORCH_AVAILABLE = False
+    _TORCH_IMPORT_ERROR = str(err)
 
 # Canonical Checkpoint Paths
 BACKBONE_CKPT_PATH = DL_ML_ROOT / "artifacts" / "transformer_mean_pooling" / "best_model.pt"
@@ -103,6 +110,8 @@ def verify_checkpoints() -> Dict[str, bool]:
 @functools.lru_cache(maxsize=None)
 def load_throughput_forecaster() -> DirectThroughputResidualForecaster:
     """Load frozen Transformer backbone and throughput residual projection heads."""
+    if not TORCH_AVAILABLE:
+        raise RuntimeError("PyTorch is required for deep learning forecasting. Please install torch.")
     with open(SCALER_PATH, "r") as f:
         scaler = json.load(f)
 
@@ -149,6 +158,8 @@ def load_throughput_forecaster() -> DirectThroughputResidualForecaster:
 @functools.lru_cache(maxsize=None)
 def load_dwell_forecaster() -> ResidualDwellGRUForecaster:
     """Load frozen Residual Dwell GRU Forecaster for 19 container mega-hubs."""
+    if not TORCH_AVAILABLE:
+        raise RuntimeError("PyTorch is required for deep learning forecasting. Please install torch.")
     ckpt = torch.load(DWELL_CKPT_PATH, map_location="cpu", weights_only=False)
     model = ResidualDwellGRUForecaster(
         num_ports=19,
@@ -289,6 +300,8 @@ def build_sequence_tensor(
     Automatically falls back to the latest valid 30-day sequence when requested date is beyond dataset.
     """
     reader = get_storage_reader()
+    if not TORCH_AVAILABLE:
+        raise RuntimeError("PyTorch is required for deep learning forecasting. Please install torch.")
     if portwatch_id not in reader.port2idx:
         raise KeyError(f"Port {portwatch_id} not found in storage registry.")
 
