@@ -230,8 +230,25 @@ class MemmapStorageBuilder:
         return manifest
 
 
+class _LazyArrayProxy:
+    """Virtual array proxy providing lazy on-demand slicing when .dat binary is absent."""
+
+    def __init__(self, reader: "MemmapStorageReader"):
+        self._reader = reader
+
+    def __getitem__(self, key: Any) -> Any:
+        if isinstance(key, tuple):
+            port_idx = key[0]
+            day_slice = key[1] if len(key) > 1 else slice(None)
+            feat_slice = key[2] if len(key) > 2 else slice(None)
+            port_arr = self._reader._load_port_features(port_idx)
+            return port_arr[day_slice, feat_slice]
+        else:
+            return self._reader._load_port_features(key)
+
+
 class MemmapStorageReader:
-    """Zero-copy memory-mapped storage reader for high-throughput sequence retrieval."""
+    """Zero-copy memory-mapped storage reader with seamless on-demand Parquet fallback."""
 
     def __init__(self, storage_dir: str):
         self.storage_dir = storage_dir
@@ -245,8 +262,6 @@ class MemmapStorageReader:
             raise FileNotFoundError(f"Storage completion marker missing in {storage_dir}. Run builder first.")
         if not os.path.exists(manifest_path):
             raise FileNotFoundError(f"Storage manifest missing in {storage_dir}.")
-        if not os.path.exists(dat_path):
-            raise FileNotFoundError(f"Storage binary missing: {dat_path}")
 
         with open(manifest_path, "r") as f:
             self.manifest = StorageManifest.from_dict(json.load(f))
@@ -261,14 +276,80 @@ class MemmapStorageReader:
         self.idx2date: List[str] = sorted(self.date2idx.keys(), key=lambda d: self.date2idx[d])
 
         shape = tuple(self.manifest.shape)
-        # Open in read-only mode ('r') for memory-mapped access
-        self.array: np.memmap = np.memmap(dat_path, dtype=np.float32, mode="r", shape=shape)
+        self._dat_path = dat_path
+        self._port_cache: Dict[int, np.ndarray] = {}
+        self._scaler: Optional[TrainingStandardScaler] = None
+
+        candidate_parquet_paths = [
+            os.path.abspath(os.path.join(
+                storage_dir, "..", "..", "..", "..", "data", "staging",
+                "supplementary_acquisition", "processed", "unified_temporal", "port_daily_unified.parquet"
+            )),
+            os.path.abspath(os.path.join(
+                os.path.dirname(__file__), "..", "..", "data", "staging",
+                "supplementary_acquisition", "processed", "unified_temporal", "port_daily_unified.parquet"
+            )),
+        ]
+        self._parquet_path = next((p for p in candidate_parquet_paths if os.path.exists(p)), candidate_parquet_paths[0])
+
+        candidate_scaler_paths = [
+            os.path.abspath(os.path.join(storage_dir, "..", "scaler_params.json")),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "artifacts", "preprocessing", "scaler_params.json")),
+        ]
+        self._scaler_path = next((p for p in candidate_scaler_paths if os.path.exists(p)), candidate_scaler_paths[0])
+
+        if os.path.exists(dat_path):
+            # Open in read-only mode ('r') for memory-mapped access
+            self.array = np.memmap(dat_path, dtype=np.float32, mode="r", shape=shape)
+            self._has_memmap = True
+        elif os.path.exists(self._parquet_path):
+            # Fall back seamlessly to zero-config on-demand retrieval from tracked Parquet
+            self.array = _LazyArrayProxy(self)
+            self._has_memmap = False
+        else:
+            raise FileNotFoundError(
+                f"Storage binary missing: {dat_path} and parquet fallback not found at {self._parquet_path}"
+            )
+
+    def _load_port_features(self, port_idx: int) -> np.ndarray:
+        """Load and cache scaled 20-feature panel for a single port on-demand."""
+        if port_idx in self._port_cache:
+            return self._port_cache[port_idx]
+
+        if not os.path.exists(self._parquet_path):
+            raise FileNotFoundError(f"Parquet source panel missing at {self._parquet_path}")
+
+        if self._scaler is None:
+            if not os.path.exists(self._scaler_path):
+                raise FileNotFoundError(f"Scaler parameters missing at {self._scaler_path}")
+            self._scaler = TrainingStandardScaler()
+            self._scaler.load(self._scaler_path)
+
+        portwatch_id = self.idx2port[port_idx]
+        feature_cols = list(FEATURE_NAMES)
+        table = pq.read_table(
+            self._parquet_path,
+            columns=["portwatch_id", "date_utc"] + feature_cols,
+            filters=[("portwatch_id", "=", portwatch_id)],
+        )
+        df = table.to_pandas().sort_values("date_utc").reset_index(drop=True)
+        raw_vals = df[feature_cols].to_numpy(dtype=np.float32)
+        scaled_vals = self._scaler.transform(raw_vals)
+
+        if len(self._port_cache) > 128:
+            self._port_cache.pop(next(iter(self._port_cache)))
+
+        self._port_cache[port_idx] = scaled_vals
+        return scaled_vals
 
     def get_sequence_by_indices(self, port_idx: int, start_day_idx: int, window_len: int = 30) -> np.ndarray:
         """Fast slice by integer indices [window_len, 20]."""
         end_day_idx = start_day_idx + window_len
-        # Slice memory-mapped buffer directly (returns copy to ensure safe PyTorch tensor conversion)
-        return np.array(self.array[port_idx, start_day_idx:end_day_idx, :], copy=True)
+        if self._has_memmap:
+            return np.array(self.array[port_idx, start_day_idx:end_day_idx, :], copy=True)
+        else:
+            port_arr = self._load_port_features(port_idx)
+            return np.array(port_arr[start_day_idx:end_day_idx, :], copy=True)
 
     def get_sequence_by_keys(self, portwatch_id: str, start_date: str, window_len: int = 30) -> np.ndarray:
         """Retrieve sequence slice by portwatch_id and start date string."""
@@ -282,6 +363,7 @@ class MemmapStorageReader:
         return self.get_sequence_by_indices(port_idx, start_day_idx, window_len)
 
     def close(self):
-        """Close memory-mapped view."""
-        if hasattr(self, "array"):
+        """Close memory-mapped view or clear cached arrays."""
+        if hasattr(self, "array") and self._has_memmap:
             del self.array
+        self._port_cache.clear()
