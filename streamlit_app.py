@@ -19,17 +19,24 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from ML.integration_engineer.control_tower import theme  # noqa: E402
-from ML.integration_engineer.control_tower.views import model, ops_queue, overview, port, triage  # noqa: E402
+from ML.integration_engineer.control_tower.views import (  # noqa: E402
+    benchmark,
+    dl_forecasting,
+    triage,
+)
 
-st.set_page_config(page_title="DWELL · TPS Surabaya", page_icon=str(REPO_ROOT / "ML/integration_engineer/control_tower/assets/mark.svg"), layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(
+    page_title="DWELL · Maritime Logistics Intelligence",
+    page_icon=str(REPO_ROOT / "ML/integration_engineer/control_tower/assets/mark.svg"),
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
 st.logo(str(REPO_ROOT / "ML/integration_engineer/control_tower/assets/wordmark.svg"), size="large")
 theme.inject_css()
 
 pages = [
-    st.Page(triage.render, title="Container triage", url_path="triage", default=True),
-    st.Page(overview.render, title="Overview", url_path="overview"),
-    st.Page(port.render, title="Port intelligence", url_path="port"),
-    st.Page(model.render, title="Model intelligence", url_path="model"),
-    st.Page(ops_queue.render, title="Operations queue", url_path="queue"),
+    st.Page(triage.render, title="ML forecasting", url_path="triage", default=True),
+    st.Page(dl_forecasting.render, title="DL forecasting", url_path="dl"),
+    st.Page(benchmark.render, title="ML vs DL benchmark", url_path="benchmark"),
 ]
 st.navigation(pages, position="top").run()

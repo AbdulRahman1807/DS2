@@ -114,7 +114,7 @@ class ModelManager:
             critical_alert_threshold=0.25,
             random_state=42,
         )
-        self.is_loaded = True
+        self.is_loaded = False
 
     def diagnose_risk_factors(self, data: Dict[str, Any]) -> List[RiskFactor]:
         """Diagnoses key logistics risk contributors based on empirical evidence."""
@@ -374,8 +374,9 @@ def get_health() -> HealthResponse:
     """Service and model registry health check endpoint."""
     manager = ModelManager.get_instance()
     uptime = time.time() - SERVICE_START_TIME
+    status_str = "HEALTHY" if manager.is_loaded else "DEGRADED"
     return HealthResponse(
-        status="HEALTHY",
+        status=status_str,
         model_loaded=manager.is_loaded,
         model_name=manager.model_name,
         model_type="LGBMClassifier / XGBoost",
@@ -383,6 +384,39 @@ def get_health() -> HealthResponse:
         uptime_seconds=round(uptime, 2),
         timestamp=datetime.now(timezone.utc).isoformat(),
     )
+
+
+@app.post("/api/dl/forecast", tags=["Deep Learning"])
+async def forecast_dl_port_throughput(payload: Dict[str, Any]):
+    """Programmatic DL forecasting endpoint for 2,065 commercial ports.
+    
+    Accepts:
+      - portwatch_id: str (e.g. 'port1201' for Singapore)
+      - reference_date: Optional[str] (YYYY-MM-DD, defaults to latest test date '2025-12-24')
+    Returns:
+      - 7-day cumulative vessel calls prediction and persistence baseline
+      - 7-day cumulative cargo tonnage prediction and persistence baseline
+    """
+    from ML.integration_engineer.control_tower import dl_service
+    portwatch_id = payload.get("portwatch_id")
+    if not portwatch_id:
+        raise HTTPException(status_code=400, detail="Missing required field 'portwatch_id'")
+    ref_date = payload.get("reference_date", "2025-12-24")
+
+    try:
+        seq, start, end, mode = dl_service.build_sequence_tensor(portwatch_id, ref_date)
+        res = dl_service.forecast_port_throughput(seq)
+        return {
+            "portwatch_id": portwatch_id,
+            "forecast_origin": ref_date,
+            "observation_window": f"{start} to {end}",
+            "latency_window": "T-2",
+            "mode": mode,
+            **res
+        }
+    except Exception as e:
+        logger.error(f"DL forecasting error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/dashboard/stats", tags=["Dashboard"])

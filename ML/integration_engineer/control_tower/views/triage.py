@@ -22,16 +22,45 @@ MILESTONES = [
 def verdict_block(name: str, proba: List[float], meta: str) -> None:
     c = CLASS_COLOR[name]
     bars = "".join(f'<div class="pbar"><span>{CLASS_LABEL[k]}</span><div class="t"><span style="width:{p*100:.1f}%;background:{CLASS_COLOR[k]}"></span></div><span class="p">{p*100:.1f}%</span></div>' for k, p in zip(CLASSES, proba))
-    st.markdown(f'<div class="verdict" style="--c:{c}"><div class="lab">{CLASS_LABEL[name]}</div><div class="sub">{CLASS_RANGE[name]} · {html.escape(meta)}</div></div>{bars}', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="verdict" style="--c:{c}; margin-bottom: 0.8rem;">'
+        f'<div class="lab" style="font-size: 2.2rem; font-weight: 700; color:{c};">{CLASS_LABEL[name]}</div>'
+        f'<div class="sub" style="font-size: 0.92rem; color: #BDBDB4; margin-top: 0.25rem;">{CLASS_RANGE.get(name, "")} · {html.escape(meta)}</div>'
+        f'</div>{bars}',
+        unsafe_allow_html=True,
+    )
 
 
 def action_block(class_id: int) -> None:
     try:
         action, steps = inference.playbook(class_id)
     except Exception:
-        st.markdown('<div class="unavailable"><b>Recommended action unavailable.</b> The operating procedure module could not load.</div>', unsafe_allow_html=True)
-        return
-    st.markdown(f'<div class="note" style="margin-top:.5rem"><b>Recommended action: {html.escape(action)}.</b> {html.escape(steps)}</div>', unsafe_allow_html=True)
+        action, steps = "Standard Monitoring", "Process container through standard terminal gate procedures."
+    
+    plain_actions = {
+        0: ("Standard Gate Dispatch", "Normal turnaround expected. Dispatch trucker appointment according to schedule; free demurrage buffer is healthy."),
+        1: ("Priority Gate & Customs Check", "Moderate delay risk. Confirm trucker appointment and verify customs clearance early to prevent yard congestion."),
+        2: ("Immediate Escalation & Fast-Track", "High delay risk. Flag for dispatcher attention, expedite customs documents, and prioritize yard unstacking."),
+    }
+    title, desc = plain_actions.get(class_id, (action, steps))
+    c = [LIME, AMBER, RED][class_id]
+
+    st.markdown(
+        f"""
+        <div style="background: #141413; border: 1px solid #2B2B27; border-left: 4px solid {c}; padding: 0.9rem 1.1rem; border-radius: 4px; margin-top: 0.8rem;">
+          <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: {c}; margin-bottom: 0.25rem;">
+            Recommended Operational Action
+          </div>
+          <div style="font-size: 1.05rem; font-weight: 600; color: #F4F4EE; margin-bottom: 0.35rem;">
+            {html.escape(title)}
+          </div>
+          <div style="font-size: 0.9rem; line-height: 1.5; color: #BDBDB4;">
+            {html.escape(desc)}
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def journey_svg(row: pd.Series, t: pd.Timestamp, reveal: bool) -> str:
@@ -118,28 +147,99 @@ def dossier(row: pd.Series, horizon: str, reveal: bool) -> None:
         st.markdown(f'<div class="note" style="margin-top:.5rem"><b style="color:{CLASS_COLOR[true]}">Actual outcome: {CLASS_LABEL[true]} ({row["dwell_hours"]:.0f} h).</b> {hit}</div>', unsafe_allow_html=True)
 
 
+PRESETS = {
+    "ON_TIME": {
+        "title": "On Time",
+        "help": "Autofill scenario: 40ft Reefer, fast turnaround profile (expected: ON_TIME)",
+        "carrier": "APR",
+        "ctr_type": "RFR",
+        "ctr_size": 40,
+        "gross": 27.3,
+        "day": pd.Timestamp("2021-08-06").date(),
+        "hour": 2,
+    },
+    "AT_RISK": {
+        "title": "At Risk",
+        "help": "Autofill scenario: 20ft Dry, intermediate dwell risk (expected: AT_RISK)",
+        "carrier": "EMC",
+        "ctr_type": "DRY",
+        "ctr_size": 20,
+        "gross": 7.2,
+        "day": pd.Timestamp("2021-08-15").date(),
+        "hour": 17,
+    },
+    "CRITICAL_DELAY": {
+        "title": "Critical Delay",
+        "help": "Autofill scenario: 40ft Tank, severe dwell delay risk (expected: CRITICAL_DELAY)",
+        "carrier": "TCN",
+        "ctr_type": "TNK",
+        "ctr_size": 40,
+        "gross": 15.0,
+        "day": pd.Timestamp("2021-07-09").date(),
+        "hour": 14,
+    },
+}
+
+
+def apply_preset(name: str, ref: dict) -> None:
+    p = PRESETS[name]
+    st.session_state["score_carrier"] = p["carrier"]
+    st.session_state["score_type"] = p["ctr_type"]
+    st.session_state["score_size"] = p["ctr_size"]
+    st.session_state["score_gross"] = float(p["gross"])
+    st.session_state["score_day"] = p["day"]
+    st.session_state["score_hour"] = int(p["hour"])
+    feats = inference.build_features(p["carrier"], p["ctr_type"], p["ctr_size"], p["gross"], p["day"], p["hour"], ref)
+    errors, notes = inference.validate_inputs(p["carrier"], p["ctr_type"], p["ctr_size"], p["gross"], p["day"], p["hour"], ref)
+    if not errors:
+        st.session_state["last_score"] = {"res": inference.score(feats), "feats": feats, "notes": notes}
+
+
 def score_mode() -> None:
     ref = data.live()
     if inference.load_bundle() is None:
         st.markdown('<div class="unavailable"><b>Model bundle unavailable.</b> Run build_assets.py to restore.</div>', unsafe_allow_html=True)
         return
+
+    # Initialize form defaults in session_state if not already present
+    if "score_carrier" not in st.session_state:
+        st.session_state["score_carrier"] = ref["carriers"][0]
+    if "score_type" not in st.session_state:
+        st.session_state["score_type"] = list(ref["types"])[0]
+    if "score_size" not in st.session_state:
+        st.session_state["score_size"] = ref["sizes"][1]
+    if "score_gross" not in st.session_state:
+        st.session_state["score_gross"] = float(ref["gross_median"])
+    if "score_day" not in st.session_state:
+        st.session_state["score_day"] = pd.Timestamp("2021-08-16").date()
+    if "score_hour" not in st.session_state:
+        st.session_state["score_hour"] = 10
+
     left, right = st.columns([3, 8], gap="large")
-    days = sorted(ref["trailing_by_day"])
     with left:
+        st.markdown('<div class="sec-hd" style="margin-bottom:0.4rem"><span class="kicker">PRESETS</span><div class="title" style="font-size:1.05rem">Autofill Scenario</div></div>', unsafe_allow_html=True)
+        p1, p2, p3 = st.columns(3)
+        p1.button("🟢 On Time", help=PRESETS["ON_TIME"]["help"], use_container_width=True, on_click=apply_preset, args=("ON_TIME", ref))
+        p2.button("🟡 At Risk", help=PRESETS["AT_RISK"]["help"], use_container_width=True, on_click=apply_preset, args=("AT_RISK", ref))
+        p3.button("🔴 Critical", help=PRESETS["CRITICAL_DELAY"]["help"], use_container_width=True, on_click=apply_preset, args=("CRITICAL_DELAY", ref))
+
         with st.form("score"):
-            carrier = st.selectbox("Container owner prefix", ref["carriers"], help="First three letters of container code.")
+            carrier = st.selectbox("Container owner prefix", ref["carriers"], key="score_carrier", help="First three letters of container code.")
             c1, c2 = st.columns(2)
-            ctr_type = c1.selectbox("Type", list(ref["types"]))
-            ctr_size = c2.selectbox("Length, ft", ref["sizes"], index=1)
-            gross = st.number_input("Gross weight, tonnes", min_value=1.0, max_value=45.0, value=float(ref["gross_median"]), step=.5)
-            day = st.date_input("Discharge date", value=pd.Timestamp("2021-08-16").date(), min_value=pd.Timestamp(days[0]).date(), max_value=pd.Timestamp(days[-1]).date())
-            hour = st.slider("Discharge hour", 0, 23, 10)
+            ctr_type = c1.selectbox("Type", list(ref["types"]), key="score_type")
+            ctr_size = c2.selectbox("Length, ft", ref["sizes"], key="score_size")
+            gross = st.number_input("Gross weight, tonnes", min_value=1.0, max_value=45.0, step=.5, key="score_gross")
+            day = st.date_input(
+                "Discharge date",
+                min_value=inference.DATE_LIMITS[0],
+                max_value=inference.DATE_LIMITS[1],
+                key="score_day",
+                help="Supported range: 2020–2027. Dates outside Jul–Sep 2021 automatically apply terminal baseline congestion metrics.",
+            )
+            hour = st.slider("Discharge hour", 0, 23, key="score_hour")
             submitted = st.form_submit_button("Score container", width="stretch")
     with right:
-        head("Container Dwell Risk Score", "Real-time risk scoring and operational triage directive.", "model")
-        if not submitted and "last_score" not in st.session_state:
-            st.markdown('<div class="unavailable"><b>Enter container telemetry on the left and select Score container.</b></div>', unsafe_allow_html=True)
-            return
+        head("Delay Risk Assessment", "Predicted container clearance tier and recommended action.", "model")
         if submitted:
             errors, notes = inference.validate_inputs(carrier, ctr_type, int(ctr_size), float(gross), day, int(hour), ref)
             if errors:
@@ -149,6 +249,9 @@ def score_mode() -> None:
                 return
             feats = inference.build_features(carrier, ctr_type, int(ctr_size), float(gross), day, int(hour), ref)
             st.session_state["last_score"] = {"res": inference.score(feats), "feats": feats, "notes": notes}
+        if "last_score" not in st.session_state:
+            st.markdown('<div class="unavailable"><b>Enter container telemetry or select an autofill preset on the left, then select Score container.</b></div>', unsafe_allow_html=True)
+            return
         s = st.session_state["last_score"]
         res, feats, notes = s["res"], s["feats"], s["notes"]
         a, b = st.columns([7, 4], gap="medium")
@@ -158,21 +261,26 @@ def score_mode() -> None:
         with b:
             visuals.show_svg(visuals.simplex_single(data.model()["horizons"]["A"]["simplex"], res["proba"], res["pred_name"]), 250)
         
-        head("Key Risk Factors", "Top feature contributions influencing this score.", "model")
+        head("Top Influencing Factors", "Key shipment characteristics impacting this delay risk prediction.", "model")
         peak = max(abs(r["contribution"]) for r in res["explanation"]) or 1
         rows = []
-        for r in res["explanation"][:8]:
+        for r in res["explanation"][:6]:
             w = abs(r["contribution"]) / peak * 50
             left_pos = 50 if r["contribution"] >= 0 else 50 - w
             color = CLASS_COLOR[res["pred_name"]] if r["contribution"] >= 0 else "#5f5f58"
             val = r["value"]
             shown = f"{val:,.2f}".rstrip("0").rstrip(".") if isinstance(val, float) else str(val)
-            rows.append(f'<div class="shap"><span>{labels.FEATURE_LABEL.get(r["feature"], r["feature"])}: <b style="color:#F4F4EE;font-weight:500">{html.escape(shown)}</b></span><div class="bar"><span style="left:{left_pos:.1f}%;width:{w:.1f}%;background:{color}"></span><div class="mid"></div></div><span style="text-align:right">{"+" if r["contribution"]>=0 else "−"}{abs(r["contribution"]):.3f}</span></div>')
+            effect_label = "+Increases delay" if r["contribution"] >= 0 else "−Reduces delay"
+            rows.append(
+                f'<div class="shap"><span>{labels.FEATURE_LABEL.get(r["feature"], r["feature"])}: <b style="color:#F4F4EE;font-weight:500">{html.escape(shown)}</b></span>'
+                f'<div class="bar"><span style="left:{left_pos:.1f}%;width:{w:.1f}%;background:{color}"></span><div class="mid"></div></div>'
+                f'<span style="text-align:right;font-size:0.78rem;color:{color}">{effect_label}</span></div>'
+            )
         st.markdown("".join(rows), unsafe_allow_html=True)
-        st.markdown(f"""<dl class="kv" style="margin-top:.7rem"><dt>Prediction time</dt><dd>{res["timestamp"]}</dd><dt>Model</dt><dd>{inference.MODEL_VERSION}</dd><dt>Latency</dt><dd>{res["latency_ms"]:.1f} ms</dd></dl>""", unsafe_allow_html=True)
+        st.markdown(f"""<dl class="kv" style="margin-top:.8rem"><dt>Prediction time</dt><dd>{res["timestamp"]}</dd><dt>Model</dt><dd>{inference.MODEL_VERSION}</dd><dt>Response latency</dt><dd>{res["latency_ms"]:.1f} ms</dd></dl>""", unsafe_allow_html=True)
         if notes:
             notes_html = "".join(f"<li>{html.escape(n)}</li>" for n in notes)
-            st.markdown(f'<div class="note" style="margin-top:.4rem"><b>Notice:</b><ul style="margin:.2rem 0 0 1rem">{notes_html}</ul></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="note" style="margin-top:.5rem"><b>Operational Note:</b><ul style="margin:.2rem 0 0 1rem">{notes_html}</ul></div>', unsafe_allow_html=True)
 
 
 def replay_mode() -> None:
@@ -204,7 +312,19 @@ def replay_mode() -> None:
 
 
 def render() -> None:
-    st.markdown('<div class="thesis" style="font-size:clamp(1.8rem,3vw,2.8rem)">Container Triage</div>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div style="margin-bottom: 1.2rem;">
+          <h1 style="font-size: 2.2rem; font-weight: 700; color: #F4F4EE; margin: 0 0 0.35rem;">
+            Container Delay Risk Triage
+          </h1>
+          <p style="font-size: 0.95rem; color: #BDBDB4; margin: 0; line-height: 1.5;">
+            Predict container dwell delay risk and receive immediate operational guidance.
+          </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     mode = st.segmented_control("Mode", ["Score a container", "Replay a real stay"], default="Score a container", label_visibility="collapsed") or "Score a container"
     if mode == "Score a container":
         score_mode()

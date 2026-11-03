@@ -1,0 +1,124 @@
+{
+  "benchmark_metadata": {
+    "title": "Mandatory Three-Way Controlled Sequence Regression Benchmark",
+    "date": "2026-11-03",
+    "participants": [
+      "Naive Persistence",
+      "LightGBM Regressor (GBDT)",
+      "Residual Transformer (DL)"
+    ],
+    "input_matrix": "30 days x 20 features under strict T-2 publication latency",
+    "training_samples": 100000,
+    "validation_sequences_2024": 743400,
+    "blind_test_sequences_2025": 741335,
+    "ports_count": 2065
+  },
+  "validation_2024": {
+    "container_calls": {
+      "persistence": {
+        "huber": 0.6822,
+        "mae": 0.8573,
+        "median_ae": 0.0,
+        "rmse": 2.4786,
+        "r2": 0.9794,
+        "bias": -0.0001
+      },
+      "gbdt": {
+        "huber": 0.5423,
+        "mae": 0.7538,
+        "median_ae": 0.0572,
+        "rmse": 2.1133,
+        "r2": 0.985,
+        "bias": 0.0022
+      },
+      "dl_transformer": {
+        "huber": 0.6397,
+        "mae": 0.8396,
+        "median_ae": 0.0078,
+        "rmse": 2.3215,
+        "r2": 0.9819,
+        "bias": -0.0923
+      }
+    },
+    "cargo_tonnage": {
+      "persistence": {
+        "huber": 1649663744.0,
+        "mae": 42406.8281,
+        "median_ae": 3946.0,
+        "rmse": 147966.8438,
+        "r2": 0.9562,
+        "bias": -199.3607
+      },
+      "gbdt": {
+        "huber": 1389527349.4296,
+        "mae": 37661.8972,
+        "median_ae": 4548.1647,
+        "rmse": 134328.5503,
+        "r2": 0.9639,
+        "bias": -691.6181
+      },
+      "dl_transformer": {
+        "huber": 1606295552.0,
+        "mae": 41840.332,
+        "median_ae": 5400.3604,
+        "rmse": 144398.4688,
+        "r2": 0.9583,
+        "bias": -2753.9917
+      }
+    }
+  },
+  "blind_test_2025": {
+    "container_calls": {
+      "persistence": {
+        "huber": 0.6784,
+        "mae": 0.8504,
+        "median_ae": 0.0,
+        "rmse": 2.482,
+        "r2": 0.9799,
+        "bias": -0.0029
+      },
+      "gbdt": {
+        "huber": 0.5434,
+        "mae": 0.7523,
+        "median_ae": 0.0367,
+        "rmse": 2.1554,
+        "r2": 0.9848,
+        "bias": -0.0085
+      },
+      "dl_transformer": {
+        "huber": 0.6356,
+        "mae": 0.8323,
+        "median_ae": 0.0,
+        "rmse": 2.3185,
+        "r2": 0.9824,
+        "bias": -0.0929
+      }
+    },
+    "cargo_tonnage": {
+      "persistence": {
+        "huber": 1640635264.0,
+        "mae": 42227.6797,
+        "median_ae": 3920.0,
+        "rmse": 142638.4844,
+        "r2": 0.9589,
+        "bias": -56.8936
+      },
+      "gbdt": {
+        "huber": 1402482854.8513,
+        "mae": 37936.2363,
+        "median_ae": 4526.731,
+        "rmse": 132055.3443,
+        "r2": 0.9648,
+        "bias": -380.5512
+      },
+      "dl_transformer": {
+        "huber": 1594848768.0,
+        "mae": 41577.7422,
+        "median_ae": 5238.3359,
+        "rmse": 139051.625,
+        "r2": 0.9609,
+        "bias": -2588.0745
+      }
+    }
+  }
+}
